@@ -35,26 +35,35 @@ use Spatie\Permission\Models\Role;
 
 
 
-Route::middleware(['guest:karyawan'])->group(function () {
+// Route::middleware(['guest:karyawan'])->group(function () {
+//     Route::get('/', function () {
+//         return view('auth.login');
+//     })->name('login');
+
+//     Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
+// });
+
+
+// Route::middleware(['guest:user'])->group(function () {
+//     Route::get('/panel', function () {
+//         return view('auth.loginadmin');
+//     })->name('loginadmin');
+
+//     Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
+// });
+
+Route::middleware(['guest'])->group(function () {
     Route::get('/', function () {
-        return view('auth.login');
+        return view('auth.login'); // Menampilkan halaman login yang telah digabung
     })->name('login');
 
-    Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
-});
-
-
-Route::middleware(['guest:user'])->group(function () {
-    Route::get('/panel', function () {
-        return view('auth.loginadmin');
-    })->name('loginadmin');
-
-    Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
+    Route::post('/proseslogin', [AuthController::class, 'proseslogin']); // Proses login untuk kedua peran
 });
 
 Route::middleware(['auth:karyawan'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
+    // Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
+    Route::get('/logout', [AuthController::class, 'proseslogout'])->name('logout');
 
     //Presensi
     Route::get('/presensi/{kode_jam_kerja}/create', [PresensiController::class, 'create']);
@@ -100,8 +109,10 @@ Route::middleware(['auth:karyawan'])->group(function () {
 
 
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
+// Route::middleware(['auth', 'role:administrator|admin departemen,user'])->group(function () {
 Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
+    // Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogout'])->name('logout');
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
 
     //Karyawan

@@ -194,12 +194,14 @@
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                             <span class="badge bg-danger"
                                 style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">
-                                {{ $rekappresensi->jmlcuti }}
+                                {{-- {{ $rekappresensi->jmlcuti }} --}}
+                                {{ $rekappresensi->jmlterlambat }}
                             </span>
                             <ion-icon name="document-outline" style="font-size: 1.6rem;"
                                 class="text-danger mb-1"></ion-icon>
                             <br>
-                            <span style="font-size: 0.8rem; font-weight:500">Cuti</span>
+                            {{-- <span style="font-size: 0.8rem; font-weight:500">Cuti</span> --}}
+                            <span style="font-size: 0.8rem; font-weight:500">Lambat</span>
                         </div>
                     </div>
                 </div>
@@ -392,7 +394,6 @@
 
                     </ul>
                 </div>
-
             </div>
         </div>
     </div>

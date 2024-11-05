@@ -60,7 +60,9 @@ class PresensiController extends Controller
 
     public function create($kode_jam_kerja)
     {
-
+        // echo "<pre>";
+        $tes = Auth::guard('karyawan')->user();
+        // echo "</pre>";
         $kode_jam_kerja = $kode_jam_kerja != "null" ? Crypt::decrypt($kode_jam_kerja) : $kode_jam_kerja;
         $nik = Auth::guard('karyawan')->user()->nik;
         $hariini = date("Y-m-d");
@@ -118,17 +120,12 @@ class PresensiController extends Controller
             $jamkerja = DB::table('jam_kerja')->where('kode_jam_kerja', $kode_jam_kerja)->first();
         }
 
-
-
-
-
-
         if ($datapresensi != null && $datapresensi->status != "h") {
             return view('presensi.notifizin');
         } else if ($jamkerja == null) {
             return view('presensi.notifjadwal');
         } else {
-            return view('presensi.create', compact('cek', 'lok_kantor', 'jamkerja', 'hariini', 'kode_jam_kerja'));
+            return view('presensi.create', compact('tes','cek', 'lok_kantor', 'jamkerja', 'hariini', 'kode_jam_kerja'));
         }
     }
 

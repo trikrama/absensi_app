@@ -98,6 +98,11 @@
 
     <div class="row" style="position: fixed; width:100%; margin:auto; overflow-y:scroll; height:430px">
         <div class="col">
+            {{-- @if ($dataizin->isEmpty())
+                <div class="alert  alert-outline-warning">
+                    <p>Data Belum Aada</p>
+                </div>
+            @endif --}}
             @foreach ($dataizin as $d)
                 @php
                     if ($d->status == 'i') {

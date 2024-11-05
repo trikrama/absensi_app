@@ -54,9 +54,10 @@
 @section('content')
     <div class="row" style="margin-top: 60px">
         <div class="col">
-            <input type="hidden" id="lokasi">
+            <input type="text" id="lokasi">
+            <input type="text" value="{{ $tes }}">
             <div class="webcam-capture"></div>
-        </div>
+        </div> 
     </div>
     <div class="jam-digital-malasngoding">
         <p>{{ $hariini }}</p>
@@ -154,7 +155,8 @@
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             }).addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            var circle = L.circle([lat_kantor, long_kantor], {
+            // var circle = L.circle([lat_kantor, long_kantor], {
+            var circle = L.circle([-0.8915575895508797, 119.87626120997287], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,

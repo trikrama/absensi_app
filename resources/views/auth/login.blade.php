@@ -50,33 +50,37 @@
                     @csrf
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="text" name="nik" class="form-control" id="nik" placeholder="NIK">
+                            <select name="role" class="form-control" required>
+                                <option value="" disabled selected>Login Sebagai..</option>
+                                <option value="admin">Admin</option>
+                                <option value="karyawan">Karyawan</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="form-group boxed">
+                        <div class="input-wrapper">
+                            <input type="text" name="nik" class="form-control" id="nik" placeholder="NIK atau Email" required>
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
                         </div>
                     </div>
-
+                
                     <div class="form-group boxed">
                         <div class="input-wrapper">
-                            <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                             <div class="icon-right" style="position: absolute; right:8px; top:10px">
-                                <ion-icon name="eye-off-outline" id="show_hide_password"
-                                    style="font-size: 1.5rem"></ion-icon>
+                                <ion-icon name="eye-off-outline" id="show_hide_password" style="font-size: 1.5rem"></ion-icon>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-links mt-2">
-                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
-                    </div>
-
+                
                     <div class="form-button-group">
                         <button type="submit" class="btn btn-success btn-block btn-lg">Log in</button>
                     </div>
-
                 </form>
+                
             </div>
         </div>
 

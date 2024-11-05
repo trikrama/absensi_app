@@ -21,7 +21,6 @@ class CabangController extends Controller
         $nama_cabang = $request->nama_cabang;
         $lokasi_cabang = $request->lokasi_cabang;
         $radius_cabang = $request->radius_cabang;
-
         try {
             $data = [
                 'kode_cabang' => $kode_cabang,
