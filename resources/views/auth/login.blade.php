@@ -15,6 +15,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icon-512.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <!-- Menambahkan Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZAILbhH1Tm5CtQXHWCCU8+YrdEYXYNVKfrRBjwX39LZUdwtu3D7XQoNZgrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body class="bg-white">
@@ -75,10 +78,32 @@
                             </div>
                         </div>
                     </div>
-                
+
+                    <!-- Gambar Captcha -->
+                    <div class="text-center">
+                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'default')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
+                        
+                        <!-- Tombol Refresh menggunakan ikon -->
+                        <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm w-20 h-20">
+                            <i class="fas fa-sync-alt"></i> <!-- Font Awesome refresh icon -->
+                        </button>
+                    </div>
+
+                    <!-- Input untuk Captcha -->
+                    <div class="form-group w-75 mx-auto">
+                        <input type="text" name="captcha" class="form-control" placeholder="Enter captcha" required>
+                        @error('captcha')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Tombol Login -->
                     <div class="form-button-group">
                         <button type="submit" class="btn btn-success btn-block btn-lg">Log in</button>
                     </div>
+                    {{-- @php
+                            echo captcha_img();
+                        @endphp --}}
                 </form>
                 
             </div>
@@ -102,6 +127,11 @@
                         console.error('Registrasi service worker Gagal', err);
                     });
             }
+        }
+        
+        // refresh Captcha
+        function refreshCaptcha() {
+            document.getElementById('captcha_image').src = '{{ captcha_src() }}' + '?' + Math.random();
         }
     </script>
 

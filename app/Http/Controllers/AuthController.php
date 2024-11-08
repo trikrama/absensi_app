@@ -16,6 +16,9 @@ class AuthController extends Controller
             'role' => 'required',
             'nik' => 'required|string',
             'password' => 'required|string',
+            'captcha' => 'required|captcha'
+        ], [
+            'captcha.captcha' => 'Captcha tidak valid. Silakan coba lagi.'
         ]);
 
         $credentials = ['password' => $request->password];
@@ -36,20 +39,19 @@ class AuthController extends Controller
         // Jika login gagal
         return redirect('/')->with(['warning' => 'NIK / Email atau Password Salah']);
     }
-
-    public function proseslogout()
+    public function prosesLogout()
     {
+        // Cek apakah guard 'karyawan' yang sedang aktif
         if (Auth::guard('karyawan')->check()) {
             Auth::guard('karyawan')->logout();
-            return redirect('/');
         }
-    }
 
-    public function proseslogoutadmin()
-    {
+        // Cek apakah guard 'user' yang sedang aktif
         if (Auth::guard('user')->check()) {
             Auth::guard('user')->logout();
-            return redirect('/');
         }
+
+        // Redirect ke halaman utama setelah logout
+        return redirect('/');
     }
 }

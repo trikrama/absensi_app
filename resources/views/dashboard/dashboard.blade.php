@@ -15,7 +15,7 @@
         }
     </style>
     <div class="section" id="user-section">
-        <a href="/proseslogout" class="logout">
+        <a href="/logout" class="logout">
             <ion-icon name="exit-outline"></ion-icon>
         </a>
         <div id="user-detail">
