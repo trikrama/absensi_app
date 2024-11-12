@@ -94,8 +94,10 @@ Route::middleware(['auth:karyawan'])->group(function () {
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
 // Route::middleware(['auth', 'role:administrator|admin departemen,user'])->group(function () {
 Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
+// Route::middleware(['auth:user'])->group(function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogout']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
+
 
     //Karyawan
     Route::get('/karyawan', [KaryawanController::class, 'index']);
@@ -124,13 +126,14 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
 });
 
 
+
 //ROute yang Hanya bisa di akses oleh Administrator
 Route::group(['middleware' => ['role:administrator,user']], function () {
 
 
 
     //Karyawan
-
+    Route::get('/karyawan/{nik}/details', [KaryawanController::class, 'show']);
     Route::post('/karyawan/store', [KaryawanController::class, 'store']);
     Route::post('/karyawan/edit', [KaryawanController::class, 'edit']);
     Route::post('/karyawan/{nik}/update', [KaryawanController::class, 'update']);
@@ -138,7 +141,8 @@ Route::group(['middleware' => ['role:administrator,user']], function () {
     Route::get('/karyawan/{nik}/lockandunlocklocation', [KaryawanController::class, 'lockandunlocklocation']);
     Route::get('/karyawan/{nik}/lockandunlockjamkerja', [KaryawanController::class, 'lockandunlockjamkerja']);
     //Departemen
-    Route::get('/departemen', [DepartemenController::class, 'index'])->middleware('permission:view-departemen,user');;
+    Route::get('/departemen', [DepartemenController::class, 'index']);
+    // ->middleware('permission:view-departemen,user');
     Route::post('/departemen/store', [DepartemenController::class, 'store']);
     Route::post('/departemen/edit', [DepartemenController::class, 'edit']);
     Route::post('/departemen/{kode_dept}/update', [DepartemenController::class, 'update']);
@@ -243,5 +247,6 @@ Route::get('/give-role-permission', function () {
     } catch (\Exception $e) {
         //throw $th;
         echo "Error";
+        dd($e->getMessage());
     }
 });

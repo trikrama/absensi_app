@@ -12,14 +12,11 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
+    
     protected function redirectTo($request)
     {
         if (!$request->expectsJson()) {
-            if (request()->is('panel/*')) {
-                return route('login');
-            } else {
-                return route('login');
-            }
+            return route('login'); // Redirect ke login untuk semua permintaan non-JSON
         }
     }
 }

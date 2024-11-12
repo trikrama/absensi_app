@@ -2,27 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Karyawan extends Authenticatable
+class Karyawan extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    // Tentukan tabel yang digunakan (optional)
+    // public $timestamps = false;
     protected $table = "karyawan";
     protected $primaryKey = "nik";
     public $incrementing = false;
+
+    // Tentukan kolom yang bisa diisi (mass assignable)
     protected $fillable = [
         'nik',
         'nama_lengkap',
         'jabatan',
         'no_hp',
+        'kode_dept',
+        'foto',
         'password',
+        'kode_cabang'
     ];
-
 
     protected $hidden = [
         'password',
@@ -32,4 +36,10 @@ class Karyawan extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relasi satu ke satu dengan tabel profil
+    public function profil()
+    {
+        return $this->hasOne(Profile::class, 'nik', 'nik');
+    }
 }
