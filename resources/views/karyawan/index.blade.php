@@ -712,7 +712,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="loadeditform">
-
+                    
                 </div>
 
             </div>
@@ -812,8 +812,6 @@
                 var nomor_kk = $("#nomor_kk").val();
                 var pendidikan_terakhir = $("#pendidikan_terakhir").val();
                 var institusi = $("#institusi").val();
-
-                
                 var masa_aktif_sim = $("#masa_aktif_sim").val();
                 var pendidikan_satpam = $("#pendidikan_satpam").val();
                 var tahun_pelatihan = $("#tahun_pelatihan").val();

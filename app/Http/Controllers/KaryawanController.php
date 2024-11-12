@@ -157,58 +157,90 @@ class KaryawanController extends Controller
         $departemen = DB::table('departemen')->get();
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
         $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
-        return view('karyawan.edit', compact('departemen', 'karyawan', 'cabang'));
+        $profil = DB::table('profil')->where('nik', $nik)->first();
+        return view('karyawan.edit', compact('departemen', 'karyawan', 'cabang', 'profil'));
     }
 
     public function update($nik, Request $request)
     {
-        $nik = Crypt::decrypt($nik);
+        $nik = Crypt::decrypt($nik);  // Dekripsi NIK
         $nik_baru = $request->nik_baru;
-        $nama_lengkap = $request->nama_lengkap;
-        $jabatan = $request->jabatan;
-        $no_hp = $request->no_hp;
-        $kode_dept = $request->kode_dept;
-        $kode_cabang = $request->kode_cabang;
-        $password = Hash::make('12345');
-        $old_foto = $request->old_foto;
-        if ($request->hasFile('foto')) {
-            $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
-        } else {
-            $foto = $old_foto;
+
+        // Pengecekan apakah NIK baru sudah digunakan oleh karyawan lain
+        $cekNik = Karyawan::where('nik', $nik_baru)->where('nik', '!=', $nik)->count();
+        if ($cekNik > 0) {
+            return redirect()->back()->with(['warning' => 'NIK sudah digunakan']);
         }
 
-
-        $ceknik = DB::table('karyawan')
-            ->where('nik', $nik_baru)
-            ->where('nik', '!=', $nik)
-            ->count();
-        if ($ceknik > 0) {
-            return Redirect::back()->with(['warning' => 'Nik Sudah Digunakan']);
-        }
+        // Mulai transaksi
+        DB::beginTransaction();
         try {
-            $data =  [
+            // Cari data karyawan berdasarkan NIK yang didekripsi
+            $karyawan = Karyawan::where('nik', $nik)->firstOrFail();
+
+            // Proses foto baru jika ada, atau gunakan foto lama
+            $foto = $request->hasFile('foto') ? $nik . "." . $request->file('foto')->getClientOriginalExtension() : $request->old_foto;
+
+            // Update data karyawan
+            $karyawan->update([
                 'nik' => $nik_baru,
-                'nama_lengkap' => $nama_lengkap,
-                'jabatan' => $jabatan,
-                'no_hp' => $no_hp,
-                'kode_dept' => $kode_dept,
+                'nama_lengkap' => $request->nama_lengkap,
+                'jabatan' => $request->jabatan,
+                'no_hp' => $request->no_hp,
+                'kode_dept' => $request->kode_dept,
+                'kode_cabang' => $request->kode_cabang,
                 'foto' => $foto,
-                'password' => $password,
-                'kode_cabang' => $kode_cabang
-            ];
-            $update = DB::table('karyawan')->where('nik', $nik)->update($data);
-            if ($update) {
-                if ($request->hasFile('foto')) {
-                    $folderPath = "public/uploads/karyawan/";
-                    $folderPathOld = "public/uploads/karyawan/" . $old_foto;
-                    Storage::delete($folderPathOld);
-                    $request->file('foto')->storeAs($folderPath, $foto);
-                }
-                return Redirect::back()->with(['success' => 'Data Berhasil Update']);
+                'password' => Hash::make($request->filled('password') ? $request->password : '12345'),
+            ]);
+
+            // Update atau buat profil baru jika belum ada
+            $profil = $karyawan->profil ?? new Profile(['nik' => $nik_baru]);
+            $profil->fill([
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'nama_ibu_kandung' => $request->nama_ibu_kandung,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'agama' => $request->agama,
+                'status_menikah' => $request->status_menikah,
+                'alamat_ktp' => $request->alamat_ktp,
+                'nomor_kk' => $request->nomor_kk,
+                'pendidikan_terakhir' => $request->pendidikan_terakhir,
+                'institusi' => $request->institusi,
+                'masa_aktif_sim' => $request->masa_aktif_sim,
+                'pendidikan_satpam' => $request->pendidikan_satpam,
+                'tahun_pelatihan' => $request->tahun_pelatihan,
+                'no_kta' => $request->no_kta,
+                'penerbit_kta' => $request->penerbit_kta,
+                'masa_aktif_kta' => $request->masa_aktif_kta,
+                'no_registrasi' => $request->no_registrasi,
+                'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
+                'nama_bank' => $request->nama_bank,
+                'no_rekening' => $request->no_rekening,
+                'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
+                'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
+                'no_npwp' => $request->no_npwp,
+            ]);
+            $karyawan->profil()->save($profil);
+
+            // Proses simpan foto jika ada file baru yang diunggah
+            if ($request->hasFile('foto')) {
+                $folderPath = "public/uploads/karyawan/";
+                $folderPathOld = "public/uploads/karyawan/" . $request->old_foto;
+
+                // Hapus foto lama jika ada
+                Storage::delete($folderPathOld);
+
+                // Simpan foto baru
+                $request->file('foto')->storeAs($folderPath, $foto);
             }
+
+            // Commit transaksi jika berhasil
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data Karyawan dan Profil berhasil diupdate']);
         } catch (\Exception $e) {
-            dd($e);
-            return Redirect::back()->with(['warning' => 'Data Gagal Diupdate']);
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+            return redirect()->back()->with(['warning' => 'Data gagal diupdate. Hubungi IT']);
         }
     }
 
