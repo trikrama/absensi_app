@@ -21,6 +21,7 @@ class AuthController extends Controller
             'captcha.captcha' => 'Captcha tidak valid. Silakan coba lagi.'
         ]);
 
+
         $credentials = ['password' => $request->password];
 
         // Memilih guard berdasarkan role

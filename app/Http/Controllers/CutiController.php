@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
+use function PHPSTORM_META\type;
+
 class CutiController extends Controller
 {
     public function index()

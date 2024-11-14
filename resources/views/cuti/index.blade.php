@@ -105,6 +105,8 @@
     </div>
 
 </div>
+
+{{-- Modal Tambah Cuti --}}
 <div class="modal modal-blur fade" id="modal-inputcuti" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -162,7 +164,7 @@
                                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                     </svg>
                                 </span>
-                                <input type="text" id="jml_hari" value="" class="form-control" name="jml_hari" placeholder="Jumlah Hari">
+                                <input type="number" id="jml_hari" value="" class="form-control" name="jml_hari" placeholder="Jumlah Hari">
                             </div>
                         </div>
                     </div>

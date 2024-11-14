@@ -300,7 +300,7 @@
                                                                     </svg>
                                                                 </a>
                                                                 <a href="/karyawan/{{ Crypt::encrypt($d->nik) }}/resetpassword"
-                                                                    class="btn btn-sm btn-warning">
+                                                                    class="btn btn-sm btn-warning reset-confirm">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-key-off"
                                                                         width="24" height="24" viewBox="0 0 24 24"
@@ -771,6 +771,25 @@
                 });
                 $("#modal-editkaryawan").modal("show");
             });
+
+            $(".reset-confirm").click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href'); // Ambil URL dari atribut href
+                Swal.fire({
+                    title: 'Apakah Anda Yakin Ingin Mereset Password?',
+                    text: "Password akan direset ke default!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Reset Password!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url; // Arahkan ke URL reset password
+                    }
+                });
+            });
+
 
             $(".delete-confirm").click(function(e) {
                 var form = $(this).closest('form');
