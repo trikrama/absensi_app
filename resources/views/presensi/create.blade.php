@@ -54,8 +54,7 @@
 @section('content')
     <div class="row" style="margin-top: 60px">
         <div class="col">
-            <input type="text" id="lokasi">
-            <input type="text" value="{{ $tes }}">
+            <input type="hidden" id="lokasi">
             <div class="webcam-capture"></div>
         </div> 
     </div>
