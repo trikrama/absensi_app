@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
 use App\Models\Pengajuanizin;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -322,50 +323,135 @@ class PresensiController extends Controller
     {
         $nik = Auth::guard('karyawan')->user()->nik;
         $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
-        return view('presensi.editprofile', compact('karyawan'));
+        $profil = DB::table('profil')->where('nik', $nik)->first();
+        return view('presensi.editprofile', compact('karyawan', 'profil'));
     }
 
     public function updateprofile(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
-        $nama_lengkap = $request->nama_lengkap;
-        $no_hp = $request->no_hp;
-        $password = Hash::make($request->password);
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
-        $request->validate([
-            'foto' => 'image|mimes:png,jpg|max:1024'
-        ]);
-        if ($request->hasFile('foto')) {
-            $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
-        } else {
-            $foto = $karyawan->foto;
-        }
-        if (empty($request->password)) {
-            $data = [
-                'nama_lengkap' => $nama_lengkap,
-                'no_hp' => $no_hp,
-                'foto' => $foto
-            ];
-        } else {
-            $data = [
-                'nama_lengkap' => $nama_lengkap,
-                'no_hp' => $no_hp,
-                'password' => $password,
-                'foto' => $foto
-            ];
-        }
 
-        $update = DB::table('karyawan')->where('nik', $nik)->update($data);
-        if ($update) {
+        // Validasi input
+        $request->validate([
+            'foto' => 'image|mimes:png,jpg|max:1024',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Mengambil data karyawan berdasarkan NIK
+            $karyawan = Karyawan::where('nik', $nik)->firstOrFail();
+            $profile = $karyawan->profil ?? new Profile(['nik' => $nik]);
+
+            // Memproses file foto jika ada
             if ($request->hasFile('foto')) {
+                $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
                 $folderPath = "public/uploads/karyawan/";
+
+                // Hapus foto lama jika ada
+                if ($karyawan->foto) {
+                    Storage::delete($folderPath . $karyawan->foto);
+                }
+
+                // Simpan foto baru
                 $request->file('foto')->storeAs($folderPath, $foto);
+            } else {
+                $foto = $karyawan->foto;
             }
-            return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
-        } else {
-            return Redirect::back()->with(['error' => 'Data gagal Di Update']);
+
+            // Jika password tidak kosong, hash password baru
+            if (!empty($request->password)) {
+                $karyawan->password = Hash::make($request->password);
+            }
+
+            // Update data karyawan
+            $karyawan->nama_lengkap = $request->nama_lengkap;
+            $karyawan->no_hp = $request->no_hp;
+            $karyawan->foto = $foto;
+            $karyawan->save();
+
+            // Update data profil
+            $profile->fill([
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'nama_ibu_kandung' => $request->nama_ibu_kandung,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'agama' => $request->agama,
+                'status_menikah' => $request->status_menikah,
+                'alamat_ktp' => $request->alamat_ktp,
+                'nomor_kk' => $request->nomor_kk,
+                'pendidikan_terakhir' => $request->pendidikan_terakhir,
+                'institusi' => $request->institusi,
+                'masa_aktif_sim' => $request->masa_aktif_sim,
+                'pendidikan_satpam' => $request->pendidikan_satpam,
+                'tahun_pelatihan' => $request->tahun_pelatihan,
+                'no_kta' => $request->no_kta,
+                'penerbit_kta' => $request->penerbit_kta,
+                'masa_aktif_kta' => $request->masa_aktif_kta,
+                'no_registrasi' => $request->no_registrasi,
+                'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
+            ]);
+            $karyawan->profil()->save($profile);
+
+            // Commit transaksi jika berhasil
+            DB::commit();
+            return redirect()->back()->with(['success' => 'Data Berhasil Di Update']);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+
+            dd($e->getMessage());
+
+            // Jika ada file yang diupload namun terjadi kesalahan, hapus file tersebut
+            if (isset($foto)) {
+                Storage::delete("public/uploads/karyawan/" . $foto);
+            }
+
+            return redirect()->back()->with(['error' => 'Data gagal diupdate. Hubungi IT']);
         }
     }
+
+
+    // public function updateprofile(Request $request)
+    // {
+    //     $nik = Auth::guard('karyawan')->user()->nik;
+    //     $nama_lengkap = $request->nama_lengkap;
+    //     $no_hp = $request->no_hp;
+    //     $password = Hash::make($request->password);
+    //     $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+    //     $request->validate([
+    //         'foto' => 'image|mimes:png,jpg|max:1024'
+    //     ]);
+    //     if ($request->hasFile('foto')) {
+    //         $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
+    //     } else {
+    //         $foto = $karyawan->foto;
+    //     }
+    //     if (empty($request->password)) {
+    //         $data = [
+    //             'nama_lengkap' => $nama_lengkap,
+    //             'no_hp' => $no_hp,
+    //             'foto' => $foto
+    //         ];
+    //     } else {
+    //         $data = [
+    //             'nama_lengkap' => $nama_lengkap,
+    //             'no_hp' => $no_hp,
+    //             'password' => $password,
+    //             'foto' => $foto
+    //         ];
+    //     }
+
+    //     $update = DB::table('karyawan')->where('nik', $nik)->update($data);
+    //     if ($update) {
+    //         if ($request->hasFile('foto')) {
+    //             $folderPath = "public/uploads/karyawan/";
+    //             $request->file('foto')->storeAs($folderPath, $foto);
+    //         }
+    //         return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
+    //     } else {
+    //         return Redirect::back()->with(['error' => 'Data gagal Di Update']);
+    //     }
+    // }
 
 
     public function histori()
