@@ -7,7 +7,7 @@
                     <!-- Page pre-title -->
 
                     <h2 class="page-title">
-                        Data Departemen
+                        Data Jabatan
                     </h2>
                 </div>
 
@@ -57,7 +57,7 @@
                                             <div class="col-10">
                                                 <div class="form-group">
                                                     <input type="text" name="nama_dept" id="nama_dept"
-                                                        class="form-control" placeholder="Departemen"
+                                                        class="form-control" placeholder="Jabatan"
                                                         value="{{ Request('nama_dept') }}">
                                                 </div>
                                             </div>
@@ -87,8 +87,8 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Kode Dept</th>
-                                                <th>Nama Dept</th>
+                                                <th>Kode Jabatan</th>
+                                                <th>Nama Jabatan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -162,7 +162,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Data Departemen</h5>
+                    <h5 class="modal-title">Tambah Data Jabatan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -188,8 +188,8 @@
                                             <path d="M19 11l0 2"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" value="" id="nik" class="form-control"
-                                        placeholder="Kode Dept" name="kode_dept">
+                                    <input type="text" value="" id="kode_dept" class="form-control"
+                                        placeholder="Kode Jabatan" name="kode_dept">
                                 </div>
                             </div>
                         </div>
@@ -208,7 +208,7 @@
                                         </svg>
                                     </span>
                                     <input type="text" id="nama_dept" value="" class="form-control"
-                                        name="nama_dept" placeholder="Nama Departemen">
+                                        name="nama_dept" placeholder="Nama Jabatan">
                                 </div>
                             </div>
                         </div>
@@ -243,7 +243,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Data Departemen</h5>
+                    <h5 class="modal-title">Edit Data Jabatan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="loadeditform">
@@ -258,6 +258,7 @@
 @push('myscript')
     <script>
         $(function() {
+            $("#kode_dept").mask("AAA"); 
             $("#btnTambahDepartemen").click(function() {
                 $("#modal-inputdepartemen").modal("show");
             });
@@ -300,61 +301,15 @@
                 })
             });
 
-            $("#frmKaryawan").submit(function() {
-                var nik = $("#nik").val();
-                var nama_lengkap = $("#nama_lengkap").val();
-                var jabatan = $("#jabatan").val();
-                var no_hp = $("#no_hp").val();
-                var kode_dept = $("frmKaryawan").find("#kode_dept").val();
-                if (nik == "") {
-                    // alert('Nik Harus Diisi');
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Nik Harus Diisi !',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#nik").focus();
-                    });
+            $("#frmDepartemen").submit(function() {    
+                var kode_dept = $("#kode_dept").val();
+                var nama_dept =  $("#frmDepartemen").find("#nama_dept").val();
 
-                    return false;
-                } else if (nama_lengkap == "") {
+                
+                if (kode_dept == "") {
                     Swal.fire({
                         title: 'Warning!',
-                        text: 'Nama Harus Diisi !',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#nama_lengkap").focus();
-                    });
-
-                    return false;
-                } else if (jabatan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Jabatan Harus Diisi !',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#jabatan").focus();
-                    });
-
-                    return false;
-                } else if (no_hp == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. HP Harus Diisi !',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_hp").focus();
-                    });
-
-                    return false;
-                } else if (kode_dept == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Departemen Harus Diisi !',
+                        text: 'Kode Jabatan Harus Diisi !',
                         icon: 'warning',
                         confirmButtonText: 'Ok'
                     }).then((result) => {
@@ -362,7 +317,19 @@
                     });
 
                     return false;
-                }
+                } else if (nama_dept == "") {
+                    // alert('Nik Harus Diisi');
+                    Swal.fire({
+                        title: 'Warning!',
+                        text: 'Nama Jabatan Harus Diisi !',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        $("#nama_dept").focus();
+                    });
+
+                    return false;
+                } 
             });
         });
     </script>

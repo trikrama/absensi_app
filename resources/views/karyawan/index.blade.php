@@ -413,7 +413,7 @@
                                             <path d="M19 11l0 2"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" maxlength="5" value="" id="nik"
+                                    <input type="text" value="" id="nik"
                                         class="form-control" placeholder="Nik" name="nik">
                                 </div>
                             </div>
@@ -439,25 +439,24 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-device-analytics" width="24"
-                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <div class="input-icon mb-3 position-relative">
+                                    <span class="input-icon-addon position-absolute top-50 translate-middle-y" style="left: 2px;">
+                                        <!-- SVG Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-analytics" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M3 4m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z">
-                                            </path>
+                                            <path d="M3 4m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"></path>
                                             <path d="M7 20l10 0"></path>
                                             <path d="M9 16l0 4"></path>
                                             <path d="M15 16l0 4"></path>
                                             <path d="M8 12l3 -3l2 2l3 -3"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" id="jabatan" value="" class="form-control"
-                                        name="jabatan" placeholder="Jabatan">
+                                    <select name="jabatan" id="jabatan" class="form-select ps-4"> <!-- Tambahkan padding kiri -->
+                                        <option value="">Pilih Jabatan</option>
+                                        @foreach($jabatan as $j)
+                                            <option value="{{ $j->nama_jabatan }}">{{ $j->nama_jabatan }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -481,9 +480,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        {{-- <div class="row mt-2">
                             <div class="col-12">
                                 <input type="file" name="foto" class="form-control">
+                            </div>
+                        </div> --}}
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="file" name="foto" class="form-control" accept=".jpg, .jpeg, .png">
+                                <small class="text-muted">Upload Foto (Dim. 1:1, Max 200KB, JPG, JPEG, PNG)</small>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -749,7 +754,7 @@
 
         $(function() {
 
-            $("#nik").mask("000000000");
+            $("#nik").mask("000000000000000000");
             $("#no_hp").mask("0000000000000");
             $("#btnTambahkaryawan").click(function() {
                 $("#modal-inputkaryawan").modal("show");

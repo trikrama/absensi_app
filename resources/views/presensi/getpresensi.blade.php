@@ -22,7 +22,7 @@ function selisih($jam_masuk, $jam_keluar)
     @if ($d->status == 'h')
         <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $d->nik }}</td>
+            {{-- <td>{{ $d->nik }}</td> --}}
             <td>{{ $d->nama_lengkap }}</td>
             <td>{{ $d->kode_cabang }}</td>
             <td>{{ $d->kode_dept }}</td>
@@ -47,7 +47,7 @@ function selisih($jam_masuk, $jam_keluar)
                     </svg>
                 @endif
             </td>
-            <td>{!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger">Belum Absen</span>' !!}</td>
+            <td>{!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger">Belum</span>' !!}</td>
             <td>
                 @if ($d->foto_out != null)
                     <img src="{{ url($foto_out) }}" class="avatar" alt="">
@@ -108,24 +108,24 @@ function selisih($jam_masuk, $jam_keluar)
     @else
         <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $d->nik }}</td>
+            {{-- <td>{{ $d->nik }}</td> --}}
             <td>{{ $d->nama_lengkap }}</td>
             <td>{{ $d->kode_cabang }}</td>
             <td>{{ $d->kode_dept }}</td>
             <td>
-                <span class="badge bg-danger">Belum Absen</span>
+                <span class="badge bg-danger">Belum</span>
             </td>
             <td>
-                <span class="badge bg-danger">Belum Absen</span>
+                <span class="badge bg-danger">Belum</span>
             </td>
             <td>
-                <span class="badge bg-danger">Belum Absen</span>
+                <span class="badge bg-danger">Belum</span>
             </td>
             <td>
-                <span class="badge bg-danger">Belum Absen</span>
+                <span class="badge bg-danger">Belum</span>
             </td>
             <td>
-                <span class="badge bg-danger">Belum Absen</span>
+                <span class="badge bg-danger">Belum</span>
             </td>
             <td>
                 @if ($d->status == 'i')

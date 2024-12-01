@@ -189,7 +189,7 @@
                                         <path d="M15 19l2 2l4 -4"></path>
                                     </svg>
                                 </span>
-                                <input type="text" id="lokasi_cabang" value="" class="form-control" name="lokasi_cabang" placeholder="Lokasi Cabang">
+                                <input type="text" id="lokasi_cabang" value="" class="form-control" name="lokasi_cabang" placeholder="Lokasi Cabang - (Ambil Lat,Lang Google Maps)">
                             </div>
                         </div>
                     </div>
@@ -206,7 +206,7 @@
                                         <path d="M12 12v9"></path>
                                     </svg>
                                 </span>
-                                <input type="text" id="radius_cabang" value="" class="form-control" name="radius_cabang" placeholder="Radius Cabang">
+                                <input type="number" id="radius_cabang" value="" class="form-control" name="radius_cabang" placeholder="Radius Cabang (Meter)">
                             </div>
                         </div>
                     </div>
@@ -250,6 +250,7 @@
 @push('myscript')
 <script>
     $(function() {
+        $("#kode_cabang").mask("AAAAA");
         $("#btnTambahCabang").click(function() {
             $("#modal-inputcabang").modal("show");
         });

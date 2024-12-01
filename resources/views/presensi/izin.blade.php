@@ -131,40 +131,77 @@
                                         style="font-size: 48px; color:rgb(237, 128, 5)"></ion-icon>
                                 @endif
                             </div>
-                            <div class="datapresensi">
-                                <h3 style="line-height: 3px">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }}
-                                    ({{ $status }})
-                                </h3>
-                                <small>{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
-                                    {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }} </small>
-                                <p>
-
-
-                                    {{ $d->keterangan }}
-                                    <br>
-                                    @if ($d->status == 'c')
-                                        <span class="badge bg-warning">{{ $d->nama_cuti }}</span>
+                            {{-- <div class="datapresensi-container" style="display: flex; flex-direction: column; gap: 10px;  padding: 10px;">
+                                <!-- Bagian Keterangan -->
+                                <div class="datapresensi" style="flex: 1;">
+                                    <h3 style="margin: 0;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} ({{ $status }})</h3>
+                                    <small>{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}</small>
+                                    <p style="margin: 5px 0; line-height: 1.4;">
+                                        {{ $d->keterangan }}
+                                        <br>
+                                        @if ($d->status == 'c')
+                                            <span class="badge bg-warning">{{ $d->nama_cuti }}</span>
+                                        @endif
+                                        @if (!empty($d->doc_sid))
+                                            <span style="color: blue; cursor: pointer;">
+                                                <ion-icon name="document-attach-outline"></ion-icon> Lihat SID
+                                            </span>
+                                        @endif
+                                    </p>
+                                </div>
+                            
+                                <!-- Bagian Status -->
+                                <div class="status" style="text-align: right; flex: 0;">
+                                    @if ($d->status_approved == 0)
+                                        <span class="badge bg-warning">Pending</span>
+                                    @elseif($d->status_approved == '1')
+                                        <span class="badge bg-success">Disetujui</span>
+                                    @elseif($d->status_approved == '2')
+                                        <span class="badge bg-danger">Ditolak</span>
                                     @endif
-                                    @if (!empty($d->doc_sid))
-                                        <span style="color: blue">
-                                            <ion-icon name="document-attach-outline"></ion-icon> Lihat SID
-                                        </span>
-                                    @endif
-                                </p>
-
+                                    <p style="margin: 5px 0 0; font-weight: bold;">{{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari</p>
+                                </div>
+                            </div> --}}
+                            <div class="datapresensi-container" style="padding: 15px; margin-bottom: 10px;">
+                                <!-- Bagian Header -->
+                                <div class="datapresensi-header" style="margin-bottom: 10px;">
+                                    <h3 style="margin: 0; font-size: 1rem;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} ({{ $status }})</h3>
+                                    <small style="color: #666;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}</small>
+                                </div>
+                            
+                                <!-- Bagian Keterangan -->
+                                <div class="datapresensi-description" style="margin-bottom: 15px;">
+                                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #333;">
+                                        {{ $d->keterangan }}
+                                        @if ($d->status == 'c')
+                                            <span class="badge bg-warning">{{ $d->nama_cuti }}</span>
+                                        @endif
+                                        @if (!empty($d->doc_sid))
+                                            <span style="color: blue; cursor: pointer;">
+                                                <ion-icon name="document-attach-outline"></ion-icon> Lihat SID
+                                            </span>
+                                        @endif
+                                    </p>
+                                </div>
+                            
+                                <!-- Bagian Status dan Hari -->
+                                <div class="datapresensi-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="status">
+                                        @if ($d->status_approved == 0)
+                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif($d->status_approved == '1')
+                                            <span class="badge bg-success">Disetujui</span>
+                                        @elseif($d->status_approved == '2')
+                                            <span class="badge bg-danger">Ditolak</span>
+                                        @endif
+                                    </div>
+                                    <div class="hari" style="font-weight: bold; font-size: 0.9rem;">
+                                        {{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="status">
-                                @if ($d->status_approved == 0)
-                                    <span class="badge bg-warning">Pending</span>
-                                @elseif($d->status_approved == '1')
-                                    <span class="badge bg-success">Disetujui</span>
-                                @elseif($d->status_approved == '2')
-                                    <span class="badge bg-danger">Ditolak</span>
-                                @endif
-                                <p style="margin-top:5px; font-weight:bold">
-                                    {{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari</p>
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>

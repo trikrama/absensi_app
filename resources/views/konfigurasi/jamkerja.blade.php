@@ -261,86 +261,132 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                                            <path d="M12 10l0 3l2 0"></path>
-                                            <path d="M7 4l-2.75 2"></path>
-                                            <path d="M17 4l2.75 2"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" value="" id="awal_jam_masuk" class="form-control"
-                                        placeholder="Awal Jam Masuk" name="awal_jam_masuk">
+                                <div class="mb-3">
+                                    <!-- Label untuk input waktu -->
+                                    <label for="awal_jam_masuk" class="form-label d-block text-muted mb-2">
+                                        Awal Jam Masuk
+                                    </label>
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                                <path d="M12 10l0 3l2 0"></path>
+                                                <path d="M7 4l-2.75 2"></path>
+                                                <path d="M17 4l2.75 2"></path>
+                                            </svg>
+                                        </span>
+                                            <input type="time" id="awal_jam_masuk" 
+                                            value=""
+                                            class="form-control" 
+                                            placeholder="Awal Jam Masuk" 
+                                            name="awal_jam_masuk"
+                                            min="00:00" 
+                                            max="23:59">    
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                                            <path d="M12 10l0 3l2 0"></path>
-                                            <path d="M7 4l-2.75 2"></path>
-                                            <path d="M17 4l2.75 2"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" value="" id="jam_masuk" class="form-control"
-                                        placeholder="Jam Masuk" name="jam_masuk">
+                                <div class="mb-3">
+                                    <!-- Label untuk input waktu -->
+                                    <label for="jam_masuk" class="form-label d-block text-muted mb-2">
+                                        Jam Masuk
+                                    </label>
+                                    <div class="input-icon ">
+                                        <span class="input-icon-addon">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                                <path d="M12 10l0 3l2 0"></path>
+                                                <path d="M7 4l-2.75 2"></path>
+                                                <path d="M17 4l2.75 2"></path>
+                                            </svg>
+                                        </span>
+                                            <input type="time" id="jam_masuk" 
+                                            value=""
+                                            class="form-control" 
+                                            placeholder="Jam Masuk" 
+                                            name="jam_masuk"
+                                            min="00:00" 
+                                            max="23:59">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="row">
                             <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                                            <path d="M12 10l0 3l2 0"></path>
-                                            <path d="M7 4l-2.75 2"></path>
-                                            <path d="M17 4l2.75 2"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" value="" id="akhir_jam_masuk" class="form-control"
-                                        placeholder="Akhir Jam Masuk" name="akhir_jam_masuk">
+                                <div class="mb-3">
+                                    <!-- Label untuk input waktu -->
+                                    <label for="akhir_jam_masuk" class="form-label d-block text-muted mb-2">
+                                        Akhir Jam Masuk
+                                    </label>
+                                    
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <!-- SVG icon alarm -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                                <path d="M12 10l0 3l2 0"></path>
+                                                <path d="M7 4l-2.75 2"></path>
+                                                <path d="M17 4l2.75 2"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="time" id="akhir_jam_masuk" 
+                                            value=""
+                                            class="form-control" 
+                                            placeholder="Akhir Jam Masuk" 
+                                            name="akhir_jam_masuk"
+                                            min="00:00" 
+                                            max="23:59">
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="input-icon mb-3">
-                                    <span class="input-icon-addon">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                                            <path d="M12 10l0 3l2 0"></path>
-                                            <path d="M7 4l-2.75 2"></path>
-                                            <path d="M17 4l2.75 2"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" value="" id="jam_pulang" class="form-control"
-                                        placeholder="Jam Pulang" name="jam_pulang">
+                                <div class="mb-3">
+                                    <!-- Label untuk input waktu -->
+                                    <label for="jam_pulang" class="form-label d-block text-muted mb-2">
+                                        Jam Pulang
+                                    </label>
+                                    <div class="input-icon mb-3">
+                                        <span class="input-icon-addon">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                                <path d="M12 10l0 3l2 0"></path>
+                                                <path d="M7 4l-2.75 2"></path>
+                                                <path d="M17 4l2.75 2"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="time" id="jam_pulang" 
+                                            value=""
+                                            class="form-control" 
+                                            placeholder="Jam Pulang" 
+                                            name="jam_pulang"
+                                            min="00:00" 
+                                            max="23:59">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -474,6 +520,48 @@
 @push('myscript')
     <script>
         $(function() {
+            // Ambil elemen-elemen dari form
+            const jamMasukInput = document.getElementById('jam_masuk');
+            const jamKeluarInput = document.getElementById('jam_pulang');
+            const totalJamInput = document.getElementById('total_jam');
+
+            // Fungsi untuk menghitung total jam kerja
+            function hitungTotalJam() {
+                const jamMasuk = jamMasukInput.value;
+                const jamKeluar = jamKeluarInput.value;
+                
+                // Jika kedua waktu sudah diisi
+                if (jamMasuk && jamKeluar) {
+                    const [masukJam, masukMenit] = jamMasuk.split(':').map(num => parseInt(num));
+                    const [keluarJam, keluarMenit] = jamKeluar.split(':').map(num => parseInt(num));
+
+                    // Membuat objek Date untuk jam masuk dan keluar
+                    const masukDate = new Date(0, 0, 0, masukJam, masukMenit); 
+                    const keluarDate = new Date(0, 0, 0, keluarJam, keluarMenit);
+
+                    // Menghitung selisih waktu (dalam menit)
+                    const diff = (keluarDate - masukDate) / 60000;
+
+                    // Jika keluar lebih awal dari masuk (misal jam keluar setelah tengah malam), tambah 24 jam
+                    if (diff < 0) {
+                        keluarDate.setHours(keluarDate.getHours() + 24);
+                    }
+
+                    // Hitung total jam dan menit
+                    const totalJam = Math.floor(diff / 60);
+                    const totalMenit = diff % 60;
+
+                    // Tampilkan total jam dan menit
+                    // totalJamInput.value = `${totalJam} jam ${totalMenit} menit`;
+                    totalJamInput.value = totalJam;
+                } else {
+                    totalJamInput.value = '';
+                }
+            }
+
+            // Event listener untuk mengupdate total jam saat ada perubahan pada jam masuk atau keluar
+            jamMasukInput.addEventListener('input', hitungTotalJam);
+            jamKeluarInput.addEventListener('input', hitungTotalJam);
 
             function showsetjamistirahat() {
                 var status_istirahat = $("#status_istirahat").val();
@@ -491,6 +579,8 @@
 
             $("#awal_jam_masuk, #jam_masuk, #akhir_jam_masuk, #jam_pulang,#awal_jam_istirahat,#akhir_jam_istirahat")
                 .mask("00:00");
+            $("#nama_jam_kerja")
+                .mask("AAAAAAAAAAAAAA");
 
             $("#btnTambahJK").click(function() {
                 $("#modal-inputjk").modal("show");
@@ -529,7 +619,20 @@
                 var total_jam = $("#total_jam").val();
                 var lintashari = $("#lintashari").val();
                 var status_istirahat = $("#status_istirahat").val();
-                if (kode_jam_kerja == "") {
+                console.log(kode_jam_kerja.length);
+                if (kode_jam_kerja.length > 4) {
+                    // alert('Nik Harus Diisi');
+                    Swal.fire({
+                        title: 'Warning!',
+                        text: 'Kode Jam Kerja Hanya 4 Karakter',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        $("#kode_jam_kerja").focus();
+                    });
+
+                    return false;
+                }else if (kode_jam_kerja == "") {
                     // alert('Nik Harus Diisi');
                     Swal.fire({
                         title: 'Warning!',

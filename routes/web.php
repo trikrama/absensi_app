@@ -7,13 +7,17 @@ use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\HariliburController;
+use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\InstrumentController;
 use App\Http\Controllers\IzinabsenController;
 use App\Http\Controllers\IzincutiController;
 use App\Http\Controllers\IzinsakitController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
+use App\Http\Controllers\ManajemenTugasController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\UserController;
+use App\Models\Instrument;
 use App\Models\Karyawan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +50,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth:karyawan'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/logout', [AuthController::class, 'proseslogout'])->name('logout');
+    Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
 
     //Presensi
     Route::get('/presensi/{kode_jam_kerja}/create', [PresensiController::class, 'create']);
@@ -113,16 +117,48 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
     //Presensi
     Route::get('/presensi/monitoring', [PresensiController::class, 'monitoring']);
     Route::post('/getpresensi', [PresensiController::class, 'getpresensi']);
+    Route::post('/getrekappresensi', [PresensiController::class, 'getrekappresensi']);
     Route::post('/tampilkanpeta', [PresensiController::class, 'tampilkanpeta']);
     Route::get('/presensi/laporan', [PresensiController::class, 'laporan']);
     Route::post('/presensi/cetaklaporan', [PresensiController::class, 'cetaklaporan']);
     Route::get('/presensi/rekap', [PresensiController::class, 'rekap']);
     Route::post('/presensi/cetakrekap', [PresensiController::class, 'cetakrekap']);
 
+    Route::get('/rekap-harian', [PresensiController::class, 'rekapHarian'])->name('rekap.harian');
+    Route::post('/rekap-harian', [PresensiController::class, 'rekapHarian']); // Untuk submit export Excel
+
+    Route::get('/rekap/cetak', [PresensiController::class, 'cetakRekapHarian'])->name('rekap.cetak');
+
+
     Route::get('/presensi/izinsakit', [PresensiController::class, 'izinsakit']);
 
     Route::post('/koreksipresensi', [PresensiController::class, 'koreksipresensi']);
     Route::post('/storekoreksipresensi', [PresensiController::class, 'storekoreksipresensi']);
+
+    Route::get('/manajemen_tugas/upload_tugas', [ManajemenTugasController::class, 'index']);
+    Route::get('/manajemen_tugas/kunjungan', [ManajemenTugasController::class, 'kunjungan']);
+
+    Route::controller(InstrumentController::class)->group(function () {
+        Route::get('/instrument', 'index')->name('instrumen.index');
+        Route::get('/instrument/tambah', 'tambah');
+        Route::post('/instrument/store', 'store')->name('instrument.store');
+        Route::get('/instrument/{id}/edit','edit')->name('instrument.edit');
+        Route::put('/instrument/{id}', 'update')->name('instrument.update');
+        Route::delete('/instrument/{id}/deteteUmum', 'destroyUmum')->name('instrument.destroyUmum');
+        Route::delete('/instrument/{id}/deteteKhusus', 'destroyKhusus')->name('instrument.destroyKhusus');
+        
+    });
+    Route::get('/get-titles', [InstrumentController::class, 'getTitles']);
+    Route::controller(InspectionController::class)->group(function () {
+        Route::get('/inspection/jadwal', 'index')->name('inspection.jadwal.index');
+        Route::post('/inspection/jadwal', 'index');
+        Route::get('/inspection/tambah', 'tambah');
+        Route::post('/inspection/store', 'store');
+        Route::get('/inspection/edit/{id}', 'edit');
+        Route::put('/inspection/update/{id}', 'update');
+        Route::delete('/inspection/delete/{id}', 'delete');
+        Route::get('/inspection/mulai/{id}', 'mulai');
+    });
 });
 
 

@@ -61,9 +61,6 @@ class PresensiController extends Controller
 
     public function create($kode_jam_kerja)
     {
-        // echo "<pre>";
-        $tes = Auth::guard('karyawan')->user();
-        // echo "</pre>";
         $kode_jam_kerja = $kode_jam_kerja != "null" ? Crypt::decrypt($kode_jam_kerja) : $kode_jam_kerja;
         $nik = Auth::guard('karyawan')->user()->nik;
         $hariini = date("Y-m-d");
@@ -126,7 +123,7 @@ class PresensiController extends Controller
         } else if ($jamkerja == null) {
             return view('presensi.notifjadwal');
         } else {
-            return view('presensi.create', compact('tes','cek', 'lok_kantor', 'jamkerja', 'hariini', 'kode_jam_kerja'));
+            return view('presensi.create', compact('cek', 'lok_kantor', 'jamkerja', 'hariini', 'kode_jam_kerja'));
         }
     }
 
@@ -569,6 +566,10 @@ class PresensiController extends Controller
             }
         );
 
+        if (!empty($request->nama_karyawan)) {
+            $query->where('nama_lengkap', 'like', '%' . $request->nama_karyawan . '%');
+        }
+
         if (!empty($request->kode_cabang)) {
             $query->where('karyawan.kode_cabang', $request->kode_cabang);
         }
@@ -581,8 +582,17 @@ class PresensiController extends Controller
             $query->where('karyawan.kode_cabang', $kode_cabang);
             $query->where('karyawan.kode_dept', $kode_dept);
         }
-        $query->orderBy('nama_lengkap');
+        // $query->orderBy('nama_lengkap');
+        $query->orderBy('kode_cabang');
         $presensi = $query->get();
+
+        $rekap = [
+            'hadir' => $presensi->where('status', 'h')->count(),
+            'lambat' => $presensi->where('status', 'l')->count(),
+            'izin' => $presensi->where('status', 'i')->count(),
+            'sakit' => $presensi->where('status', 's')->count(),
+            'tidak_hadir' => $presensi->where('status', 'a')->count(),
+        ];
         // if ($user->hasRole('admin departemen')) {
         //     $presensi = DB::table('presensi')
         //         ->select('presensi.*', 'nama_lengkap', 'karyawan.kode_dept', 'jam_masuk', 'nama_jam_kerja', 'jam_masuk', 'jam_pulang', 'keterangan')
@@ -606,7 +616,48 @@ class PresensiController extends Controller
         // }
 
 
-        return view('presensi.getpresensi', compact('presensi', 'tanggal'));
+        return view('presensi.getpresensi', compact('presensi', 'tanggal', 'rekap'));
+    }
+
+    public function getrekappresensi(Request $request)
+    {
+        $user = User::find(Auth::guard('user')->user()->id);
+
+        $tanggal = $request->tanggal;
+
+        $query = Karyawan::query();
+        $query->selectRaw(
+            'karyawan.nik, nama_lengkap, karyawan.kode_dept, karyawan.kode_cabang,
+        datapresensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,
+        datapresensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan'
+        );
+        $query->leftJoin(
+            DB::raw("(
+                SELECT
+                presensi.nik,presensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,presensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan
+                FROM presensi
+                LEFT JOIN  jam_kerja ON presensi.kode_jam_kerja = jam_kerja.kode_jam_kerja
+                LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+                WHERE tgl_presensi = '$tanggal'
+            ) datapresensi"),
+            function ($join) {
+                $join->on('karyawan.nik', '=', 'datapresensi.nik');
+            }
+        );
+        $presensi = $query->get();
+       
+
+        $rekap = [
+            'hadir' => $presensi->where('status', 'h')->count(),
+            // 'lambat' => $presensi->where('status', 'l')->count(),
+            'izin' => $presensi->where('status', 'i')->count(),
+            'sakit' => $presensi->where('status', 's')->count(),
+            'tidak_hadir' => $presensi->where('status', 'a')->count(),
+            'lambat' => $presensi->filter(function($item) {
+                return strtotime($item->jam_in) > strtotime($item->jam_masuk);
+            })->count(),
+        ];
+        return view('presensi.rekap_monitoring', compact('rekap'));
     }
 
     public function tampilkanpeta(Request $request)
@@ -641,9 +692,6 @@ class PresensiController extends Controller
 
     public function cetaklaporan(Request $request)
     {
-
-
-
         $nik = $request->nik;
         $bulan = $request->bulan;
         $tahun = $request->tahun;
@@ -799,6 +847,278 @@ class PresensiController extends Controller
         }
     }
 
+    public function showRekapHarian()
+    {
+        $kode_dept = Auth::guard('user')->user()->kode_dept;
+        $kode_cabang = Auth::guard('user')->user()->kode_cabang;
+        $user = User::find(Auth::guard('user')->user()->id);
+
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        if ($user->hasRole('admin departemen')) {
+            $karyawan = DB::table('karyawan')
+                ->where('kode_dept', $kode_dept)
+                ->where('kode_cabang', $kode_cabang)
+                ->orderBy('nama_lengkap')->get();
+        } else if ($user->hasRole('administrator')) {
+            $karyawan = DB::table('karyawan')
+                ->orderBy('nama_lengkap')->get();
+        }
+
+        return view('presensi.laporan', compact('namabulan', 'karyawan'));
+        return view('presensi.rekap_harian');
+    }
+
+
+    public function rekapHarian(Request $request)
+    {
+        $tanggal = $request->tanggal ?? date('Y-m-d'); // Default ke tanggal hari ini jika tidak diinputkan
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        // Ambil data karyawan dan absensi berdasarkan tanggal
+        $rekapHarian = DB::table('karyawan')
+            ->select(
+                'karyawan.nik',
+                'karyawan.nama_lengkap',
+                'departemen.nama_dept',
+                'presensi.jam_in',
+                'presensi.jam_out',
+                'presensi.status',
+                'presensi.kode_izin',
+                'pengajuan_izin.keterangan as alasan_izin',
+                'jam_kerja.nama_jam_kerja',
+                'jam_kerja.jam_masuk',
+                'jam_kerja.jam_pulang'
+            )
+            ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
+            ->leftJoin('presensi', function ($join) use ($tanggal) {
+                $join->on('karyawan.nik', '=', 'presensi.nik')
+                    ->where('presensi.tgl_presensi', '=', $tanggal);
+            })
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
+            ->orderBy('karyawan.nama_lengkap')
+            ->get();
+
+        // Opsi untuk ekspor Excel
+        if (isset($_POST['exportexcel'])) {
+            $time = date("d-M-Y H:i:s");
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Absensi Harian $tanggal $time.xls");
+            return view('presensi.rekapHarianExcel', compact('tanggal', 'rekapHarian', 'namabulan'));
+        }
+
+        // Tampilkan view laporan harian
+        return view('presensi.rekap_harian', compact('tanggal', 'rekapHarian', 'namabulan'));
+    }
+
+    // public function cetakRekapHarian(Request $request)
+    // {
+    //     $tanggal = $request->tanggal ?? date('Y-m-d'); // Fokus pada satu tanggal
+    //     $kode_dept = $request->input('kode_dept');
+    //     $kode_cabang = $request->input('kode_cabang');
+
+    //     // Liburan dan hari libur pada tanggal tertentu
+    //     $splitTgl =  explode('-', $tanggal);
+    //         $bulan = $splitTgl[1];
+    //         $tahun = $splitTgl[0];
+    //     $dari = $tahun . "-" . $bulan . "-01";
+    //     $sampai = date("Y-m-t", strtotime($dari));
+    //     $datalibur = getkaryawanlibur($dari, $sampai);
+    //     // $datalibur = $this->cekKaryawanLibur($tanggal);
+
+    //     $harilibur = DB::table('harilibur')->where('tanggal_libur', $tanggal)->get();
+
+    //     // Query untuk data presensi dan karyawan
+    //     $query = Karyawan::query();
+    //     $query->selectRaw("
+    //         karyawan.nik,
+    //         nama_lengkap,
+    //         jabatan,
+    //         IFNULL(jam_in, 'NA') as jam_in,
+    //         IFNULL(jam_out, 'NA') as jam_out,
+    //         IFNULL(presensi.status, 'NA') as status,
+    //         IFNULL(nama_jam_kerja, 'NA') as nama_jam_kerja,
+    //         IFNULL(keterangan, 'NA') as keterangan
+    //     ");
+    //     $query->leftJoin(
+    //         DB::raw("
+    //             (SELECT * FROM presensi WHERE tgl_presensi = '$tanggal') as presensi
+    //         "),
+    //         function ($join) {
+    //             $join->on('karyawan.nik', '=', 'presensi.nik');
+    //         }
+    //     );
+
+    //     // Filter berdasarkan departemen atau cabang (jika ada)
+    //     if (!empty($kode_dept)) {
+    //         $query->where('kode_dept', $kode_dept);
+    //     }
+    //     if (!empty($kode_cabang)) {
+    //         $query->where('kode_cabang', $kode_cabang);
+    //     }
+
+    //     $query->orderBy('nama_lengkap');
+    //     $rekap = $query->get();
+
+    //     // Data untuk view
+    //     $data = [
+    //         'tanggal' => $tanggal,
+    //         'rekap' => $rekap,
+    //         'harilibur' => $harilibur,
+    //         'datalibur' => $datalibur
+    //     ];
+
+    //     return view('presensi.rekap_harian_cetak', $data);
+    // }
+
+    // private function cekKaryawanLibur($tanggal)
+    // {
+    //     // Fungsi pengecekan karyawan libur (dummy logic, sesuaikan dengan kebutuhan)
+    //     return DB::table('karyawan_libur')->where('tanggal', $tanggal)->get();
+    // }
+
+
+    public function cetakRekapHarian(Request $request)
+    {
+        $tanggal = $request->tanggal ?? date('Y-m-d'); // Default ke tanggal hari ini jika tidak diinputkan
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        // Ambil data karyawan dan absensi berdasarkan tanggal
+        $rekapHarian = DB::table('karyawan')
+            ->select(
+                'karyawan.nik',
+                'karyawan.nama_lengkap',
+                'departemen.nama_dept',
+                'presensi.jam_in',
+                'presensi.jam_out',
+                'presensi.status',
+                'presensi.kode_izin',
+                'pengajuan_izin.keterangan as alasan_izin',
+                'jam_kerja.nama_jam_kerja',
+                'jam_kerja.jam_masuk',
+                'jam_kerja.jam_pulang'
+            )
+            ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
+            ->leftJoin('presensi', function ($join) use ($tanggal) {
+                $join->on('karyawan.nik', '=', 'presensi.nik')
+                    ->where('presensi.tgl_presensi', '=', $tanggal);
+            })
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
+            ->orderBy('karyawan.nama_lengkap')
+            ->get();
+
+        // Opsi untuk ekspor Excel
+        if (isset($_POST['exportexcel'])) {
+            $time = date("d-M-Y H:i:s");
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Absensi Harian $tanggal $time.xls");
+            return view('presensi.rekapHarianExcel', compact('tanggal', 'rekapHarian', 'namabulan'));
+        }
+
+        // Tampilkan view laporan harian
+        return view('presensi.rekap_harian_cetak', compact('tanggal', 'rekapHarian', 'namabulan'));
+        // $tanggal = $request->tanggal ?? date('Y-m-d');
+        // $splitTgl =  explode('-', $tanggal);
+        // $bulan = $splitTgl[1];
+        // $tahun = $splitTgl[0];
+        // $kode_dept = $request->input('kode_dept');
+        // $kode_cabang = $request->input('kode_cabang');
+
+        // $dari = $tahun . "-" . $bulan . "-01";
+        // $sampai = date("Y-m-t", strtotime($dari));
+        // $datalibur = getkaryawanlibur($dari, $sampai);
+        // $harilibur = DB::table('harilibur')->whereBetween('tanggal_libur', [$dari, $sampai])->get();
+
+        // $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        // $rangetanggal = [];
+        // $field_date = "";
+        // $select_date = "";
+        // $i = 1;
+
+        // // Buat kolom dinamis berdasarkan rentang tanggal
+        // while (strtotime($dari) <= strtotime($sampai)) {
+        //     $rangetanggal[] = $dari;
+
+        //     $select_date .= "MAX(IF(tgl_presensi = '$dari',
+        //         CONCAT(
+        //             IFNULL(jam_in, 'NA'), '|',
+        //             IFNULL(jam_out, 'NA'), '|',
+        //             IFNULL(presensi.status, 'NA'), '|',
+        //             IFNULL(nama_jam_kerja, 'NA'), '|',
+        //             IFNULL(jam_masuk, 'NA'), '|',
+        //             IFNULL(jam_pulang, 'NA'), '|',
+        //             IFNULL(presensi.kode_izin, 'NA'), '|',
+        //             IFNULL(keterangan, 'NA'), '|',
+        //             IFNULL(total_jam, 'NA'), '|',
+        //             IFNULL(lintashari, 'NA'), '|',
+        //             IFNULL(awal_jam_istirahat, 'NA'), '|',
+        //             IFNULL(akhir_jam_istirahat, 'NA'), '|'
+        //         ), NULL)) as tgl_" . $i . ",";
+        //     $field_date .= "tgl_" . $i . ",";
+        //     $i++;
+        //     $dari = date("Y-m-d", strtotime("+1 day", strtotime($dari)));
+        // }
+
+        // $jmlhari = count($rangetanggal);
+        // $lastrange = $jmlhari - 1;
+        // $sampai = $rangetanggal[$lastrange];
+
+        // // Query untuk mengambil data presensi dan menggabungkan dengan data karyawan
+        // $query = Karyawan::query();
+        // $query->selectRaw(
+        //     "$field_date karyawan.nik, nama_lengkap, jabatan"
+        // );
+        // $query->leftJoin(
+        //     DB::raw("(
+        //         SELECT
+        //         $select_date
+        //         presensi.nik
+        //         FROM presensi
+        //         LEFT JOIN jam_kerja ON presensi.kode_jam_kerja = jam_kerja.kode_jam_kerja
+        //         LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+        //         WHERE tgl_presensi BETWEEN '$rangetanggal[0]' AND '$sampai'
+        //         GROUP BY presensi.nik
+        //     ) as presensi"),
+        //     function ($join) {
+        //         $join->on('karyawan.nik', '=', 'presensi.nik');
+        //     }
+        // );
+
+        // if (!empty($kode_dept)) {
+        //     $query->where('kode_dept', $kode_dept);
+        // }
+
+        // if (!empty($kode_cabang)) {
+        //     $query->where('kode_cabang', $kode_cabang);
+        // }
+
+        // $query->orderBy('nama_lengkap');
+        // $rekap = $query->get();
+
+        // // Pilihan view berdasarkan jenis laporan
+        // $data = [
+        //     'bulan' => $bulan,
+        //     'tahun' => $tahun,
+        //     'namabulan' => $namabulan[$bulan],
+        //     'rekap' => $rekap,
+        //     'rangetanggal' => $rangetanggal,
+        //     'jmlhari' => $jmlhari,
+        //     'harilibur' => $harilibur,
+        //     'datalibur' => $datalibur
+        // ];
+
+
+        // if ($request->jenis_laporan == 1) {
+        // return view('presensi.rekap_harian_cetak', $data);
+        // } else if ($request->jenis_laporan == 2) {
+        //     return view('presensi.cetakrekap_detail', $data);
+        // }
+    }
+
+
+
+
     public function izinsakit(Request $request)
     {
 
@@ -827,7 +1147,8 @@ class PresensiController extends Controller
         }
 
         if (!empty($request->nik)) {
-            $query->where('pengajuan_izin.nik', $request->nik);
+            // $query->where('pengajuan_izin.nik', $request->nik);
+            $query->where('pengajuan_izin.nik', 'like', '%' . $request->nik . '%');
         }
 
         if (!empty($request->nama_lengkap)) {

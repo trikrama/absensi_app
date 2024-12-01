@@ -154,7 +154,7 @@
                         $cekhari = gethari(date('D',strtotime($tgl_presensi)));
                         if($status == "h"){
                             $jml_hadir += 1;
-                            $color = "white";
+                            $color = "#00ff4c";
                         }
 
                         if($status == "i"){
@@ -179,7 +179,7 @@
                         }
 
                         if(!empty($ceklibur)){
-                            $color = "green";
+                            $color = "#bb00ff";
                         }
 
 
@@ -192,7 +192,7 @@
                 ?>
                     <td style="background-color: {{ $color }}">
 
-                        {{ $status }}
+                        {{-- {{ $status }} --}}
 
                     </td>
                     <?php

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use App\Models\Jabatan;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,10 +44,10 @@ class KaryawanController extends Controller
             $query->where('karyawan.kode_cabang', $kode_cabang);
         }
         $karyawan = $query->paginate(10);
-
+        $jabatan = Jabatan::all();
         $departemen = DB::table('departemen')->get();
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
-        return view('karyawan.index', compact('karyawan', 'departemen', 'cabang'));
+        return view('karyawan.index', compact('karyawan', 'departemen', 'cabang', 'jabatan'));
     }
 
     public function show($nik)
@@ -69,6 +70,7 @@ class KaryawanController extends Controller
 
         $nik = $request->nik;
         $nama_lengkap = $request->nama_lengkap;
+        $username = strtolower(strtok($nama_lengkap, ' '));
         $jabatan = $request->jabatan;
         $no_hp = $request->no_hp;
         $kode_dept = $request->kode_dept;
@@ -88,6 +90,7 @@ class KaryawanController extends Controller
             $karyawan = Karyawan::create([
                 'nik' => $nik,
                 'nama_lengkap' => $nama_lengkap,
+                'username' => $username,
                 'jabatan' => $jabatan,
                 'no_hp' => $no_hp,
                 'foto' => $foto,
@@ -181,10 +184,14 @@ class KaryawanController extends Controller
             // Proses foto baru jika ada, atau gunakan foto lama
             $foto = $request->hasFile('foto') ? $nik . "." . $request->file('foto')->getClientOriginalExtension() : $request->old_foto;
 
+            $nama_lengkap = $request->nama_lengkap;
+            $username = strtolower(strtok($nama_lengkap, ' '));
+
             // Update data karyawan
             $karyawan->update([
                 'nik' => $nik_baru,
-                'nama_lengkap' => $request->nama_lengkap,
+                'nama_lengkap' =>  $nama_lengkap,
+                'username' => $username,
                 'jabatan' => $request->jabatan,
                 'no_hp' => $request->no_hp,
                 'kode_dept' => $request->kode_dept,

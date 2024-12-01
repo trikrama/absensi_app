@@ -130,6 +130,7 @@ class HariliburController extends Controller
 
     public function storekaryawanlibur(Request $request)
     {
+        
         try {
             $cek = DB::table('harilibur_detail')
                 ->where('kode_libur', $request->kode_libur)

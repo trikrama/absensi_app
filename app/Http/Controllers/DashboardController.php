@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
         $hariini = date("Y-m-d");
-        $bulanini = date("m") * 1; //1 atau Januari
+        $bulanini = date("m") * 1 ; //1 atau Januari
         $tahunini = date("Y"); // 2023
         $nik = Auth::guard('karyawan')->user()->nik;
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
@@ -29,6 +29,11 @@ class DashboardController extends Controller
             ->orderBy('tgl_presensi', 'desc')
             ->get();
 
+        
+        // Hitung jumlah hari dalam bulan yang berjalan
+        $jumlahHariBulanIni = cal_days_in_month(CAL_GREGORIAN, $bulanini, $tahunini);
+        $hariBerjalan = date('d'); // Hari ke berapa dalam bulan ini
+
         $rekappresensi = DB::table('presensi')
             ->selectRaw('
             SUM(IF(status="h",1,0)) as jmlhadir,
@@ -44,6 +49,14 @@ class DashboardController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
             ->first();
 
+        // Hitung jumlah tidak hadir
+        $jmlTidakHadir = $hariBerjalan - (
+            ($rekappresensi->jmlhadir ?? 0) +
+            ($rekappresensi->jmlizin ?? 0) +
+            ($rekappresensi->jmlsakit ?? 0) +
+            ($rekappresensi->jmlcuti ?? 0)
+        );
+
 
         $leaderboard = DB::table('presensi')
             ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
@@ -55,7 +68,7 @@ class DashboardController extends Controller
         $cabang = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
         $departemen = DB::table('departemen')->where('kode_dept', $kode_dept)->first();
 
-        return view('dashboard.dashboard', compact('presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekappresensi', 'leaderboard', 'cabang', 'departemen'));
+        return view('dashboard.dashboard', compact('presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekappresensi', 'leaderboard', 'cabang', 'departemen', 'jmlTidakHadir'));
     }
 
     public function dashboardadmin()

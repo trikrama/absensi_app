@@ -167,48 +167,114 @@
 
         }
 
+        // $("#takeabsen").click(function(e) {
+        //     Webcam.snap(function(uri) {
+        //         image = uri;
+        //     });
+        //     var lokasi = $("#lokasi").val();
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '/presensi/store',
+        //         data: {
+        //             _token: "{{ csrf_token() }}",
+        //             image: image,
+        //             lokasi: lokasi,
+        //             kode_jam_kerja: "{{ $kode_jam_kerja }}"
+        //         },
+        //         cache: false,
+        //         success: function(respond) {
+        //             var status = respond.split("|");
+        //             if (status[0] == "success") {
+        //                 if (status[2] == "in") {
+        //                     notifikasi_in.play();
+        //                 } else {
+        //                     notifikasi_out.play();
+        //                 }
+        //                 Swal.fire({
+        //                     title: 'Berhasil !',
+        //                     text: status[1],
+        //                     icon: 'success'
+        //                 })
+        //                 setTimeout("location.href='/dashboard'", 3000);
+        //             } else {
+        //                 if (status[2] == "radius") {
+        //                     radius_sound.play();
+        //                 }
+        //                 Swal.fire({
+        //                     title: 'Error !',
+        //                     text: status[1],
+        //                     icon: 'error'
+        //                 })
+        //             }
+        //         }
+        //     });
+
+        // });
         $("#takeabsen").click(function(e) {
+            e.preventDefault(); // Hindari submit form default jika ada
+            var button = $(this); // Simpan referensi tombol
+            var originalText = button.html(); // Simpan teks asli tombol
+            
+            // Ubah tombol menjadi loading state
+            button.html('<i class="fas fa-spinner fa-spin"></i> Sedang Memproses...');
+            button.prop('disabled', true); // Matikan tombol sementara
+            
             Webcam.snap(function(uri) {
                 image = uri;
-            });
-            var lokasi = $("#lokasi").val();
-            $.ajax({
-                type: 'POST',
-                url: '/presensi/store',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    image: image,
-                    lokasi: lokasi,
-                    kode_jam_kerja: "{{ $kode_jam_kerja }}"
-                },
-                cache: false,
-                success: function(respond) {
-                    var status = respond.split("|");
-                    if (status[0] == "success") {
-                        if (status[2] == "in") {
-                            notifikasi_in.play();
+                var lokasi = $("#lokasi").val();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/presensi/store',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        image: image,
+                        lokasi: lokasi,
+                        kode_jam_kerja: "{{ $kode_jam_kerja }}"
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        var status = respond.split("|");
+                        if (status[0] == "success") {
+                            if (status[2] == "in") {
+                                notifikasi_in.play();
+                            } else {
+                                notifikasi_out.play();
+                            }
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: status[1],
+                                icon: 'success'
+                            });
+                            setTimeout(() => {
+                                location.href = '/dashboard';
+                            }, 3000);
                         } else {
-                            notifikasi_out.play();
+                            if (status[2] == "radius") {
+                                radius_sound.play();
+                            }
+                            Swal.fire({
+                                title: 'Error!',
+                                text: status[1],
+                                icon: 'error'
+                            });
                         }
+                    },
+                    error: function() {
                         Swal.fire({
-                            title: 'Berhasil !',
-                            text: status[1],
-                            icon: 'success'
-                        })
-                        setTimeout("location.href='/dashboard'", 3000);
-                    } else {
-                        if (status[2] == "radius") {
-                            radius_sound.play();
-                        }
-                        Swal.fire({
-                            title: 'Error !',
-                            text: status[1],
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan pada server.',
                             icon: 'error'
-                        })
+                        });
+                    },
+                    complete: function() {
+                        // Kembalikan tombol ke kondisi semula
+                        button.html(originalText);
+                        button.prop('disabled', false);
                     }
-                }
+                });
             });
-
         });
+
     </script>
 @endpush

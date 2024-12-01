@@ -49,8 +49,15 @@
                         <path d="M21 15v6" />
                     </svg>
                 </span>
-                <input type="text" id="jam_in" value="{{ $presensi != null ? $presensi->jam_in : '' }}"
-                    class="form-control" placeholder="Jam Masuk" name="jam_in">
+                {{-- <input type="text" id="jam_in" value="{{ $presensi != null ? $presensi->jam_in : '' }}"
+                    class="form-control" placeholder="Jam Masuk" name="jam_in"> --}}
+                <input type="time" id="jam_in" 
+                    value="{{ $presensi != null ? date('H:i', strtotime($presensi->jam_in)) : '' }}"
+                    class="form-control" 
+                    placeholder="Jam Masuk" 
+                    name="jam_in"
+                    min="00:00" 
+                    max="23:59">
             </div>
         </div>
     </div>
@@ -69,8 +76,15 @@
                         <path d="M21 15v6" />
                     </svg>
                 </span>
-                <input type="text" id="jam_out" value="{{ $presensi != null ? $presensi->jam_out : '' }}"
-                    class="form-control" placeholder="Jam Pulang" name="jam_out">
+                {{-- <input type="text" id="jam_out" value="{{ $presensi != null ? $presensi->jam_out : '' }}"
+                    class="form-control" placeholder="Jam Pulang" name="jam_out"> --}}
+                <input type="time" id="jam_out" 
+                    value="{{ $presensi != null ? date('H:i', strtotime($presensi->jam_out)) : '' }}"
+                    class="form-control" 
+                    placeholder="Jam Pulang" 
+                    name="jam_out"
+                    min="00:00" 
+                    max="23:59">
             </div>
         </div>
     </div>

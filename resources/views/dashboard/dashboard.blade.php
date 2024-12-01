@@ -15,7 +15,7 @@
         }
     </style>
     <div class="section" id="user-section">
-        <a href="/logout" class="logout">
+        <a href="/proseslogout" class="logout">
             <ion-icon name="exit-outline"></ion-icon>
         </a>
         <div id="user-detail">
@@ -150,62 +150,77 @@
         <div id="rekappresensi">
             <h3>Rekap Presensi Bulan {{ $namabulan[$bulanini] }} Tahun {{ $tahunini }}</h3>
             <div class="row">
-                <div class="col-3">
+                <!-- Baris pertama -->
+                <div class="col-4">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                             <span class="badge bg-danger"
                                 style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlhadir }}</span>
-                            <ion-icon name="accessibility-outline" style="font-size: 1.6rem;"
-                                class="text-primary mb-1"></ion-icon>
+                            <ion-icon name="accessibility-outline" style="font-size: 1.6rem;" class="text-primary mb-1"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem; font-weight:500">Hadir</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                             <span class="badge bg-danger"
-                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">
-                                {{ $rekappresensi->jmlizin }}
-                            </span>
-                            <ion-icon name="newspaper-outline" style="font-size: 1.6rem;"
-                                class="text-success mb-1"></ion-icon>
+                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlizin }}</span>
+                            <ion-icon name="newspaper-outline" style="font-size: 1.6rem;" class="text-success mb-1"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem; font-weight:500">Izin</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                             <span class="badge bg-danger"
-                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">
-                                {{ $rekappresensi->jmlsakit }}</span>
-                            <ion-icon name="medkit-outline" style="font-size: 1.6rem;"
-                                class="text-warning mb-1"></ion-icon>
+                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlsakit }}</span>
+                            <ion-icon name="medkit-outline" style="font-size: 1.6rem;" class="text-warning mb-1"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem; font-weight:500">Sakit</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+            </div>
+            <div class="row mt-3">
+                <!-- Baris kedua -->
+                <div class="col-4">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                             <span class="badge bg-danger"
-                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">
-                                {{-- {{ $rekappresensi->jmlcuti }} --}}
-                                {{ $rekappresensi->jmlterlambat }}
-                            </span>
-                            <ion-icon name="document-outline" style="font-size: 1.6rem;"
-                                class="text-danger mb-1"></ion-icon>
+                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlcuti }}</span>
+                            <ion-icon name="document-outline" style="font-size: 1.6rem;" class="text-danger mb-1"></ion-icon>
                             <br>
-                            {{-- <span style="font-size: 0.8rem; font-weight:500">Cuti</span> --}}
-                            <span style="font-size: 0.8rem; font-weight:500">Lambat</span>
+                            <span style="font-size: 0.8rem; font-weight:500">Cuti</span>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $jmlTidakHadir }}</span>
+                            <ion-icon name="eye-off-outline" style="font-size: 1.6rem;" class="text-secondary mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight:500">Tidak Hadir</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <span class="badge bg-danger"
+                                style="position: absolute; top:3px; right:10px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlterlambat }}</span>
+                            <ion-icon name="time-outline" style="font-size: 1.6rem;" class="text-info mb-1"></ion-icon>
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight:500">Terlambat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
         <div class="presencetab mt-2">
             <div class="tab-pane fade show active" id="pilled" role="tabpanel">

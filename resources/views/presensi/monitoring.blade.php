@@ -36,9 +36,10 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="row">
+
+                            <div class="row g-3 align-items-center">
                                 @role('administrator', 'user')
-                                    <div class="col-4">
+                                    <div class="col-md-3">
                                         <div class="input-icon mb-3">
                                             <span class="input-icon-addon">
                                                 <!-- Download SVG icon from http://tabler-icons.io/i/user -->
@@ -61,8 +62,17 @@
                                                 autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="form-group">
+                                    {{-- untuk filter nama --}}
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
+                                            <input type="text" name="nama_karyawan" id="nama_karyawan"
+                                                class="form-control" placeholder="Nama Karyawan"
+                                                value="{{ Request('nama_karyawan') }}">
+                                        </div>
+                                    </div>
+                                    {{-- akhir filter nama --}}
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
                                             <select name="kode_cabang" id="kode_cabang" class="form-select">
                                                 <option value="">Semua Cabang</option>
                                                 @foreach ($cabang as $d)
@@ -72,8 +82,8 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="form-group">
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
                                             <select name="kode_dept" id="kode_dept" class="form-select">
                                                 <option value="">Semua Departemen</option>
                                                 @foreach ($departemen as $d)
@@ -109,6 +119,7 @@
                                     </div>
                                 @endrole
                             </div>
+                            <div id="loadrekap"></div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="table-responsive">
@@ -116,7 +127,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No.</th>
-                                                    <th>Nik</th>
+                                                    {{-- <th>Nik</th> --}}
                                                     <th>Nama Karyawan</th>
                                                     <th>Cabang</th>
                                                     <th>Dept</th>
@@ -184,12 +195,14 @@
                 var tanggal = $("#tanggal").val();
                 var kode_cabang = $("#kode_cabang").val();
                 var kode_dept = $("#kode_dept").val();
+                var nama_karyawan = $("#nama_karyawan").val();
                 $.ajax({
                     type: 'POST',
                     url: '/getpresensi',
                     data: {
                         _token: "{{ csrf_token() }}",
                         tanggal: tanggal,
+                        nama_karyawan: nama_karyawan,
                         kode_cabang: kode_cabang,
                         kode_dept: kode_dept
                     },
@@ -199,19 +212,42 @@
                     }
                 });
             }
+            function loadrekap() {
+                var tanggal = $("#tanggal").val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/getrekappresensi',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        tanggal: tanggal
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        $("#loadrekap").html(respond);
+                    }
+                });
+            }
             $("#tanggal").change(function(e) {
                 loadpresensi();
+                loadrekap();
             });
-
             $("#kode_cabang").change(function(e) {
                 loadpresensi();
+                loadrekap();
             });
-
+            
             $("#kode_dept").change(function(e) {
                 loadpresensi();
+                loadrekap();
+            });
+            $("#nama_karyawan").on("input", function(e) {
+                loadpresensi();
+                loadrekap();
             });
             loadpresensi();
+            loadrekap();
 
         });
+
     </script>
 @endpush

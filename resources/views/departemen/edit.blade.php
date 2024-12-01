@@ -17,7 +17,7 @@
                         <path d="M19 11l0 2"></path>
                     </svg>
                 </span>
-                <input type="text" value="{{ $departemen->kode_dept }}" id="nik" class="form-control" placeholder="Kode Dept" name="kode_dept" readonly>
+                <input type="text" value="{{ $departemen->kode_dept }}" id="nik" class="form-control" placeholder="Kode Jabatan" name="kode_dept" readonly>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                     </svg>
                 </span>
-                <input type="text" id="nama_dept" value="{{ $departemen->nama_dept }}" class="form-control" name="nama_dept" placeholder="Nama Departemen">
+                <input type="text" id="nama_dept" value="{{ $departemen->nama_dept }}" class="form-control" name="nama_dept" placeholder="Nama Jabatan">
             </div>
         </div>
     </div>

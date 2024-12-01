@@ -17,6 +17,18 @@ class CabangController extends Controller
 
     public function store(Request $request)
     {
+        // request()->validate([
+        //     'kode_cabang' => 'required|unique:cabang,kode_cabang|max:3',
+        //     'nama_cabang' => 'required',
+        //     'lokasi_cabang' => 'required',
+        //     'radius_cabang' => 'required',
+        // ]);
+
+        // if (validator()->fails()) {
+        //     return Redirect::back()->with(['warning' => validator()->errors()->first()]);
+        // }
+        
+
         $kode_cabang = $request->kode_cabang;
         $nama_cabang = $request->nama_cabang;
         $lokasi_cabang = $request->lokasi_cabang;
