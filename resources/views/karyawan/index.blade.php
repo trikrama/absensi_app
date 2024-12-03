@@ -162,7 +162,8 @@
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
-                                                    <td>{{ $d->nik }}</td>
+                                                    {{-- <td>{{ $d->nik }}</td> --}}
+                                                    <td>{{ $d->id_karyawan }}</td>
                                                     <td>{{ $d->nama_lengkap }}</td>
                                                     <td>{{ $d->jabatan }}</td>
                                                     <td>{{ $d->no_hp }}</td>
@@ -607,9 +608,20 @@
                         </div>
 
                         <!-- Tahun Pelatihan -->
-                        <div class="row mt-2">
+                        {{-- <div class="row mt-2">
                             <div class="col-12">
                                 <input type="number" id="tahun_pelatihan" name="tahun_pelatihan" class="form-control" placeholder="Tahun Pelatihan">
+                            </div>
+                        </div> --}}
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <input type="number" 
+                                    id="tahun_pelatihan" 
+                                    name="tahun_pelatihan" 
+                                    class="form-control" 
+                                    placeholder="Tahun Pelatihan" 
+                                    min="1901" 
+                                    max="2155">
                             </div>
                         </div>
 
@@ -751,9 +763,18 @@
 
 @push('myscript')
     <script>
+        document.getElementById('tahun_pelatihan').addEventListener('input', function (e) {
+            const min = 1901;
+            const max = 2155;
+            let value = parseInt(e.target.value);
 
+            if (value < min) {
+                e.target.value = min;
+            } else if (value > max) {
+                e.target.value = max;
+            }
+        });
         $(function() {
-
             $("#nik").mask("000000000000000000");
             $("#no_hp").mask("0000000000000");
             $("#btnTambahkaryawan").click(function() {
@@ -918,267 +939,268 @@
                     });
 
                     return false;
-                } else if (tempat_lahir == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Tempat Lahir Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#tempat_lahir").focus();
-                    });
-                    return false;
-                } else if (tanggal_lahir == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Tanggal Lahir Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#tanggal_lahir").focus();
-                    });
-                    return false;
-                } else if (nama_ibu_kandung == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Nama Ibu Kandung Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#nama_ibu_kandung").focus();
-                    });
-                    return false;
-                } else if (jenis_kelamin == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Jenis Kelamin Harus Dipilih!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#jenis_kelamin").focus();
-                    });
-                    return false;
-                } else if (agama == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Agama Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#agama").focus();
-                    });
-                    return false;
-                } else if (status_menikah == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Status Menikah Harus Dipilih!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#status_menikah").focus();
-                    });
-                    return false;
-                } else if (alamat_ktp == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Alamat KTP Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#alamat_ktp").focus();
-                    });
-                    return false;
-                } else if (nomor_kk == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Nomor KK Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#nomor_kk").focus();
-                    });
-                    return false;
-                } else if (pendidikan_terakhir == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Pendidikan Terakhir Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#pendidikan_terakhir").focus();
-                    });
-                    return false;
-                } else if (institusi == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Institusi Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#institusi").focus();
-                    });
-                    return false;
-                } else if (masa_aktif_sim == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Masa Aktif SIM Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#masa_aktif_sim").focus();
-                    });
-                    return false;
-                } else if (pendidikan_satpam == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Pendidikan Satpam Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#pendidikan_satpam").focus();
-                    });
-                    return false;
-                } else if (tahun_pelatihan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Tahun Pelatihan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#tahun_pelatihan").focus();
-                    });
-                    return false;
-                } else if (no_kta == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. KTA Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_kta").focus();
-                    });
-                    return false;
-                } else if (penerbit_kta == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Penerbit KTA Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#penerbit_kta").focus();
-                    });
-                    return false;
-                } else if (masa_aktif_kta == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Masa Aktif KTA Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#masa_aktif_kta").focus();
-                    });
-                    return false;
-                } else if (no_registrasi == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. Registrasi Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_registrasi").focus();
-                    });
-                    return false;
-                } else if (tmt_awal_penugasan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'TMT Awal Penugasan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#tmt_awal_penugasan").focus();
-                    });
-                    return false;
-                } else if (nama_bank == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'Nama Bank Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#nama_bank").focus();
-                    });
-                    return false;
-                } else if (no_rekening == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. Rekening Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_rekening").focus();
-                    });
-                    return false;
-                } else if (no_bpjs_kesehatan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. BPJS Kesehatan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_bpjs_kesehatan").focus();
-                    });
-                    return false;
-                } else if (no_bpjs_ketenagakerjaan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. BPJS Ketenagakerjaan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_bpjs_ketenagakerjaan").focus();
-                    });
-                    return false;
-                } else if (no_npwp == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. NPWP Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_npwp").focus();
-                    });
-                    return false;
-                } else if (no_bpjs_kesehatan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. BPJS Kesehatan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_bpjs_kesehatan").focus();
-                    });
-                    return false;
-                } else if (no_bpjs_ketenagakerjaan == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. BPJS Ketenagakerjaan Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_bpjs_ketenagakerjaan").focus();
-                    });
-                    return false;
-                } else if (no_npwp == "") {
-                    Swal.fire({
-                        title: 'Warning!',
-                        text: 'No. NPWP Harus Diisi!',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result) => {
-                        $("#no_npwp").focus();
-                    });
-                    return false;
                 } 
+                // else if (tempat_lahir == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Tempat Lahir Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#tempat_lahir").focus();
+                //     });
+                //     return false;
+                // } else if (tanggal_lahir == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Tanggal Lahir Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#tanggal_lahir").focus();
+                //     });
+                //     return false;
+                // } else if (nama_ibu_kandung == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Nama Ibu Kandung Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#nama_ibu_kandung").focus();
+                //     });
+                //     return false;
+                // } else if (jenis_kelamin == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Jenis Kelamin Harus Dipilih!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#jenis_kelamin").focus();
+                //     });
+                //     return false;
+                // } else if (agama == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Agama Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#agama").focus();
+                //     });
+                //     return false;
+                // } else if (status_menikah == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Status Menikah Harus Dipilih!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#status_menikah").focus();
+                //     });
+                //     return false;
+                // } else if (alamat_ktp == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Alamat KTP Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#alamat_ktp").focus();
+                //     });
+                //     return false;
+                // } else if (nomor_kk == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Nomor KK Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#nomor_kk").focus();
+                //     });
+                //     return false;
+                // } else if (pendidikan_terakhir == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Pendidikan Terakhir Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#pendidikan_terakhir").focus();
+                //     });
+                //     return false;
+                // } else if (institusi == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Institusi Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#institusi").focus();
+                //     });
+                //     return false;
+                // } else if (masa_aktif_sim == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Masa Aktif SIM Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#masa_aktif_sim").focus();
+                //     });
+                //     return false;
+                // } else if (pendidikan_satpam == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Pendidikan Satpam Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#pendidikan_satpam").focus();
+                //     });
+                //     return false;
+                // } else if (tahun_pelatihan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Tahun Pelatihan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#tahun_pelatihan").focus();
+                //     });
+                //     return false;
+                // } else if (no_kta == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. KTA Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_kta").focus();
+                //     });
+                //     return false;
+                // } else if (penerbit_kta == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Penerbit KTA Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#penerbit_kta").focus();
+                //     });
+                //     return false;
+                // } else if (masa_aktif_kta == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Masa Aktif KTA Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#masa_aktif_kta").focus();
+                //     });
+                //     return false;
+                // } else if (no_registrasi == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. Registrasi Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_registrasi").focus();
+                //     });
+                //     return false;
+                // } else if (tmt_awal_penugasan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'TMT Awal Penugasan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#tmt_awal_penugasan").focus();
+                //     });
+                //     return false;
+                // } else if (nama_bank == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'Nama Bank Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#nama_bank").focus();
+                //     });
+                //     return false;
+                // } else if (no_rekening == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. Rekening Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_rekening").focus();
+                //     });
+                //     return false;
+                // } else if (no_bpjs_kesehatan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. BPJS Kesehatan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_bpjs_kesehatan").focus();
+                //     });
+                //     return false;
+                // } else if (no_bpjs_ketenagakerjaan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. BPJS Ketenagakerjaan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_bpjs_ketenagakerjaan").focus();
+                //     });
+                //     return false;
+                // } else if (no_npwp == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. NPWP Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_npwp").focus();
+                //     });
+                //     return false;
+                // } else if (no_bpjs_kesehatan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. BPJS Kesehatan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_bpjs_kesehatan").focus();
+                //     });
+                //     return false;
+                // } else if (no_bpjs_ketenagakerjaan == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. BPJS Ketenagakerjaan Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_bpjs_ketenagakerjaan").focus();
+                //     });
+                //     return false;
+                // } else if (no_npwp == "") {
+                //     Swal.fire({
+                //         title: 'Warning!',
+                //         text: 'No. NPWP Harus Diisi!',
+                //         icon: 'warning',
+                //         confirmButtonText: 'Ok'
+                //     }).then((result) => {
+                //         $("#no_npwp").focus();
+                //     });
+                //     return false;
+                // } 
             });
         });
     </script>

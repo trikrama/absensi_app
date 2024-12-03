@@ -134,7 +134,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $rekap->nik }}</td>
                     <td>{{ $rekap->nama_lengkap }}</td>
-                    <td>{{ $rekap->nama_dept }}</td>
+                    <td>{{ $rekap->kode_dept }}</td>
                     <td>{{ $rekap->jam_in ?? '-' }}</td>
                     <td>{{ $rekap->jam_out ?? '-' }}</td>
                     <td>{{ $rekap->status ?? 'Tidak Hadir' }}</td>
@@ -254,6 +254,7 @@
                 let xPosition = marginLeft; // Mulai dari margin kiri
 
                 // Gambar data dengan jarak antar kolom
+                const safeText = (text) => (text ? text.toString() : '-');
                 page.drawText((index + 1).toString(), { x: xPosition, y: yPosition, size: 10 });
                 xPosition += columnWidths[0]; // Posisi x setelah kolom pertama
 
@@ -263,7 +264,7 @@
                 page.drawText(rekap.nama_lengkap, { x: xPosition, y: yPosition, size: 10 });
                 xPosition += columnWidths[2]; // Posisi x setelah kolom ketiga
 
-                page.drawText(rekap.nama_dept, { x: xPosition, y: yPosition, size: 10 });
+                page.drawText(rekap.kode_dept, { x: xPosition, y: yPosition, size: 10 });
                 xPosition += columnWidths[3]; // Tambahkan jarak setelah kolom "Departemen"
 
                 page.drawText((rekap.jam_in || '-').toString(), { x: xPosition, y: yPosition, size: 10 });

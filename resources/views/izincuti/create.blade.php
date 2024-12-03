@@ -13,6 +13,18 @@
         #keterangan {
             height: 5rem !important;
         }
+        .form-control {
+        background-color: #f8f9fa; /* Sesuaikan dengan warna input lainnya */
+        border: 1px solid #ced4da;
+        color: #495057;
+        }
+
+        .form-control:focus {
+            background-color: #ffffff; /* Warna saat fokus */
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
     </style>
     <!-- App Header -->
     <div class="appHeader bg-primary text-light">
@@ -57,14 +69,15 @@
                         placeholder="Maksimal Cuti" readonly>
                     <p id="info_max_cuti"></p>
                 </div>
+                <!-- Mengubah keterangan menjadi textarea dengan warna background yang sama -->
                 <div class="form-group">
-                    <input type="text" id="keterangan" name="keterangan" class="form-control" autocomplete="off"
-                        placeholder="Keterangan">
+                    <textarea id="keterangan" name="keterangan" class="form-control" autocomplete="off"
+                        placeholder="Masukkan keterangan Anda di sini" rows="4" style="resize: none;"></textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary w-100">Kirim</button>
                 </div>
-            </form>
+            </form>            
         </div>
     </div>
 @endsection

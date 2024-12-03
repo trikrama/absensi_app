@@ -182,7 +182,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -253,7 +253,7 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>{{ $d->keterangan }}</td>
+                                    <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
                                     <td>
                                         @if ($d->status_approved == 1)
                                             <span class="badge bg-success">Disetujui</span>

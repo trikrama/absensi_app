@@ -645,18 +645,21 @@ class PresensiController extends Controller
             }
         );
         $presensi = $query->get();
-       
 
+        $total = $presensi->count();
+        
         $rekap = [
             'hadir' => $presensi->where('status', 'h')->count(),
             // 'lambat' => $presensi->where('status', 'l')->count(),
             'izin' => $presensi->where('status', 'i')->count(),
             'sakit' => $presensi->where('status', 's')->count(),
-            'tidak_hadir' => $presensi->where('status', 'a')->count(),
-            'lambat' => $presensi->filter(function($item) {
+            // 'tidak_hadir' => $presensi->where('status', 'a')->count(),
+            'lambat' => $presensi->filter(function ($item) {
                 return strtotime($item->jam_in) > strtotime($item->jam_masuk);
             })->count(),
         ];
+
+        $rekap['tidak_hadir'] = $total - $rekap['hadir'] - $rekap['izin'] - $rekap['sakit'];
         return view('presensi.rekap_monitoring', compact('rekap'));
     }
 
@@ -865,39 +868,70 @@ class PresensiController extends Controller
         }
 
         return view('presensi.laporan', compact('namabulan', 'karyawan'));
-        return view('presensi.rekap_harian');
+        // return view('presensi.rekap_harian');
     }
 
 
     public function rekapHarian(Request $request)
     {
         $tanggal = $request->tanggal ?? date('Y-m-d'); // Default ke tanggal hari ini jika tidak diinputkan
+        
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         // Ambil data karyawan dan absensi berdasarkan tanggal
-        $rekapHarian = DB::table('karyawan')
-            ->select(
-                'karyawan.nik',
-                'karyawan.nama_lengkap',
-                'departemen.nama_dept',
-                'presensi.jam_in',
-                'presensi.jam_out',
-                'presensi.status',
-                'presensi.kode_izin',
-                'pengajuan_izin.keterangan as alasan_izin',
-                'jam_kerja.nama_jam_kerja',
-                'jam_kerja.jam_masuk',
-                'jam_kerja.jam_pulang'
-            )
-            ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
-            ->leftJoin('presensi', function ($join) use ($tanggal) {
-                $join->on('karyawan.nik', '=', 'presensi.nik')
-                    ->where('presensi.tgl_presensi', '=', $tanggal);
-            })
-            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
-            ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
-            ->orderBy('karyawan.nama_lengkap')
-            ->get();
+        $data_cabang = DB::table('cabang')->get();
+        // $rekapHarian = DB::table('karyawan')
+        //     ->select(
+        //         'karyawan.nik',
+        //         'karyawan.nama_lengkap',
+        //         'departemen.nama_dept',
+        //         'presensi.jam_in',
+        //         'presensi.jam_out',
+        //         'presensi.status',
+        //         'presensi.kode_izin',
+        //         'pengajuan_izin.keterangan as alasan_izin',
+        //         'jam_kerja.nama_jam_kerja',
+        //         'jam_kerja.jam_masuk',
+        //         'jam_kerja.jam_pulang'
+        //     )
+        //     ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
+        //     ->leftJoin('presensi', function ($join) use ($tanggal) {
+        //         $join->on('karyawan.nik', '=', 'presensi.nik')
+        //             ->where('presensi.tgl_presensi', '=', $tanggal);
+        //     })
+        //     ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+        //     ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
+        //     ->orderBy('karyawan.nama_lengkap')
+        //     ->get();
+
+        $query = Karyawan::query();
+        $query->selectRaw(
+            'karyawan.nik, nama_lengkap, karyawan.kode_dept, karyawan.kode_cabang,
+        datapresensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,
+        datapresensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan'
+        );
+        $query->leftJoin(
+            DB::raw("(
+                SELECT
+                presensi.nik,presensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,presensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan
+                FROM presensi
+                LEFT JOIN  jam_kerja ON presensi.kode_jam_kerja = jam_kerja.kode_jam_kerja
+                LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+                WHERE tgl_presensi = '$tanggal'
+            ) datapresensi"),
+            function ($join) {
+                $join->on('karyawan.nik', '=', 'datapresensi.nik');
+            }
+        );
+
+        if (!empty($request->kode_cabang)) {
+            $query->where('karyawan.kode_cabang', $request->kode_cabang);
+        }
+        
+        // $query->orderBy('nama_lengkap');
+        $query->orderBy('karyawan.nama_lengkap');
+        $rekapHarian = $query->get();
+        // dd($rekapHarian);
 
         // Opsi untuk ekspor Excel
         if (isset($_POST['exportexcel'])) {
@@ -908,7 +942,7 @@ class PresensiController extends Controller
         }
 
         // Tampilkan view laporan harian
-        return view('presensi.rekap_harian', compact('tanggal', 'rekapHarian', 'namabulan'));
+        return view('presensi.rekap_harian', compact('tanggal', 'rekapHarian', 'namabulan', 'data_cabang'));
     }
 
     // public function cetakRekapHarian(Request $request)
@@ -982,31 +1016,57 @@ class PresensiController extends Controller
     {
         $tanggal = $request->tanggal ?? date('Y-m-d'); // Default ke tanggal hari ini jika tidak diinputkan
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
         // Ambil data karyawan dan absensi berdasarkan tanggal
-        $rekapHarian = DB::table('karyawan')
-            ->select(
-                'karyawan.nik',
-                'karyawan.nama_lengkap',
-                'departemen.nama_dept',
-                'presensi.jam_in',
-                'presensi.jam_out',
-                'presensi.status',
-                'presensi.kode_izin',
-                'pengajuan_izin.keterangan as alasan_izin',
-                'jam_kerja.nama_jam_kerja',
-                'jam_kerja.jam_masuk',
-                'jam_kerja.jam_pulang'
-            )
-            ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
-            ->leftJoin('presensi', function ($join) use ($tanggal) {
-                $join->on('karyawan.nik', '=', 'presensi.nik')
-                    ->where('presensi.tgl_presensi', '=', $tanggal);
-            })
-            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
-            ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
-            ->orderBy('karyawan.nama_lengkap')
-            ->get();
+        // $rekapHarian = DB::table('karyawan')
+        //     ->select(
+            //         'karyawan.nik',
+        //         'karyawan.nama_lengkap',
+        //         'departemen.nama_dept',
+        //         'presensi.jam_in',
+        //         'presensi.jam_out',
+        //         'presensi.status',
+        //         'presensi.kode_izin',
+        //         'pengajuan_izin.keterangan as alasan_izin',
+        //         'jam_kerja.nama_jam_kerja',
+        //         'jam_kerja.jam_masuk',
+        //         'jam_kerja.jam_pulang'
+        //     )
+        //     ->leftJoin('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
+        //     ->leftJoin('presensi', function ($join) use ($tanggal) {
+        //         $join->on('karyawan.nik', '=', 'presensi.nik')
+        //             ->where('presensi.tgl_presensi', '=', $tanggal);
+        //     })
+        //     ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+        //     ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
+        //     ->orderBy('karyawan.nama_lengkap')
+        //     ->get();
+        $query = Karyawan::query();
+        $query->selectRaw(
+            'karyawan.nik, nama_lengkap, karyawan.kode_dept, karyawan.kode_cabang,
+        datapresensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,
+        datapresensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan'
+        );
+        $query->leftJoin(
+            DB::raw("(
+                SELECT
+                presensi.nik,presensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,presensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan
+                FROM presensi
+                LEFT JOIN  jam_kerja ON presensi.kode_jam_kerja = jam_kerja.kode_jam_kerja
+                LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+                WHERE tgl_presensi = '$tanggal'
+            ) datapresensi"),
+            function ($join) {
+                $join->on('karyawan.nik', '=', 'datapresensi.nik');
+            }
+        );
+
+        if (!empty($request->cabang)) {
+            $query->where('karyawan.kode_cabang', $request->cabang);
+        }
+        
+        // $query->orderBy('nama_lengkap');
+        $query->orderBy('karyawan.nama_lengkap');
+        $rekapHarian = $query->get();
 
         // Opsi untuk ekspor Excel
         if (isset($_POST['exportexcel'])) {

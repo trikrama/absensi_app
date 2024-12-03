@@ -6,6 +6,7 @@ use App\Models\Karyawan;
 use App\Models\Jabatan;
 use App\Models\Profile;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -65,9 +66,40 @@ class KaryawanController extends Controller
         return view('karyawan.detail', compact('karyawan'));
     }
 
+    // Validasi input
+    // $request->validate([
+    //     'nik' => 'required|unique:karyawan,nik',
+    //     'nama_lengkap' => 'required',
+    //     'jabatan' => 'required',
+    //     'no_hp' => 'required|numeric',
+    //     'kode_dept' => 'required',
+    //     'kode_cabang' => 'required',
+    //     'foto' => 'image|mimes:png,jpg|max:1024',
+    // ]);
+    // $request->validate([
+    //     'tahun_pelatihan' => 'required|digits:4|integer|min:1901|max:2155',
+    // ]);
+
+    // Generate ID Karyawan
+    private function generateIdKaryawan($tahun, $bulan)
+    {
+        // Ambil nilai auto increment terakhir untuk bulan dan tahun yang sama
+        $lastId = Karyawan::whereRaw('LEFT(id_karyawan, 4) = ?', [$tahun . $bulan])
+            ->orderBy('id_karyawan', 'desc')
+            ->first();
+
+        // Jika belum ada ID sebelumnya, mulai dari 1
+        $increment = $lastId ? intval(substr($lastId->id_karyawan, -4)) + 1 : 1;
+
+        // Format auto increment dengan leading zero
+        $incrementFormatted = str_pad($increment, 4, '0', STR_PAD_LEFT);
+
+        // Gabungkan tahun, bulan, dan increment
+        return $tahun . $bulan . $incrementFormatted;
+    }
     public function store(Request $request)
     {
-
+        
         $nik = $request->nik;
         $nama_lengkap = $request->nama_lengkap;
         $username = strtolower(strtok($nama_lengkap, ' '));
@@ -83,12 +115,22 @@ class KaryawanController extends Controller
             $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
         }
 
+        // Dapatkan waktu sekarang
+        $now = Carbon::now();
+
+        // Ambil 2 digit terakhir tahun dan 2 digit bulan
+        $tahun = $now->format('y'); // 2 digit tahun terakhir, contoh: '24' untuk 2024
+        $bulan = $now->format('m'); // Bulan dalam format 2 digit, contoh: '09' untuk September
+
+        $id_karyawan = $this->generateIdKaryawan($tahun, $bulan);
+
         // Mulai transaksi
         DB::beginTransaction();
         try {
             // Insert data ke tabel karyawan menggunakan Eloquent
             $karyawan = Karyawan::create([
                 'nik' => $nik,
+                'id_karyawan' => $id_karyawan,
                 'nama_lengkap' => $nama_lengkap,
                 'username' => $username,
                 'jabatan' => $jabatan,

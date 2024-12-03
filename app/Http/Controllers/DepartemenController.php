@@ -53,17 +53,32 @@ class DepartemenController extends Controller
 
     public function update($kode_dept, Request $request)
     {
-        $nama_dept = $request->nama_dept;
-        $data = [
-            'nama_dept' => $nama_dept
-        ];
+        try {
+            $request->validate([
+                'kode_dept' => 'required',
+                'nama_dept' => 'required',
+            ]);
 
-        $update = DB::table('departemen')->where('kode_dept', $kode_dept)->update($data);
-        if ($update) {
-            return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
-        } else {
-            return Redirect::back()->with(['warning' => 'Data Gagal Di Update']);
+            $kode_dept_req = $request->kode_dept;
+            $nama_dept = $request->nama_dept;
+            $data = [
+                'kode_dept' => $kode_dept_req,
+                'nama_dept' => $nama_dept
+            ];
+    
+            $update = DB::table('departemen')->where('kode_dept', $kode_dept)->update($data);
+            // if ($update) {
+                return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
+            // } else {
+                // return Redirect::back()->with(['warning' => 'Data Gagal Di Update']);
+            // }
+        }catch (\Exception $e) {
+            dd($e->getMessage());
+            return Redirect::back()->with(['warning' => 'Data Gagal Di Update (' . $e->getMessage().')']);
         }
+
+    
+
     }
 
     public function delete($kode_dept)

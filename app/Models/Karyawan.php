@@ -20,7 +20,9 @@ class Karyawan extends Authenticatable
     // Tentukan kolom yang bisa diisi (mass assignable)
     protected $fillable = [
         'nik',
+        'id_karyawan',
         'nama_lengkap',
+        'username',
         'jabatan',
         'no_hp',
         'kode_dept',

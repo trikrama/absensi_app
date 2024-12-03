@@ -42,7 +42,8 @@
                 <input type="text" id="jml_hari" name="jml_hari" class="form-control" autocomplete="off" placeholder="Jumlah Hari" readonly>
             </div>
             <div class="form-group">
-                <input type="text" id="keterangan" name="keterangan" class="form-control" autocomplete="off" placeholder="Keterangan">
+                <textarea id="keterangan" name="keterangan" class="form-control" autocomplete="off"
+                    placeholder="Keterangan" rows="4" style="resize: none;"></textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary w-100">Kirim</button>

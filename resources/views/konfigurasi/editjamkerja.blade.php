@@ -19,7 +19,7 @@
                         <path d="M19 11l0 2"></path>
                     </svg>
                 </span>
-                <input type="text" id="kode_jam_kerja" name="kode_jam_kerja" value="{{ $jamkerja->kode_jam_kerja }}"
+                <input type="text" id="kode_jam_kerja_edit" name="kode_jam_kerja" value="{{ $jamkerja->kode_jam_kerja }}"
                     class="form-control" placeholder="Kode Jam Kerja" name="kode_jam_kerja_edit">
             </div>
         </div>
@@ -48,7 +48,41 @@
             </div>
         </div>
     </div>
+    {{-- --- --}}
     <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <!-- Label untuk input waktu -->
+                <label for="awal_jam_masuk" class="form-label d-block text-muted mb-2">
+                    Awal Jam Masuk
+                </label>
+                <div class="input-icon">
+                    <span class="input-icon-addon">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                            <path d="M12 10l0 3l2 0"></path>
+                            <path d="M7 4l-2.75 2"></path>
+                            <path d="M17 4l2.75 2"></path>
+                        </svg>
+                    </span>
+                        <input type="time" id="awal_jam_masuk_edit" 
+                        value="{{ $jamkerja->awal_jam_masuk }}"
+                        class="form-control" 
+                        placeholder="Awal Jam Masuk" 
+                        name="awal_jam_masuk"
+                        min="00:00" 
+                        max="23:59">    
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- --- --}}
+    {{-- <div class="row">
         <div class="col-12">
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -67,8 +101,40 @@
                     class="form-control" placeholder="Awal Jam Masuk" name="awal_jam_masuk">
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <!-- Label untuk input waktu -->
+                <label for="jam_masuk" class="form-label d-block text-muted mb-2">
+                    Jam Masuk
+                </label>
+                <div class="input-icon ">
+                    <span class="input-icon-addon">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                            <path d="M12 10l0 3l2 0"></path>
+                            <path d="M7 4l-2.75 2"></path>
+                            <path d="M17 4l2.75 2"></path>
+                        </svg>
+                    </span>
+                        <input type="time" id="jam_masuk_edit" 
+                        value="{{ $jamkerja->jam_masuk }}"
+                        class="form-control" 
+                        placeholder="Jam Masuk" 
+                        name="jam_masuk"
+                        min="00:00" 
+                        max="23:59">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="row">
         <div class="col-12">
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -87,8 +153,41 @@
                     placeholder="Jam Masuk" name="jam_masuk">
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <!-- Label untuk input waktu -->
+                <label for="akhir_jam_masuk" class="form-label d-block text-muted mb-2">
+                    Akhir Jam Masuk
+                </label>
+                
+                <div class="input-icon">
+                    <span class="input-icon-addon">
+                        <!-- SVG icon alarm -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                            <path d="M12 10l0 3l2 0"></path>
+                            <path d="M7 4l-2.75 2"></path>
+                            <path d="M17 4l2.75 2"></path>
+                        </svg>
+                    </span>
+                    <input type="time" id="akhir_jam_masuk_edit" 
+                        value="{{ $jamkerja->akhir_jam_masuk }}"
+                        class="form-control" 
+                        placeholder="Akhir Jam Masuk" 
+                        name="akhir_jam_masuk"
+                        min="00:00" 
+                        max="23:59">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="row">
         <div class="col-12">
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -107,9 +206,41 @@
                     class="form-control" placeholder="Akhir Jam Masuk" name="akhir_jam_masuk">
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <!-- Label untuk input waktu -->
+                <label for="jam_pulang" class="form-label d-block text-muted mb-2">
+                    Jam Pulang
+                </label>
+                <div class="input-icon mb-3">
+                    <span class="input-icon-addon">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                            <path d="M12 10l0 3l2 0"></path>
+                            <path d="M7 4l-2.75 2"></path>
+                            <path d="M17 4l2.75 2"></path>
+                        </svg>
+                    </span>
+                    <input type="time" id="jam_pulang_edit" 
+                        value="{{ $jamkerja->jam_pulang }}"
+                        class="form-control" 
+                        placeholder="Jam Pulang" 
+                        name="jam_pulang"
+                        min="00:00" 
+                        max="23:59">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="row">
         <div class="col-12">
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -128,7 +259,7 @@
                     placeholder="Jam Pulang" name="jam_pulang">
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="col-12">
             <div class="input-icon mb-3">
@@ -231,6 +362,52 @@
 
 
 <script>
+    $(function() {
+    $("#kode_jam_kerja_edit").mask("AAAA");
+    $("#nama_jam_kerja_edit").mask("AAAAAAAAAAAAAA");
+
+    const jamMasukInput = document.getElementById('jam_masuk_edit');
+    const jamKeluarInput = document.getElementById('jam_pulang_edit');
+    const totalJamInput = document.getElementById('total_jam_edit');
+
+    // Fungsi untuk menghitung total jam kerja
+    function hitungTotalJam() {
+        const jamMasuk = jamMasukInput.value;
+        const jamKeluar = jamKeluarInput.value;
+        
+        // Jika kedua waktu sudah diisi
+        if (jamMasuk && jamKeluar) {
+            const [masukJam, masukMenit] = jamMasuk.split(':').map(num => parseInt(num));
+            const [keluarJam, keluarMenit] = jamKeluar.split(':').map(num => parseInt(num));
+
+            // Membuat objek Date untuk jam masuk dan keluar
+            const masukDate = new Date(0, 0, 0, masukJam, masukMenit); 
+            const keluarDate = new Date(0, 0, 0, keluarJam, keluarMenit);
+
+            // Menghitung selisih waktu (dalam menit)
+            const diff = (keluarDate - masukDate) / 60000;
+
+            // Jika keluar lebih awal dari masuk (misal jam keluar setelah tengah malam), tambah 24 jam
+            if (diff < 0) {
+                keluarDate.setHours(keluarDate.getHours() + 24);
+            }
+
+            // Hitung total jam dan menit
+            const totalJam = Math.floor(diff / 60);
+            const totalMenit = diff % 60;
+
+            // Tampilkan total jam dan menit
+            // totalJamInput.value = `${totalJam} jam ${totalMenit} menit`;
+            totalJamInput.value = totalJam;
+        } else {
+            totalJamInput.value = '';
+        }
+    }
+
+    // Event listener untuk input jam masuk dan keluar
+    jamMasukInput.addEventListener('input', hitungTotalJam);
+    jamKeluarInput.addEventListener('input', hitungTotalJam);
+            
     function showsetjamistirahat() {
         var status_istirahat = $("#status_istirahat_edit").val();
         if (status_istirahat == "1") {
@@ -392,4 +569,6 @@
             return false;
         }
     });
+});
+
 </script>

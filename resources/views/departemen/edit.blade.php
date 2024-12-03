@@ -1,4 +1,4 @@
-<form action="/departemen/{{ $departemen->kode_dept }}/update" method="POST" id="frmDepartemen">
+<form action="/departemen/{{ $departemen->kode_dept }}/update" method="POST" id="frmDepartemenedit">
     @csrf
     <div class="row">
         <div class="col-12">
@@ -17,7 +17,7 @@
                         <path d="M19 11l0 2"></path>
                     </svg>
                 </span>
-                <input type="text" value="{{ $departemen->kode_dept }}" id="nik" class="form-control" placeholder="Kode Jabatan" name="kode_dept" readonly>
+                <input type="text" value="{{ $departemen->kode_dept }}" id="kode_dept" class="form-control" placeholder="Kode Jabatan" name="kode_dept">
             </div>
         </div>
     </div>
@@ -52,3 +52,39 @@
         </div>
     </div>
 </form>
+
+<script>
+    $(function() {
+        $("#frmDepartemenedit").find("#kode_dept").mask("AAA"); 
+        $("#frmDepartemenedit").submit(function() {   
+            var kode_dept =  $("#frmDepartemenedit").find("#kode_dept").val();
+            var nama_dept =  $("#frmDepartemenedit").find("#nama_dept").val();
+            
+            
+            if (kode_dept == "") {
+                Swal.fire({
+                    title: 'Warning!',
+                    text: 'Kode Jabatan Harus Diisi !',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                }).then((result) => {
+                    $("#kode_dept").focus();
+                });
+                
+                return false;
+            } else if (nama_dept == "") {
+                Swal.fire({
+                    title: 'Warning!',
+                    text: 'Nama Jabatan Harus Diisi !',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                }).then((result) => {
+                    $("#nama_dept").focus();
+                });
+                
+                return false;
+            } 
+        });
+    });
+</script>
+

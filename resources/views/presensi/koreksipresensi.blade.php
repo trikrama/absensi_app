@@ -36,6 +36,7 @@
     </div>
     <div class="row mb-2" id="frm_jam_in">
         <div class="col-12">
+            <label for="jam_in" class="form-label fw-bold">Jam Masuk</label>
             <div class="input-icon">
                 <span class="input-icon-addon">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock-24" width="24"
@@ -49,8 +50,6 @@
                         <path d="M21 15v6" />
                     </svg>
                 </span>
-                {{-- <input type="text" id="jam_in" value="{{ $presensi != null ? $presensi->jam_in : '' }}"
-                    class="form-control" placeholder="Jam Masuk" name="jam_in"> --}}
                 <input type="time" id="jam_in" 
                     value="{{ $presensi != null ? date('H:i', strtotime($presensi->jam_in)) : '' }}"
                     class="form-control" 
@@ -63,6 +62,7 @@
     </div>
     <div class="row mb-2" id="frm_jam_out">
         <div class="col-12">
+            <label for="jam_out" class="form-label fw-bold mb-2">Jam Pulang</label>
             <div class="input-icon">
                 <span class="input-icon-addon">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock-24" width="24"
@@ -76,8 +76,6 @@
                         <path d="M21 15v6" />
                     </svg>
                 </span>
-                {{-- <input type="text" id="jam_out" value="{{ $presensi != null ? $presensi->jam_out : '' }}"
-                    class="form-control" placeholder="Jam Pulang" name="jam_out"> --}}
                 <input type="time" id="jam_out" 
                     value="{{ $presensi != null ? date('H:i', strtotime($presensi->jam_out)) : '' }}"
                     class="form-control" 

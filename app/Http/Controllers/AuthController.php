@@ -31,8 +31,8 @@ class AuthController extends Controller
                 return redirect('/panel/dashboardadmin');
             }
         } elseif ($request->role === 'karyawan') {
-            $credentials['nik'] = $request->nik; // Menggunakan NIK untuk login karyawan
-            // $credentials['username'] = $request->nik;
+            // $credentials['nik'] = $request->nik; // Menggunakan NIK untuk login karyawan
+            $credentials['id_karyawan'] = $request->nik;
             if (Auth::guard('karyawan')->attempt($credentials)) {
                 return redirect('/dashboard');
             }

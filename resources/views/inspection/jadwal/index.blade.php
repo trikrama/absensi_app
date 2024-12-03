@@ -76,6 +76,7 @@
     </div>
 </div>
 
+
 <div class="container-fluid px-4">
     @if($pemeriksaan)
         @if($pemeriksaan->status == "BELUM")
@@ -93,8 +94,12 @@
             </div>
         @endif
     @endif
+
+    <div class="d-flex justify-content-end">
+        <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm">Tambah Instrument</a>
+    </div>
     {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
-    <div class="card mt-5">
+    <div class="card mt-2">
         <div class="card-body">
             <h5 class="card-title">Tambahkan Jadwal Pemeriksaan</h5>
             <form method="POST" action="{{ url('/inspection/store') }}" id="form-pemeriksaan">@csrf
