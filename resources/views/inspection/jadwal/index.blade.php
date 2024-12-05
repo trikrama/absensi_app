@@ -20,6 +20,21 @@
         background-color: #a5b4fc;
     }
 </style> --}}
+<div class="row">
+    <div class="col-12">
+        @if (Session::get('success'))
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+        @endif
+
+        @if (Session::get('warning'))
+            <div class="alert alert-warning">
+                {{ Session::get('warning') }}
+            </div>
+        @endif
+    </div>
+</div>
 
 
 <div class="container-fluid px-4 py-3">
@@ -27,21 +42,6 @@
         <div class="d-flex">
             <p class="font-weight-bold text-muted">Admin / Pemeriksaan / </p>
             <a href="javascript:;" class="font-weight-bold text-lg text-info hover:text-teal-500">Pemeriksaan & Jadwal</a>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                @if (Session::get('success'))
-                    <div class="alert alert-success">
-                        {{ Session::get('success') }}
-                    </div>
-                @endif
-
-                @if (Session::get('warning'))
-                    <div class="alert alert-warning">
-                        {{ Session::get('warning') }}
-                    </div>
-                @endif
-            </div>
         </div>
         {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
         <form class="d-flex gap-2" method="POST" action="{{ url('/inspection/jadwal') }}">@csrf
@@ -186,7 +186,7 @@
                                 @csrf @method('DELETE')
                                 <button type="submit" data-id="{{ $row->id }}" class="btn btn-danger btn-sm">Hapus</button>
                             </form>
-                            <a href="{{ url('/admin/pemeriksaan/detail_pemeriksaan/'.$row->id) }}" class="btn btn-info btn-sm">Lihat</a>
+                            <a href="{{ url('/inspection/detailInspection/'.$row->id) }}" class="btn btn-info btn-sm">Lihat Detail</a>
                         </td>
                     </tr>
                     @endforeach

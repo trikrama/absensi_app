@@ -7,6 +7,7 @@ use App\Models\DetailInspection;
 use App\Models\Inspection;
 use App\Models\Instrument;
 use App\Models\InstrumentTitle;
+use App\Models\Karyawan;
 use App\Models\RangeValue;
 use App\Models\UnitInstrument;
 use App\Models\User;
@@ -81,7 +82,6 @@ class InspectionController extends Controller
 
     public function store(request $req)
     {
-
         $req->validate([
             'pemeriksa' => 'required',
             'unit' => 'required',
@@ -106,6 +106,7 @@ class InspectionController extends Controller
             return redirect()->route('inspection.jadwal.index')->with('success', 'Pemeriksaan Berhasil Ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->back()->with('warning', 'Pemeriksaan Gagal Ditambahkan');
         }
     }
@@ -126,6 +127,8 @@ class InspectionController extends Controller
         $nama_cabang = DB::table('cabang')->where('kode_cabang', $query->lokasi)->first();
 
         $data = $query;
+        // dd($data);
+
 
         return view('inspection.jadwal.edit', compact('data', 'data_user', 'data_unit', 'data_cabang', 'nama_cabang'));
     }
@@ -178,12 +181,13 @@ class InspectionController extends Controller
     {
 
         $query = Inspection::find($id);
-
+        $karyawans = Karyawan::all();
         $data = $query;
         $id_unit = $data->kode_dept;
 
         $pertanyaanUmum = Instrument::where('tipe', 'umum')->get();
         $semuaInstrumen = collect();
+        // $pertanyaanKhusus = UnitInstrument::where('kode_dept', $id_unit)->get();
         $pertanyaanKhusus = UnitInstrument::where('kode_dept', $id_unit)->get();
         foreach ($pertanyaanKhusus as $item) {
             $instrumen = Instrument::where('id', $item->instrument_id)
@@ -195,9 +199,84 @@ class InspectionController extends Controller
         $semuaPertanyaan = $semuaPertanyaan->groupBy('title.title');
         $ranges = RangeValue::all();
 
+        // dd($instrumen);
+
         // $data_detail = DetailInspection::where('id_pemeriksaan', $id)->where('indikator', 'BAIK')->pluck('id_instrumen')->toArray();
 
         // return view('inspection.jadwal.mulai', compact('data', 'data_instrumen', 'data_detail', 'semuaPertanyaan'));
-        return view('inspection.jadwal.mulai', compact('data', 'semuaPertanyaan', 'ranges'));
+        return view('inspection.jadwal.mulai', compact('data', 'semuaPertanyaan', 'ranges', 'karyawans'));
     }
+
+    public function storeInspection(Request $request) {
+        // dd($request->all());
+        $request->validate([
+            'nik' => 'required|exists:karyawan,nik',
+            'details.*.id_instrumen' => 'required|exists:instruments,id',
+            'details.*.jawaban' => 'required|string',
+            'details.*.foto' => 'nullable|image|max:2048',
+        ]);
+
+        $id = $request->id;
+        $pemeriksa = $request->id_pemeriksa;
+        // $pemeriksa2 = Auth::guard('user')->user()->id;
+        // dd($pemeriksa1 . " -------- ". $pemeriksa2);
+
+        // $lokasi = DB::table('cabang')->where('kode_cabang', $request->lokasi)->first()->nama_cabang;
+
+
+
+        $inspection = Inspection::where('id', $id)->first();
+        // Simpan data pemeriksaan utama
+        // $inspection = Inspection::create([
+        // $inspection = where('id', $request->nik)->update([
+        //     'nik' => $request->nik,
+        //     'user_id' => $pemeriksa,
+        //     'kode_dept' => Karyawan::where('nik', $request->nik)->first()->kode_dept,
+        //     // 'lokasi' => $lokasi,
+        //     'lokasi' => $request->lokasi,
+        //     'tgl_pemeriksaan' => now(),
+        //     'status' => 'SELESAI',
+        // ]);
+        if ($inspection) {
+            $inspection->update([
+                'nik' => $request->nik,
+                'user_id' => $pemeriksa,
+                'kode_dept' => Karyawan::where('nik', $request->nik)->first()->kode_dept,
+                'lokasi' => $request->lokasi,
+                'tgl_pemeriksaan' => now(),
+                'status' => 'SELESAI',
+            ]);
+        } else {
+            // Opsional: Tangani jika data tidak ditemukan
+            return redirect()->route('inspection.jadwal.index')->with('warning', 'Data Tidak di Temukan');
+        }
+    
+        // Simpan detail pemeriksaan
+        foreach ($request->details as $detail) {
+            $fotoPath = null;
+            if (isset($detail['foto'])) {
+                $fotoPath = $detail['foto']->store('pemeriksaan_fotos', 'public');
+            }
+    
+            DetailInspection::create([
+                'id_pemeriksaan' => $inspection->id,
+                'id_instrumen' => $detail['id_instrumen'],
+                'indikator' => Instrument::find($detail['id_instrumen'])->deskripsi,
+                'jawaban' => $detail['jawaban'],
+                'keterangan' => $detail['keterangan'],
+                'foto' => $fotoPath,
+            ]);
+        }
+    
+        return redirect()->route('inspection.jadwal.index')->with('success', 'Pemeriksaan berhasil disimpan');
+    }
+
+    public function detailInspection($id) {
+        $data = Inspection::find($id);
+        // $inspection = Inspection::with(['detail_inspections', 'karyawan'])->find($id);
+        $data_detail = DetailInspection::where('id_pemeriksaan', $id)->get();
+        // dd($data_detail);
+        return view('inspection.jadwal.detail', compact('data', 'data_detail'));
+    }
+
 }

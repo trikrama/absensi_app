@@ -8,6 +8,7 @@ use App\Models\Instrument;
 use App\Models\InstrumentTitle;
 use App\Models\UnitInstrument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InstrumentController extends Controller
 {
@@ -29,11 +30,13 @@ class InstrumentController extends Controller
         $pertanyaanUmum = $pertanyaanUmum->groupBy(function ($item) {
             return $item->title->title;
         });
+        $kCabang = DB::table('cabang')->get();
         return view('inspection.instrument.index', [
             'pertanyaanUmum' => $pertanyaanUmum,
             'pertanyaanKhusus' => $pertanyaanKhusus,
             'instrumentTitles' => $instrumentTitles,
-            'departements' => $departements
+            'departements' => $departements,
+            'kCabang' => $kCabang
         ]);
     }
 

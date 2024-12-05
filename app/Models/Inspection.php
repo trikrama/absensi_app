@@ -9,7 +9,7 @@ class Inspection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'kode_dept', 'lokasi', 'tgl_pemeriksaan', 'status', 'keterangan'];
+    protected $fillable = ['nik','user_id', 'kode_dept', 'lokasi', 'tgl_pemeriksaan', 'status', 'keterangan'];
 
     public function answers()
     {
@@ -18,6 +18,14 @@ class Inspection extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function details() {
+        return $this->hasMany(DetailInspection::class, 'id_pemeriksaan', 'id');
+    }
+
+    public function karyawan() {
+        return $this->belongsTo(Karyawan::class, 'nik', 'nik');
     }
 
     // public function departemen()

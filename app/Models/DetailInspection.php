@@ -17,15 +17,18 @@ class DetailInspection extends Model
         'id_pemeriksaan',
         'id_instrumen',
         'indikator',
+        'jawaban',
         'keterangan',
         'foto'
     ];
 
     // Relasi ke tabel Pemeriksaan
-    public function pemeriksaan()
+    public function inspection()
     {
         return $this->belongsTo(Inspection::class, 'inspection_id');
     }
+
+    
 
     // Relasi ke tabel Instrumen
     public function instrumen()

@@ -154,10 +154,12 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
         Route::post('/inspection/jadwal', 'index');
         Route::get('/inspection/tambah', 'tambah');
         Route::post('/inspection/store', 'store');
+        Route::post('/inspection/storeInspection', 'storeInspection')->name('inspection.store');
         Route::get('/inspection/edit/{id}', 'edit');
         Route::put('/inspection/update/{id}', 'update');
         Route::delete('/inspection/delete/{id}', 'delete');
         Route::get('/inspection/mulai/{id}', 'mulai');
+        Route::get('/inspection/detailInspection/{id}', 'detailInspection');
     });
 });
 

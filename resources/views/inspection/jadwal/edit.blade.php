@@ -20,7 +20,7 @@
   }
 </style>
 
-<div class="container px-4 py-5">
+{{-- <div class="container px-4 py-5">
   <p class="text-md text-[#3bb09f]">Hi Molsyam,</p>
   <div class="d-flex justify-content-between">
     <div class="d-flex gap-2">
@@ -28,7 +28,7 @@
       <a href="javascript:;" class="font-weight-bold text-muted">Pemeriksaan & Jadwal</a>
     </div>
   </div>
-</div>
+</div> --}}
 
 <form method="POST" id="form-pemeriksaan" action="{{ url('/inspection/update/'.$data->id) }}">
 @csrf

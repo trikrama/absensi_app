@@ -1,7 +1,7 @@
 @extends('layouts.admin.tabler')
 
 @section('content')
-<title>Mulai Pemeriksaan | HaloMutiara!</title>
+{{-- <title>Mulai Pemeriksaan | HaloMutiara!</title>
 <style>
   #progressBar {
     transition: width 0.3s ease;
@@ -30,9 +30,9 @@
       transform: scale(1);
     }
   }
-</style>
+</style> --}}
 
-<div class="container-fluid px-4">
+{{-- <div class="container-fluid px-4">
   <div class="row mb-4">
     <div class="col">
       <p class="text-muted">Hi Molsyam,</p>
@@ -60,7 +60,7 @@
 
     <form id="form-pemeriksaan" method="POST" action="{{ url('admin/pemeriksaan/store_detail') }}">
       @csrf
-      <input type="hidden" name="id_pemeriksaan" value="{{ $data->id }}">
+      <input type="hidden" name="id_pemeriksaan" value="{{ $data->id }}"> --}}
       {{-- @foreach($data_instrumen as $instrumen) --}}
       {{-- @foreach($semuaPertanyaan as $instrumen)
         <div class="form-check form-check-inline my-2">
@@ -73,7 +73,7 @@
         </div>
         <input type="hidden" name="id_instrumen[]" value="{{ $instrumen->id }}">
       @endforeach --}}
-      @foreach($semuaPertanyaan as $title => $pertanyaanGroup)
+      {{-- @foreach($semuaPertanyaan as $title => $pertanyaanGroup)
       <h3>{{ $title }}</h3>
       <ul>
         @foreach($pertanyaanGroup as $instrumen)
@@ -161,4 +161,54 @@
   })
 </script>
 @endpush
+ --}}
 
+ <form action="{{ route('inspection.store') }}" method="POST" enctype="multipart/form-data" class="container mt-4">
+  @csrf
+  <div class="mb-4">
+      <input type="hidden" name="id" id="id" class="form-control" value="{{ $data->id }}">
+      <input type="hidden" name="id_pemeriksa" id="id_pemeriksa" class="form-control" value="{{ $data->user_id}}">
+      <input type="hidden" name="lokasi" id="lokasi" class="form-control" value="{{ $data->lokasi}}">
+      <label for="nik" class="form-label">Pilih Karyawan:</label>
+      <select name="nik" id="nik" class="form-select" required>
+          <option value="">Pilih Karyawan..</option>
+          @foreach($karyawans as $karyawan)
+              <option value="{{ $karyawan->nik }}">{{ $karyawan->nama_lengkap }}</option>
+          @endforeach
+      </select>
+  </div>
+
+  @foreach($semuaPertanyaan as $title => $pertanyaanGroup)
+      <h2 class="mt-4">{{ $title }}</h2>
+      <div class="mb-3">
+          @foreach($pertanyaanGroup as $instrument)
+              <div class="row mb-3 align-items-center">
+                  <div class="col-md-6">
+                      <h4>{{ $instrument->deskripsi }}</h4>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="row">
+                          <div class="col-4">
+                              <label for="jawaban{{ $loop->index }}" class="form-label">Jawaban (0-100):</label>
+                              {{-- <input type="number" id="jawaban{{ $loop->index }}" name="details[{{ $loop->index }}][jawaban]" class="form-control" min="0" max="100" required> --}}
+                              <input type="number" id="jawaban{{ $loop->index }}" name="details[{{ $instrument->id }}][jawaban]" class="form-control" min="0" max="100" required>
+                          </div>
+                          <div class="col-4">
+                              <label for="keterangan{{ $loop->index }}" class="form-label">Keterangan:</label>
+                              <textarea id="keterangan{{ $loop->index }}" name="details[{{ $instrument->id }}][keterangan]" class="form-control" rows="2"></textarea>
+                          </div>
+                          {{-- <div class="col-4">
+                              <label for="foto{{ $loop->index }}" class="form-label">Upload Foto:</label>
+                              <input type="file" id="foto{{ $loop->index }}" name="details[{{ $instrument->id }}][foto]" class="form-control">
+                          </div> --}}
+                      </div>
+                  </div>
+              </div>
+              <input type="hidden" name="details[{{ $instrument->id }}][id_instrumen]" value="{{ $instrument->id }}">
+          @endforeach
+      </div>
+  @endforeach
+
+  <button type="submit" class="btn btn-primary">Simpan Pemeriksaan</button>
+</form>
+@endsection
