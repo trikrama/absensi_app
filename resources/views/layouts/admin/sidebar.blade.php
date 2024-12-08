@@ -381,11 +381,11 @@
                         </span>
                     </a>
                     <div
-                        class="dropdown-menu {{ request()->is(['manajemen_tugas/upload_tugas', 'manajemen_tugas/kunjungan']) ? 'show' : '' }}">
+                        class="dropdown-menu {{ request()->is(['tugas', 'manajemen_tugas/kunjungan']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item {{ request()->is(['manajemen_tugas/upload_tugas']) ? 'active' : '' }}"
-                                    href="/manajemen_tugas/upload_tugas">
+                                <a class="dropdown-item {{ request()->is(['tugas']) ? 'active' : '' }}"
+                                    href="/tugas">
                                     Upload Tugas
                                 </a>
                                 <a class="dropdown-item {{ request()->is(['manajemen_tugas/kunjungan']) ? 'active' : '' }}"

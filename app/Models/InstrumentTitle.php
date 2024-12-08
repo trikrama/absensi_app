@@ -15,4 +15,8 @@ class InstrumentTitle extends Model
     {
         return $this->hasMany(Instrument::class);
     }
+
+    public function details(){
+        return $this->hasMany(DetailInspection::class);
+    }
 }

@@ -207,7 +207,8 @@ class InspectionController extends Controller
         return view('inspection.jadwal.mulai', compact('data', 'semuaPertanyaan', 'ranges', 'karyawans'));
     }
 
-    public function storeInspection(Request $request) {
+    public function storeInspection(Request $request)
+    {
         // dd($request->all());
         $request->validate([
             'nik' => 'required|exists:karyawan,nik',
@@ -250,14 +251,14 @@ class InspectionController extends Controller
             // Opsional: Tangani jika data tidak ditemukan
             return redirect()->route('inspection.jadwal.index')->with('warning', 'Data Tidak di Temukan');
         }
-    
+
         // Simpan detail pemeriksaan
         foreach ($request->details as $detail) {
             $fotoPath = null;
             if (isset($detail['foto'])) {
                 $fotoPath = $detail['foto']->store('pemeriksaan_fotos', 'public');
             }
-    
+
             DetailInspection::create([
                 'id_pemeriksaan' => $inspection->id,
                 'id_instrumen' => $detail['id_instrumen'],
@@ -267,16 +268,21 @@ class InspectionController extends Controller
                 'foto' => $fotoPath,
             ]);
         }
-    
+
         return redirect()->route('inspection.jadwal.index')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 
-    public function detailInspection($id) {
+    public function detailInspection($id)
+    {
         $data = Inspection::find($id);
-        // $inspection = Inspection::with(['detail_inspections', 'karyawan'])->find($id);
-        $data_detail = DetailInspection::where('id_pemeriksaan', $id)->get();
-        // dd($data_detail);
-        return view('inspection.jadwal.detail', compact('data', 'data_detail'));
-    }
+        $dataDetail = DB::table('detail_inspections as di')
+            ->join('instruments as i', 'di.id_instrumen', '=', 'i.id')
+            ->join('instrument_titles as it', 'i.instrument_title_id', '=', 'it.id')
+            ->where('di.id_pemeriksaan', $id)
+            ->select('di.*', 'it.title as instrument_title')
+            ->get();
 
+        $groupedDetails = $dataDetail->groupBy('instrument_title');
+        return view('inspection.jadwal.detail', compact('data', 'groupedDetails'));
+    }
 }

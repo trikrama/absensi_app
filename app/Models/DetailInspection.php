@@ -35,4 +35,8 @@ class DetailInspection extends Model
     {
         return $this->belongsTo(Instrument::class, 'instrument_id');
     }
+
+    public function instrumentTitle(){
+        return $this->belongsTo(InstrumentTitle::class, 'instrument_title_id', 'id');
+    }
 }

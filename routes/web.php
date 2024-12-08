@@ -16,6 +16,7 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\ManajemenTugasController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\TugasController;
 use App\Http\Controllers\UserController;
 use App\Models\Instrument;
 use App\Models\Karyawan;
@@ -98,7 +99,7 @@ Route::middleware(['auth:karyawan'])->group(function () {
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
 // Route::middleware(['auth', 'role:administrator|admin departemen,user'])->group(function () {
 Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
-// Route::middleware(['auth:user'])->group(function () {
+    // Route::middleware(['auth:user'])->group(function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogout']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
 
@@ -142,11 +143,10 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
         Route::get('/instrument', 'index')->name('instrumen.index');
         Route::get('/instrument/tambah', 'tambah');
         Route::post('/instrument/store', 'store')->name('instrument.store');
-        Route::get('/instrument/{id}/edit','edit')->name('instrument.edit');
+        Route::get('/instrument/{id}/edit', 'edit')->name('instrument.edit');
         Route::put('/instrument/{id}', 'update')->name('instrument.update');
         Route::delete('/instrument/{id}/deteteUmum', 'destroyUmum')->name('instrument.destroyUmum');
         Route::delete('/instrument/{id}/deteteKhusus', 'destroyKhusus')->name('instrument.destroyKhusus');
-        
     });
     Route::get('/get-titles', [InstrumentController::class, 'getTitles']);
     Route::controller(InspectionController::class)->group(function () {
@@ -160,6 +160,22 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
         Route::delete('/inspection/delete/{id}', 'delete');
         Route::get('/inspection/mulai/{id}', 'mulai');
         Route::get('/inspection/detailInspection/{id}', 'detailInspection');
+    });
+
+    Route::controller(TugasController::class)->group(function () {
+        Route::get('/tugas', 'index')->name('tugas.index');
+        Route::get('/tugas/create', 'create');
+        Route::post('/tugas/store', 'store')->name('tugas.store');
+        Route::get('/tugas/edit', 'edit')->name('tugas.edit');
+        Route::put('/tugas/{id}', 'update')->name('tugas.update');
+        Route::delete('/tugas/{id}/delete', 'delete')->name('tugas.destroy');
+        
+        Route::get('/tugas/{id}/settugaskaryawan', 'settugaskaryawan');
+        Route::get('/tugas/{id}/setlisttugaskaryawan', 'setlisttugaskaryawan');
+        Route::get('/tugas/{id}/getsetlisttugaskaryawan', 'getsetlisttugaskaryawan');
+        Route::post('/tugas/storetugaskaryawan', 'storetugaskaryawan');
+        Route::post('/tugas/removetugaskaryawan', 'removetugaskaryawan');
+        Route::get('/tugas/{id}/gettugaskaryawan', 'gettugaskaryawan');
     });
 });
 
