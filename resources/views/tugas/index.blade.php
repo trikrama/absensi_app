@@ -104,7 +104,17 @@
                                                     <td>{{ $loop->iteration + $tugas->firstItem() - 1 }}</td>
                                                     <td>{{ $d->judul_tugas }}</td>
                                                     <td>{{ $d->deskripsi_tugas }}</td>
-                                                    <td>{{ $d->lampiran_tugas }}</td>
+                                                    {{-- <td>{{ $d->lampiran_tugas }} --}}
+                                                    <td>
+                                                        @if($d->lampiran_tugas)
+                                                        <a href="{{ asset('storage/uploads/tugas/' . $d->lampiran_tugas) }}" target="_blank">
+                                                            {{ $d->lampiran_tugas }}
+                                                        </a>
+                                                        @else
+                                                        Tidak ada lampiran
+                                                        @endif
+                                                        {{-- <a href="{{ asset('storage/uploads/tugas/' . $d->lampiran_tugas) }}" target="_blank">{{ $d->lampiran_tugas }}</a> --}}
+                                                    </td>
                                                     <td>{{ $d->status }}</td>
                                                     <td>{{ explode(' ', $d->deadline)[0] }}</td>
                                                     <td>

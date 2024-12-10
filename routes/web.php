@@ -188,6 +188,7 @@ Route::group(['middleware' => ['role:administrator,user']], function () {
 
     //Karyawan
     Route::get('/karyawan/{nik}/details', [KaryawanController::class, 'show']);
+    Route::post('/karyawan/{id}/profile', [KaryawanController::class, 'storeProfile'])->name('karyawan.storeProfile');
     Route::post('/karyawan/store', [KaryawanController::class, 'store']);
     Route::post('/karyawan/edit', [KaryawanController::class, 'edit']);
     Route::post('/karyawan/{nik}/update', [KaryawanController::class, 'update']);

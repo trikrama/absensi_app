@@ -1,4 +1,4 @@
-<form action="/tugas/store" method="POST" id="frmcreateTugas">
+<form action="/tugas/store" method="POST" id="frmcreateTugas" enctype="multipart/form-data">
     @csrf
     <div class="row">
         <div class="col-12">
@@ -90,7 +90,16 @@
                 </span>
                 {{-- <input type="text" id="judul_tugas" class="form-control" placeholder="Judul Tugas" name="judul_tugas">
                  --}}
-                <input type="file" id="lampiran" class="form-control" placeholder="Lampiran Tugas" name="lampiran">
+                {{-- <input type="file" id="lampiran" class="form-control" placeholder="Lampiran Tugas" name="lampiran"> --}}
+                <input 
+                    type="file" 
+                    id="lampiran" 
+                    class="form-control" 
+                    placeholder="Lampiran Tugas" 
+                    name="lampiran" 
+                    accept=".jpg,.jpeg,.png,.pdf">
+                {{-- <small id="error-message" style="color: red; display: none;"></small> --}}
+                <br>
             </div>
         </div>
     </div>
@@ -142,7 +151,14 @@
             format: 'yyyy-mm-dd'
         });
 
+        const uploadForm = document.getElementById('frmcreateTugas');
+        const lampiranInput = document.getElementById('lampiran');
+        // const errorMessage = document.getElementById('error-message');
+        const MAX_FILE_SIZE = 2048; // Ukuran maksimum dalam kilobyte (2MB)
+
         $("#frmcreateTugas").submit(function(e) {
+
+            
             var tugas_id = $("#tugas_id").val();
             var judul_tugas = $("#judul_tugas").val();
             var deskripsi_tugas = $("#deskripsi_tugas").val();
@@ -202,6 +218,37 @@
                 });
                 return false;
             }
+
+            if (lampiranInput.files.length > 0) {
+                const file = lampiranInput.files[0];
+                const fileSizeInKB = file.size / 1024; // Konversi ukuran file ke KB
+                
+                
+                // Validasi ukuran file
+                if (fileSizeInKB > MAX_FILE_SIZE) {
+                    event.preventDefault(); // Mencegah pengiriman form
+                    
+                    // Tampilkan pesan error menggunakan SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Ukuran file tidak boleh lebih dari 2MB.',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            } 
+            // else {
+            //     event.preventDefault(); // Mencegah pengiriman form jika tidak ada file
+
+            //     // Tampilkan pesan error jika tidak ada file diunggah
+            //     Swal.fire({
+            //         icon: 'warning',
+            //         title: 'Peringatan',
+            //         text: 'Silakan pilih file sebelum mengirimkan form!',
+                    
+            //     });
+            // }
+
         });
     });
 </script>

@@ -7,6 +7,7 @@ use App\Models\Tugas;
 use App\Models\TugasDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class TugasController extends Controller
 {
@@ -28,19 +29,31 @@ class TugasController extends Controller
         $deadlineReq = $request->deadline;
         $deadlineSplit = explode(' ', $deadlineReq);
         try {
+            $request->validate([
+                'lampiran' => 'file|mimes:jpg,jpeg,png,pdf|max:2048', // Maks 2 MB
+            ]);
+
             // Menggunakan Eloquent untuk insert data
             Tugas::create([
                 'tugas_id' => $request->tugas_id,
                 'judul_tugas' => $request->judul_tugas,
                 'deskripsi_tugas' => $request->deskripsi_tugas,
-                'lampiran_tugas' => $request->lampiran,
+                'lampiran_tugas' => $request->lampiran->getClientOriginalName(),
                 'status' => "belum",
                 'deadline' => $deadlineSplit[0],
             ]);
 
+            if ($request->hasFile('lampiran')) {
+                $lampiran = $request->file('lampiran');
+                $folderPath = "public/uploads/tugas/";
+                $lampiran->storeAs($folderPath, $lampiran->getClientOriginalName());
+            }
+
+
             return Redirect::back()->with(['success' => 'Data Berhasil Disimpan']);
         } catch (\Exception $e) {
             // Menangani error
+            dd($e->getMessage());
             return Redirect::back()->with(['warning' => $e->getMessage()]);
         }
     }
@@ -57,25 +70,45 @@ class TugasController extends Controller
         $deadlineReq = $request->deadline;
         $deadlineSplit = explode(' ', $deadlineReq);
         try {
+            // $request->validate([
+            //     'lampiran' => 'file|mimes:jpg,jpeg,png,pdf|max:2048', // Maks 2 MB
+            // ]);
             // Mencari model berdasarkan kode_libur dan memperbarui data
             $tugas = Tugas::where('tugas_id', $tugas_id)->first();
+             // Jika ada file lampiran baru diunggah
+            if ($request->hasFile('lampiran')) {
+                $lampiran = $request->file('lampiran');
+                $folderPath = "public/uploads/tugas/";  
+
+                // Hapus file lama jika ada
+                if ($tugas->lampiran_tugas) {
+                    Storage::delete($folderPath . $tugas->lampiran_tugas);
+                }
+
+                // Simpan file baru
+                $newLampiranName = $lampiran->getClientOriginalName();
+                $lampiran->storeAs($folderPath, $newLampiranName);
+
+                // Update nama file di database
+                $tugas->lampiran_tugas = $newLampiranName;
+            }
 
             if ($tugas) {
                 $tugas->tugas_id = $request->tugas_id;
                 $tugas->judul_tugas = $request->judul_tugas;
                 $tugas->deskripsi_tugas = $request->deskripsi_tugas;
                 // Cek apakah lampiran diinput
-                if ($request->hasFile('lampiran')) {
-                    // Simpan lampiran baru
-                    $tugas->lampiran_tugas = $request->file('lampiran')->store('lampiran'); // Atur folder penyimpanan sesuai kebutuhan
-                }
+                // if ($request->hasFile('lampiran')) {
+                //     // Simpan lampiran baru
+                //     $tugas->lampiran_tugas = $request->file('lampiran')->store('lampiran'); // Atur folder penyimpanan sesuai kebutuhan
+                // }
                 $tugas->deadline = $deadlineSplit[0];
                 $tugas->save(); // Simpan perubahan
             }
 
             return Redirect::back()->with(['success' => 'Data Berhasil Diupdate']);
         } catch (\Exception $e) {
-            //dd($e);
+            dd($e->getMessage());
             return Redirect::back()->with(['warning' => 'Data Gagal Diupdate']);
         }
     }

@@ -264,7 +264,7 @@ class InspectionController extends Controller
                 'id_instrumen' => $detail['id_instrumen'],
                 'indikator' => Instrument::find($detail['id_instrumen'])->deskripsi,
                 'jawaban' => $detail['jawaban'],
-                'keterangan' => $detail['keterangan'],
+                'keterangan' => isset($detail['keterangan']) ? $detail['keterangan'] : '',
                 'foto' => $fotoPath,
             ]);
         }

@@ -148,36 +148,36 @@ class KaryawanController extends Controller
             }
 
             // Insert data ke tabel profil menggunakan Eloquent
-            $profil = new Profile([
-                'nik' => $nik,
-                'tempat_lahir' => $request->tempat_lahir,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'nama_ibu_kandung' => $request->nama_ibu_kandung,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'agama' => $request->agama,
-                'status_menikah' => $request->status_menikah,
-                'alamat_ktp' => $request->alamat_ktp,
-                'nomor_kk' => $request->nomor_kk,
-                'pendidikan_terakhir' => $request->pendidikan_terakhir,
-                'institusi' => $request->institusi,
-                'masa_aktif_sim' => $request->masa_aktif_sim,
-                'pendidikan_satpam' => $request->pendidikan_satpam,
-                'tahun_pelatihan' => $request->tahun_pelatihan,
-                'no_kta' => $request->no_kta,
-                'penerbit_kta' => $request->penerbit_kta,
-                'masa_aktif_kta' => $request->masa_aktif_kta,
-                'no_registrasi' => $request->no_registrasi,
-                'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
-                'nama_bank' => $request->nama_bank,
-                'no_rekening' => $request->no_rekening,
-                'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
-                'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
-                'no_npwp' => $request->no_npwp
-            ]);
+            // $profil = new Profile([
+            //     'nik' => $nik,
+            //     'tempat_lahir' => $request->tempat_lahir,
+            //     'tanggal_lahir' => $request->tanggal_lahir,
+            //     'nama_ibu_kandung' => $request->nama_ibu_kandung,
+            //     'jenis_kelamin' => $request->jenis_kelamin,
+            //     'agama' => $request->agama,
+            //     'status_menikah' => $request->status_menikah,
+            //     'alamat_ktp' => $request->alamat_ktp,
+            //     'nomor_kk' => $request->nomor_kk,
+            //     'pendidikan_terakhir' => $request->pendidikan_terakhir,
+            //     'institusi' => $request->institusi,
+            //     'masa_aktif_sim' => $request->masa_aktif_sim,
+            //     'pendidikan_satpam' => $request->pendidikan_satpam,
+            //     'tahun_pelatihan' => $request->tahun_pelatihan,
+            //     'no_kta' => $request->no_kta,
+            //     'penerbit_kta' => $request->penerbit_kta,
+            //     'masa_aktif_kta' => $request->masa_aktif_kta,
+            //     'no_registrasi' => $request->no_registrasi,
+            //     'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
+            //     'nama_bank' => $request->nama_bank,
+            //     'no_rekening' => $request->no_rekening,
+            //     'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
+            //     'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
+            //     'no_npwp' => $request->no_npwp
+            // ]);
 
 
-            // Simpan data profil terkait dengan karyawan
-            $karyawan->profil()->save($profil);
+            // // Simpan data profil terkait dengan karyawan
+            // $karyawan->profil()->save($profil);
 
             // Commit transaksi jika berhasil
             DB::commit();
@@ -196,6 +196,97 @@ class KaryawanController extends Controller
         }
     }
 
+    public function storeProfile(Request $request, $nik)
+    {
+
+        // dd($request->all());
+        // Validasi data input
+        // $request->validate([
+        //     'tempat_lahir' => 'required|string|max:255',
+        //     'tanggal_lahir' => 'required|date',
+        //     // Tambahkan validasi untuk kolom lainnya
+        // ]);
+
+        DB::beginTransaction();
+        try {
+            // Cari karyawan berdasarkan ID
+            $karyawan = Karyawan::findOrFail($nik);
+
+            $profil = Profile::where('nik', $nik)->first();
+            // Jika data profil sudah ada, lakukan update
+            if ($profil) {
+                $profil->update([
+                    'tempat_lahir' => $request->tempat_lahir,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'nama_ibu_kandung' => $request->nama_ibu_kandung,
+                    'jenis_kelamin' => $request->jenis_kelamin,
+                    'agama' => $request->agama,
+                    'status_menikah' => $request->status_menikah,
+                    'alamat_ktp' => $request->alamat_ktp,
+                    'nomor_kk' => $request->nomor_kk,
+                    'pendidikan_terakhir' => $request->pendidikan_terakhir,
+                    'institusi' => $request->institusi,
+                    'masa_aktif_sim' => $request->masa_aktif_sim,
+                    'pendidikan_satpam' => $request->pendidikan_satpam,
+                    'tahun_pelatihan' => $request->tahun_pelatihan,
+                    'no_kta' => $request->no_kta,
+                    'penerbit_kta' => $request->penerbit_kta,
+                    'masa_aktif_kta' => $request->masa_aktif_kta,
+                    'no_registrasi' => $request->no_registrasi,
+                    'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
+                    'nama_bank' => $request->nama_bank,
+                    'no_rekening' => $request->no_rekening,
+                    'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
+                    'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
+                    'no_npwp' => $request->no_npwp,
+                ]);
+                $message = 'Profil Karyawan Berhasil Diperbarui';
+            } else {
+                // Jika data profil belum ada, buat baru
+                $profil = new Profile([
+                    'nik' => $nik,
+                    'tempat_lahir' => $request->tempat_lahir,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'nama_ibu_kandung' => $request->nama_ibu_kandung,
+                    'jenis_kelamin' => $request->jenis_kelamin,
+                    'agama' => $request->agama,
+                    'status_menikah' => $request->status_menikah,
+                    'alamat_ktp' => $request->alamat_ktp,
+                    'nomor_kk' => $request->nomor_kk,
+                    'pendidikan_terakhir' => $request->pendidikan_terakhir,
+                    'institusi' => $request->institusi,
+                    'masa_aktif_sim' => $request->masa_aktif_sim,
+                    'pendidikan_satpam' => $request->pendidikan_satpam,
+                    'tahun_pelatihan' => $request->tahun_pelatihan,
+                    'no_kta' => $request->no_kta,
+                    'penerbit_kta' => $request->penerbit_kta,
+                    'masa_aktif_kta' => $request->masa_aktif_kta,
+                    'no_registrasi' => $request->no_registrasi,
+                    'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
+                    'nama_bank' => $request->nama_bank,
+                    'no_rekening' => $request->no_rekening,
+                    'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
+                    'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
+                    'no_npwp' => $request->no_npwp,
+                ]);
+
+                // Simpan data profil terkait dengan karyawan
+                $karyawan->profil()->save($profil);
+                $message = 'Profil Karyawan Berhasil Disimpan';
+            }
+           
+            // Commit transaksi
+            DB::commit();
+            return Redirect::back()->with(['success' => $message]);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+            dd($e->getMessage());
+            return Redirect::back()->with(['error' => 'Data Gagal Disimpan: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function edit(Request $request)
     {
         $nik = $request->nik;
@@ -203,7 +294,8 @@ class KaryawanController extends Controller
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
         $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
         $profil = DB::table('profil')->where('nik', $nik)->first();
-        return view('karyawan.edit', compact('departemen', 'karyawan', 'cabang', 'profil'));
+        $jabatan = Jabatan::all();
+        return view('karyawan.edit', compact('departemen', 'karyawan', 'cabang', 'profil', 'jabatan'));
     }
 
     public function update($nik, Request $request)
