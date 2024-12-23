@@ -10,8 +10,8 @@ use Mews\Captcha\Facades\Captcha;
 class CaptchaController extends Controller
 {
     //
-    public function getCaptcha()
-    {
-        return Captcha::create(env('CAPTCHA_STYLE', 'default'));
-    }
+    // public function getCaptcha()
+    // {
+    //     return Captcha::create(env('CAPTCHA_STYLE', 'default'));
+    // }
 }

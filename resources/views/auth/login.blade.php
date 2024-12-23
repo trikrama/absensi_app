@@ -79,9 +79,31 @@
                         </div>
                     </div>
 
+                    {{-- <div class="form-group boxed">
+                        {!! NoCaptcha::renderJs() !!}
+                        {!! NoCaptcha::display() !!}
+                    </div> --}}
                     <!-- Gambar Captcha -->
-                    <div class="text-center">
-                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'default')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
+                    {{-- <div class="text-center">
+                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'math')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
+                        
+                        <!-- Tombol Refresh menggunakan ikon -->
+                        <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm w-20 h-20">
+                            <i class="fas fa-sync-alt"></i> <!-- Font Awesome refresh icon -->
+                        </button>
+                    </div> --}}
+
+                    <!-- Input untuk Captcha -->
+                    {{-- <div class="form-group w-75 mx-auto">
+                        <input type="text" name="captcha" class="form-control" placeholder="Enter captcha" required>
+                        @error('captcha')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div> --}}
+
+                      <!-- Gambar Captcha -->
+                      <div class="text-center">
+                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'math')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
                         
                         <!-- Tombol Refresh menggunakan ikon -->
                         <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm w-20 h-20">
@@ -133,6 +155,7 @@
         function refreshCaptcha() {
             document.getElementById('captcha_image').src = '{{ captcha_src() }}' + '?' + Math.random();
         }
+        
     </script>
 
     <!-- ///////////// Js Files ////////////////////  -->

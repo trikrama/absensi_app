@@ -6,6 +6,7 @@ use App\Models\Departemen;
 use App\Models\Inspection;
 use App\Models\Instrument;
 use App\Models\InstrumentTitle;
+use App\Models\Jabatan;
 use App\Models\UnitInstrument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ class InstrumentController extends Controller
 {
     //
     public function index(Request $req){
+        $jabatan = Jabatan::all();
         $instrumentTitles = InstrumentTitle::all();
         $departements = Departemen::all();
         $pertanyaanUmum = Instrument::where('tipe', 'umum')->get();
@@ -35,6 +37,7 @@ class InstrumentController extends Controller
             'pertanyaanUmum' => $pertanyaanUmum,
             'pertanyaanKhusus' => $pertanyaanKhusus,
             'instrumentTitles' => $instrumentTitles,
+            'jabatan' => $jabatan,
             'departements' => $departements,
             'kCabang' => $kCabang
         ]);

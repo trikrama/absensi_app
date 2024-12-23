@@ -187,12 +187,23 @@
                                 <!-- Bagian Status dan Hari -->
                                 <div class="datapresensi-footer" style="display: flex; justify-content: space-between; align-items: center;">
                                     <div class="status">
+                                        <span class="badge bg-danger">
+                                            <a href="{{ asset('storage/uploads/approval/' . $d->doc_persetujuan) }}" class="text-white" target="_blank" download>
+                                                Download Lampiran
+                                            </a>
+                                        </span>
                                         @if ($d->status_approved == 0)
                                             <span class="badge bg-warning">Pending</span>
                                         @elseif($d->status_approved == '1')
                                             <span class="badge bg-success">Disetujui</span>
                                         @elseif($d->status_approved == '2')
                                             <span class="badge bg-danger">Ditolak</span>
+
+                                        @endif
+                                    </div>
+                                    <div class="text-danger">
+                                        @if($d->status_approved == '2')
+                                            <p>{{ $d->ket_tolak }}</p>
                                         @endif
                                     </div>
                                     <div class="hari" style="font-weight: bold; font-size: 0.9rem;">

@@ -207,9 +207,9 @@
                                 </th>
                                 <th>Keterangan</th>
                                 <th>Status Approve</th>
-                                @role('administrator', 'user')
+                                {{-- @role('administrator', 'user') --}}
                                     <th>Aksi</th>
-                                @endrole
+                                {{-- @endrole --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -296,9 +296,22 @@
                                                     Batalkan
                                                 </a>
                                             @endif
-
+                                        @endrole
+                                            <a href="#" class="btn btn-sm btn-primary detail"
+                                                        kode_izin="{{ $d->kode_izin }}">
+                                                        {{-- <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon icon-tabler icon-tabler-external-link" width="24"
+                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5">
+                                                            </path>
+                                                            <path d="M10 14l10 -10"></path>
+                                                            <path d="M15 4l5 0l0 5"></path>
+                                                        </svg> --}}
+                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
                                         </td>
-                                    @endrole
                                 </tr>
                             @endforeach
                         </tbody>
@@ -316,7 +329,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="/presensi/approveizinsakit" method="POST">
+                    <form action="/presensi/approveizinsakit" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" id="kode_izin_form" name="kode_izin_form">
                         <div class="row">
@@ -327,6 +340,22 @@
                                         <option value="2">Ditolak</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="input-icon mb-3">
+                                <input 
+                                    type="file" 
+                                    id="lampiran" 
+                                    class="form-control" 
+                                    placeholder="Lampiran" 
+                                    name="lampiran" 
+                                    accept=".jpg,.jpeg,.png,.pdf">
+                                {{-- <small id="error-message" style="color: red; display: none;"></small> --}}
+                                <br>
+                            </div>
+                            <div class="input-icon mb-3">
+                                <label for="ket_tolak" class="form-label">Alasan Penolakan (jika Di Tolak)</label>
+                                <textarea class="form-control" id="ket_tolak" name="ket_tolak" rows="3"></textarea>
+                                <br>
                             </div>
                         </div>
                         <div class="row mt-1">
@@ -354,6 +383,37 @@
             </div>
         </div>
     </div>
+    {{-- modal detail --}}
+    <<div class="modal modal-blur fade" id="modal-izinsakit-detail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Detail Izin/Sakit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-4 text-end fw-bold">Nama</div>
+                        <div class="col-8 text-start">: <span id="nama-detail">John Doe</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 text-end fw-bold">Jabatan</div>
+                        <div class="col-8 text-start">: <span id="jabatan-detail">Staff</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 text-end fw-bold">Keterangan</div>
+                        <div class="col-8 text-start">: <span id="keterangan-detail">Sedang sakit demam tinggi</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 text-end fw-bold">Lampiran</div>
+                        <div class="col-8 text-start">: 
+                            <a href="#" id="lampiran-detail" class="text-decoration-underline text-primary" target="_blank">Lihat Lampiran</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('myscript')
@@ -365,8 +425,14 @@
                 $("#kode_izin_form").val(kode_izin);
                 $("#modal-izinsakit").modal("show");
             });
+            $(".detail").click(function(e) {
+                e.preventDefault();
+                // var kode_izin = $(this).attr("kode_izin");
+                // $("#kode_izin_form").val(kode_izin);
+                $("#modal-izinsakit-detail").modal("show");
+            });
 
-            $("#dari, #sampai").datepicker({
+            $("#dari,  ").datepicker({
                 autoclose: true,
                 todayHighlight: true,
                 format: 'yyyy-mm-dd'

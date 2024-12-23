@@ -66,12 +66,12 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="/presensi/histori" class="warning" style="font-size: 40px;">
+                            <a href="/aktivitas/create" class="warning" style="font-size: 40px;">
                                 <ion-icon name="document-text"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
-                            <span class="text-center">Histori</span>
+                            <span class="text-center">Aktivitas</span>
                         </div>
                     </div>
                     <div class="item-menu text-center">
@@ -306,9 +306,12 @@
                                                         $jadwal_jam_masuk,
                                                         $jam_presensi,
                                                     );
+                                                    $jmlterlambatSplit = explode(':', $jmlterlambat);
                                                 @endphp
-                                                <span class="danger">Terlambat {{ $jmlterlambat }}
-                                                    ({{ $jmlterlambatdesimal }} Jam)
+                                                <span class="danger">Terlambat {{ $jmlterlambatSplit[0] }} Jam {{ $jmlterlambatSplit[1] }} Menit
+                                                </span>
+                                                <br>
+                                                <span class="danger">(Jumlah Jam Kerja : {{ $jmlterlambatdesimal }} Jam)
                                                 </span>
                                             @else
                                                 <span style="color:green">Tepat Waktu</span>

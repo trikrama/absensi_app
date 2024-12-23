@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AktivitasController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\CaptchaController;
@@ -50,7 +51,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth:karyawan'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
 
     //Presensi
@@ -93,6 +94,14 @@ Route::middleware(['auth:karyawan'])->group(function () {
 
     Route::get('/izin/{kode_izin}/showact', [PresensiController::class, 'showact']);
     Route::get('/izin/{kode_izin}/delete', [PresensiController::class, 'deleteizin']);
+
+    Route::controller(AktivitasController::class)->group(function () {
+        Route::get('/aktivitas/create', 'create')->name('aktivitas.create');
+        Route::post('/aktivitas', 'store')->name('aktivitas.store');
+        Route::get('/aktivitas', 'index')->name('aktivitas.index');
+        Route::get('/aktivitas/{id}/edit', 'edit')->name('aktivitas.edit');
+        Route::put('/aktivitas/{id}', 'update')->name('aktivitas.update');
+    });
 });
 
 
@@ -158,8 +167,13 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
         Route::get('/inspection/edit/{id}', 'edit');
         Route::put('/inspection/update/{id}', 'update');
         Route::delete('/inspection/delete/{id}', 'delete');
+        // Route::get('/inspection/mulai/{id}', 'mulai');
         Route::get('/inspection/mulai/{id}', 'mulai');
         Route::get('/inspection/detailInspection/{id}', 'detailInspection');
+        Route::get('/get-karyawan-by-dept', 'getKaryawanByDept')->name('getKaryawanByDept');
+        Route::post('/get-instruments', 'getInstrumentsByDept')->name('get-instruments');
+
+
     });
 
     Route::controller(TugasController::class)->group(function () {

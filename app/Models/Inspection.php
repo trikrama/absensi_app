@@ -9,7 +9,7 @@ class Inspection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nik','user_id', 'kode_dept', 'lokasi', 'tgl_pemeriksaan', 'status', 'keterangan'];
+    protected $fillable = ['nik','user_id', 'kode_dept', 'lokasi', 'tgl_pemeriksaan', 'tujuan', 'status', 'keterangan', 'foto_bukti'];
 
     public function answers()
     {

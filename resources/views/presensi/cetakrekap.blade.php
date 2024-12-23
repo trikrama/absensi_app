@@ -89,24 +89,42 @@
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">
 
-        <table style="width: 100%">
+        {{-- <table style="width: 100%">
             <tr>
-                <td style="width: 30px">
-                    <img src="{{ asset('assets/img/logopresensi.png') }}" width="70" height="70" alt="">
+                <td style="width: 30px; border: 1px solid #131212;">
+                    <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="70" height="70" alt="">
                 </td>
-                <td>
-                    <span id="title">
+                <td style="border: 1px solid #131212">
+                    <span id="title" style="text-align: center">
                         REKAP PRESENSI KARYAWAN<br>
                         PERIODE {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
-                        PT. ADAM ADIFA<br>
+                        PT. SINDUE KARYA MANDIRI<br>
                     </span>
-                    <span><i>Jln. H. Dahlan No. 75, Kecamatan Sindangrasa, Kabupaten Ciamis</i></span>
+                    <span><i>JL. MH. Thamrin No. 62, Besusu Timur, Palu Timur </i></span>
+                </td>
+            </tr>
+        </table> --}}
+        <table style="width: 100%;">
+            <tr>
+                {{-- <td style="width: 30px; border: 1px solid #131212; text-align: center; vertical-align: middle;">
+                </td> --}}
+                <td style="text-align: center; vertical-align: middle;">
+                    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        {{-- <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="70" height="70" alt=""> --}}
+                        <span id="title">
+                            REKAP PRESENSI KARYAWAN<br>
+                            PERIODE {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
+                            PT. SINDUE KARYA MANDIRI<br>
+                        </span>
+                        <span><i>JL. MH. Thamrin No. 62, Besusu Timur, Palu Timur </i></span>
+                    </div>
                 </td>
             </tr>
         </table>
+
         <table class="tabelpresensi">
             <tr>
-                <th rowspan="2">Nik</th>
+                {{-- <th rowspan="2">Nik</th> --}}
                 <th rowspan="2">Nama Karyawan</th>
                 <th colspan="{{ $jmlhari }}">Bulan {{ $namabulan[$bulan] }} {{ $tahun }}</th>
                 <th rowspan="2">H</th>
@@ -125,7 +143,7 @@
             </tr>
             @foreach ($rekap as $r)
                 <tr>
-                    <td>{{ $r->nik }}</td>
+                    {{-- <td>{{ $r->nik }}</td> --}}
                     <td>{{ $r->nama_lengkap }}</td>
 
                     <?php

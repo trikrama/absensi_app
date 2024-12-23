@@ -72,8 +72,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                @role('administrator', 'user')
-                                    <div class="row mt-2">
+                                {{-- @role('administrator', 'user') --}}
+                                    {{-- <div class="row mt-2">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <select name="kode_dept" id="kode_dept" class="form-select">
@@ -84,11 +84,23 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div> --}}
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <select name="id_jabatan" id="id_jabatan" class="form-select">
+                                                    <option value="">Semua Jabatan</option>
+                                                    @foreach ($jabatan as $d)
+                                                        <option value="{{ $d->nama_jabatan }}">{{ $d->nama_jabatan }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
-                                @else
+                                {{-- @else
                                     <input type="hidden" name="kode_dept"
                                         value="{{ Auth::guard('user')->user()->kode_dept }}">
-                                @endrole
+                                @endrole --}}
                                 <div class="row mt-2">
                                     <div class="col-12">
                                         <div class="form-group">

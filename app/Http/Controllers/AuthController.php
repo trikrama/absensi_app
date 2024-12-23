@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -17,9 +18,22 @@ class AuthController extends Controller
             'nik' => 'required|string',
             'password' => 'required|string',
             'captcha' => 'required|captcha'
-        ], [
-            'captcha.captcha' => 'Captcha tidak valid. Silakan coba lagi.'
-        ]);
+            // 'g-recaptcha-response' => 'required|captcha',
+        ],
+        [
+           'captcha.captcha' => 'Captcha tidak valid. Silakan coba lagi.'
+        ],
+        );
+        // $validator = Validator::make($request->all(), [
+        //     'role' => 'required',
+        //     'nik' => 'required|string',
+        //     'password' => 'required|string',
+        //     'g-recaptcha-response' => 'required|captcha', // Validasi Google reCAPTCHA
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return back()->withErrors($validator)->withInput();
+        // }
 
 
         $credentials = ['password' => $request->password];

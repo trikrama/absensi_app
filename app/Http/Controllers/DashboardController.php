@@ -67,6 +67,7 @@ class DashboardController extends Controller
 
         $cabang = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
         $departemen = DB::table('departemen')->where('kode_dept', $kode_dept)->first();
+        // dd($historibulanini);
 
         return view('dashboard.dashboard', compact('presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekappresensi', 'leaderboard', 'cabang', 'departemen', 'jmlTidakHadir'));
     }

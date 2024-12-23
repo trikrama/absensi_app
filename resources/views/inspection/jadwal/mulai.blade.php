@@ -163,12 +163,74 @@
 @endpush
  --}}
 
+
+ {{-- <div class="card mt-2">
+  <div class="card-body">
+      <h5 class="card-title">Pemeriksaan</h5>
+      <form method="POST" action="{{ url('/inspection/store') }}" id="form-pemeriksaan">@csrf
+          <div class="row"> --}}
+              {{-- <div class="col-md-4 mb-3">
+                  <div class="form-group">
+                      <label for="pemeriksa">Pilih Pemeriksa</label>
+                      <select name="pemeriksa" class="form-control form-control-sm">
+                          <option value="">Pilih Pemeriksa</option>
+                          @foreach($data_user as $row)
+                              <option value="{{ $row->id }}">{{ $row->name }}</option>
+                          @endforeach
+                      </select>
+                  </div>
+              </div> --}}
+              {{-- <div class="col-md-4 mb-3">
+                  <div class="form-group">
+                      <label for="unit">Pilih Unit Yang Akan Diperiksa</label>
+                      <select name="unit" class="form-control form-control-sm">
+                          <option value="">Pilih Unit</option>
+                          @foreach($data_unit as $row => $nama)
+                              <option value="{{ $row }}">{{ $nama }}</option>
+                          @endforeach
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                  <div class="form-group">
+                      <label for="lokasi">Lokasi Pemeriksaan</label>
+                      <select name="lokasi" class="form-control form-control-sm">
+                          <option value="">Pilih Lokasi</option>
+                          @foreach($data_cabang as $row => $nama)
+                              <option value="{{ $row }}">{{ $nama }}</option>
+                          @endforeach
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <div class="form-group">
+                      <label for="tgl_pemeriksaan">Tanggal Pemeriksaan</label>
+                      <input type="date" id="datepicker" 
+                             value="{{ date('Y-m-d') }}" 
+                             name="tgl_pemeriksaan"
+                             class="form-control" 
+                             placeholder="Tanggal Pemeriksaan"
+                             autocomplete="off">
+                  </div>
+              </div>
+            </div>
+              <div class="col-md-4 mb-3 d-flex align-items-end">
+                  <button type="submit" id="btn-submit" class="btn btn-primary btn-sm w-100">Mulai Pemeriksaan</button>
+              </div>
+      </form>
+  </div>
+</div> --}}
+
  <form action="{{ route('inspection.store') }}" method="POST" enctype="multipart/form-data" class="container mt-4">
   @csrf
   <div class="mb-4">
       <input type="hidden" name="id" id="id" class="form-control" value="{{ $data->id }}">
       <input type="hidden" name="id_pemeriksa" id="id_pemeriksa" class="form-control" value="{{ $data->user_id}}">
       <input type="hidden" name="lokasi" id="lokasi" class="form-control" value="{{ $data->lokasi}}">
+      <input type="hidden" name="tgl_pemeriksaan" id="tgl_pemeriksaan" class="form-control" value="{{ $data->tgl_pemeriksaan }}">
+      <input type="hidden" name="tujuan" id="tujuan" class="form-control" value="{{ $data->tujuan }}">
       <label for="nik" class="form-label">Pilih Karyawan:</label>
       <select name="nik" id="nik" class="form-select" required>
           <option value="">Pilih Karyawan..</option>
@@ -209,6 +271,27 @@
       </div>
   @endforeach
 
-  <button type="submit" class="btn btn-primary">Simpan Pemeriksaan</button>
+  <label for="keterangan" class="form-label">Hasil Pengecekan</label>
+  <textarea id="keterangan" name="keterangan" class="form-control mb-3" rows="4"></textarea>
+
+  <label for="foto_bukti" class="form-label">Upload Foto Bukti :</label>
+  <input type="file" id="foto_bukti" name="foto_bukti" class="form-control">
+
+
+
+  <button type="submit" class="btn btn-primary" name="submit">Simpan Pemeriksaan</button>
+  {{-- Panding Pemeriksaan --}}
+  {{-- <button type="submit" id="btn-submit" class="btn btn-warning" name="pending">Pending Pemeriksaan</button> --}}
 </form>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
+    </script>
+@endpush

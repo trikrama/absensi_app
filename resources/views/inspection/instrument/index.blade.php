@@ -18,9 +18,12 @@
                 <label for="title">Title</label>
                 <select class="form-control" name="title" required>
                     <option value="" disabled selected>Pilih Title</option>
-                    @foreach ($instrumentTitles as $title)
-                        <option value="{{ $title->id }}">{{ $title->title }}</option>
+                    @foreach ($jabatan as $title)
+                        <option value="{{ $title->id }}">{{ $title->nama_jabatan }}</option>
                     @endforeach
+                    {{-- @foreach ($instrumentTitles as $title)
+                        <option value="{{ $title->id }}">{{ $title->title }}</option>
+                    @endforeach --}}
                 </select>
             </div>
             <div class="form-group">
@@ -115,7 +118,7 @@
                 </table>
             </div>
         @endforeach
-
+        
 
 </div>
 @endsection
@@ -135,5 +138,6 @@ function showForm(tipe) {
         document.querySelector('select[name="kode_dept"]').removeAttribute('required');
     }
 }
+
 </script>
 @endpush

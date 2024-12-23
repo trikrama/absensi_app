@@ -40,11 +40,11 @@
 <div class="container-fluid px-4 py-3">
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex">
-            <p class="font-weight-bold text-muted">Admin / Pemeriksaan / </p>
-            <a href="javascript:;" class="font-weight-bold text-lg text-info hover:text-teal-500">Pemeriksaan & Jadwal</a>
+            {{-- <p class="font-weight-bold text-muted">Admin / Pemeriksaan / </p> --}}
+            <a href="javascript:;" class="font-weight-bold text-lg text-info hover:text-teal-500">Pemeriksaan</a>
         </div>
         {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
-        <form class="d-flex gap-2" method="POST" action="{{ url('/inspection/jadwal') }}">@csrf
+        {{-- <form class="d-flex gap-2" method="POST" action="{{ url('/inspection/jadwal') }}">@csrf
             <div class="form-group">
                 <select name="cari_user" id="id_user" class="form-control form-control-sm">
                     <option value="">Pemeriksa</option>
@@ -52,13 +52,13 @@
                         <option value="{{ $row->id }}" {{ request('cari_user') == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
                     @endforeach
                 </select>
-            </div>
+            </div> --}}
             {{-- <pre>
                 @php
                     dd($data_unit);
                 @endphp
             </pre> --}}
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <select name="cari_unit" id="id_unit" class="form-control form-control-sm">
                     <option value="">Unit Di Periksa</option>
                     @foreach($data_unit as $row => $nama)
@@ -71,29 +71,31 @@
                 <input name="cari_tgl" id="rangedatepicker" value="{{ request('cari_tgl') }}" class="form-control form-control-sm" placeholder="Rentang Tanggal">
             </div>
             <button type="submit" class="btn btn-teal btn-sm">Cari</button>
-        </form>
+        </form> --}}
         {{-- @endif --}}
     </div>
 </div>
 
 
 <div class="container-fluid px-4">
-    @if($pemeriksaan)
+    {{-- @if($pemeriksaan)
         @if($pemeriksaan->status == "BELUM")
             <div class="alert alert-warning d-flex justify-content-between align-items-center">
-                <p>Anda Telah Terjadwal Di Hari Ini! Klik Tombol Di Samping Untuk Memulai Pemeriksaan.</p>
+                <p>Anda Telah Terjadwal Di Hari Ini! Klik Tombol Di Samping Untuk Memulai Pemeriksaan.</p> --}}
                 {{-- <a href="/inspection/mulai" id="confirmButton" data-id="{{ $pemeriksaan->id }}" data-id_unit="{{ $pemeriksaan->kode_dept }}" class="btn btn-teal btn-sm">
                     <p>Mulai Pemeriksaan</p>
                     <i data-icon="tabler:chevrons-right" class="iconify text-lg"></i>
                 </a> --}}
-                <a href="{{ url('/inspection/mulai/'.$pemeriksaan->id) }}" class="btn btn-warning btn-sm">Mulai Pemeriksaan</a>
+                {{-- <a href="{{ url('/inspection/mulai/'.$pemeriksaan->id) }}" class="btn btn-warning btn-sm">Mulai Pemeriksaan</a>
             </div>
         @else
             <div class="alert alert-success text-center">
                 <p>Anda Telah Menyelesaikan Tugas Pemeriksaan, Terimakasih Selamat Bertugas.</p>
             </div>
         @endif
-    @endif
+    @endif --}}
+
+    {{-- <a href="{{ url('/inspection/mulai') }}" class="btn btn-warning btn-sm">Mulai Pemeriksaan</a> --}}
 
     <div class="d-flex justify-content-end">
         <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm">Tambah Instrument</a>
@@ -102,10 +104,11 @@
     <div class="card mt-2">
         <div class="card-body">
             <h5 class="card-title">Tambahkan Jadwal Pemeriksaan</h5>
-            <form method="POST" action="{{ url('/inspection/store') }}" id="form-pemeriksaan">@csrf
+            <form method="POST" action="{{ url('/inspection/store') }}" id="form-pemeriksaan">
+                @csrf
                 <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="form-group">
+                    {{-- <div class="col-md-4 mb-3"> --}}
+                        {{-- <div class="form-group">
                             <label for="pemeriksa">Pilih Pemeriksa</label>
                             <select name="pemeriksa" class="form-control form-control-sm">
                                 <option value="">Pilih Pemeriksa</option>
@@ -113,8 +116,8 @@
                                     <option value="{{ $row->id }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
+                        </div> --}}
+                    {{-- </div> --}}
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label for="unit">Pilih Unit Yang Akan Diperiksa</label>
@@ -138,6 +141,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label for="tujuan">Tujuan</label>
+                        <input type="text" name="tujuan" id="tujuan" class="form-control form-control-sm" placeholder="Tujuan Pemeriksaan">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
@@ -151,7 +160,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 mb-3 d-flex align-items-end">
-                        <button type="submit" id="btn-submit" class="btn btn-primary btn-sm w-100">Tambahkan Jadwal</button>
+                        <button type="submit" id="btn-submit" class="btn btn-primary btn-sm w-100">Mulai Pemeriksaan</button>
                     </div>
                 </div>
             </form>
@@ -218,7 +227,7 @@
             event.preventDefault();
 
             // Mengambil nilai dari setiap input
-            const pemeriksa = $('select[name="pemeriksa"]').val();
+            // const pemeriksa = $('select[name="pemeriksa"]').val();
             const unit = $('select[name="unit"]').val();
             const lokasi = $('select[name="lokasi"]').val();
             const tglPemeriksaan = $('input[name="tgl_pemeriksaan"]').val();
@@ -227,9 +236,9 @@
             let messages = [];
 
             // Memeriksa apakah ada input yang kosong
-            if (!pemeriksa) {
-                messages.push('Pilih Pemeriksa tidak boleh kosong.');
-            }
+            // if (!pemeriksa) {
+            //     messages.push('Pilih Pemeriksa tidak boleh kosong.');
+            // }
             if (!unit) {
                 messages.push('Pilih Unit tidak boleh kosong.');
             }

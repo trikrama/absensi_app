@@ -728,15 +728,17 @@ class PresensiController extends Controller
     {
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $departemen = DB::table('departemen')->get();
+        $jabatan = DB::table('jabatan')->get();
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
-        return view('presensi.rekap', compact('namabulan', 'departemen', 'cabang'));
+        return view('presensi.rekap', compact('namabulan', 'departemen', 'cabang', 'jabatan'));
     }
 
     public function cetakrekap(Request $request)
     {
         $bulan = $request->bulan;
         $tahun = $request->tahun;
-        $kode_dept = $request->kode_dept;
+        // $kode_dept = $request->kode_dept;
+        $id_jabatan = $request->id_jabatan;
         $kode_cabang = $request->kode_cabang;
         $dari  = $tahun . "-" . $bulan . "-01";
         $sampai = date("Y-m-t", strtotime($dari));
@@ -820,8 +822,11 @@ class PresensiController extends Controller
             }
         );
 
-        if (!empty($kode_dept)) {
-            $query->where('kode_dept', $kode_dept);
+        // if (!empty($kode_dept)) {
+        //     $query->where('kode_dept', $kode_dept);
+        // }
+        if (!empty($id_jabatan)) {
+            $query->where('jabatan', $id_jabatan);
         }
         if (!empty($kode_cabang)) {
             $query->where('kode_cabang', $kode_cabang);
@@ -842,6 +847,7 @@ class PresensiController extends Controller
         }
 
         $data = ['bulan', 'tahun', 'namabulan', 'rekap', 'rangetanggal', 'jmlhari', 'datalibur', 'harilibur'];
+        // dd($rekap);
 
         if ($request->jenis_laporan == 1) {
             return view('presensi.cetakrekap', compact($data));
@@ -1244,6 +1250,7 @@ class PresensiController extends Controller
     public function approveizinsakit(Request $request)
     {
         $status_approved = $request->status_approved;
+
         $kode_izin = $request->kode_izin_form;
         $dataizin = DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->first();
         $nik = $dataizin->nik;
@@ -1266,14 +1273,37 @@ class PresensiController extends Controller
             }
 
 
+            // DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->update([
+            //     'status_approved' => $status_approved, 'doc_persetujuan' => $request->lampiran->getClientOriginalName(),
+            // ]);
+
+            $doc_persetujuan = null;
+            if ($request->hasFile('lampiran')) {
+                $lampiran = $request->file('lampiran');
+                $folderPath = "public/uploads/approval/";
+
+                // Buat nama file unik untuk menghindari duplikasi
+                $doc_persetujuan = time() . '_' . $lampiran->getClientOriginalName();
+                $lampiran->storeAs($folderPath, $doc_persetujuan);
+            }
+
+            $ket_tolak = null;
+            if ($request->ket_tolak) {
+                $ket_tolak = $request->ket_tolak;
+            }
+
+            
             DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->update([
-                'status_approved' => $status_approved
+                'status_approved' => $status_approved,
+                'doc_persetujuan' => $doc_persetujuan,
+                'ket_tolak' => $ket_tolak
             ]);
+
             DB::commit();
             return Redirect::back()->with(['success' => 'Data Berhasil Diproses']);
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            dd($e->getMessage());
             return Redirect::back()->with(['warning' => 'Data Gagal Diproses']);
         }
 
@@ -1287,7 +1317,7 @@ class PresensiController extends Controller
         //     return Redirect::back()->with(['warning' => 'Data Gagal Di Update']);
         // }
     }
-
+    
     public function batalkanizinsakit($kode_izin)
     {
 

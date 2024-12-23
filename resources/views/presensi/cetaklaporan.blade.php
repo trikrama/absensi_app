@@ -26,6 +26,9 @@
 
         .tabeldatakaryawan {
             margin-top: 40px;
+            text-align: right; /* Mengatur teks agar berada di sebelah kanan */
+            margin-left: auto; /* Mengatur margin kiri otomatis */
+            margin-right: 0; /* Mengatur margin kanan menjadi 0 */
         }
 
         .tabeldatakaryawan tr td {
@@ -62,7 +65,6 @@
 <!-- Set also "landscape" if you need -->
 
 <body class="A4">
-
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">
@@ -70,7 +72,7 @@
         <table style="width: 100%">
             <tr>
                 <td style="width: 30px">
-                    <img src="{{ asset('assets/img/download.png') }}" width="120" height="150" alt="">
+                    <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="120" height="120" alt="">
                 </td>
                 <td>
                     <span id="title">
@@ -84,44 +86,43 @@
         </table>
         <table class="tabeldatakaryawan">
             <tr>
-                <td rowspan="7">
+                <td style="text-align: left">NIK</td>
+                <td>:</td>
+                <td style="text-align: left">{{ $karyawan->nik }}</td>
+                <td rowspan="7" >
                     @php
                         $path = Storage::url('uploads/karyawan/' . $karyawan->foto);
                     @endphp
-                    <img src="{{ url($path) }}" alt="" width="120px" height="150">
+                    <img src="{{ url($path) }}" alt="" width="150px" height="150">
                 </td>
             </tr>
             <tr>
-                <td>NIK</td>
+                <td style="text-align: left">Nama Karyawan</td>
                 <td>:</td>
-                <td>{{ $karyawan->nik }}</td>
+                <td style="text-align: left">{{ $karyawan->nama_lengkap }}</td>
             </tr>
             <tr>
-                <td>Nama Karyawan</td>
+                <td style="text-align: left">Jabatan</td>
                 <td>:</td>
-                <td>{{ $karyawan->nama_lengkap }}</td>
+                <td style="text-align: left">{{ $karyawan->jabatan }}</td>
             </tr>
             <tr>
-                <td>Jabatan</td>
+                <td style="text-align: left">Departemen</td>
                 <td>:</td>
-                <td>{{ $karyawan->jabatan }}</td>
+                <td style="text-align: left">{{ $karyawan->nama_dept }}</td>
             </tr>
             <tr>
-                <td>Departemen</td>
+                <td style="text-align: left">No. HP</td>
                 <td>:</td>
-                <td>{{ $karyawan->nama_dept }}</td>
+                <td style="text-align: left">{{ $karyawan->no_hp }}</td>
             </tr>
             <tr>
-                <td>No. HP</td>
+                <td style="text-align: left">Bulan</td>
                 <td>:</td>
-                <td>{{ $karyawan->no_hp }}</td>
-            </tr>
-            <tr>
-                <td>Bulan</td>
-                <td>:</td>
-                <td>{{ $namabulan[$bulan] }} {{ $tahun }}</td>
+                <td style="text-align: left">{{ $namabulan[$bulan] }} {{ $tahun }}</td>
             </tr>
         </table>
+       
         <table class="tabelpresensi">
             <tr>
                 <th>No.</th>
