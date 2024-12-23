@@ -18,6 +18,29 @@
     <!-- Menambahkan Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZAILbhH1Tm5CtQXHWCCU8+YrdEYXYNVKfrRBjwX39LZUdwtu3D7XQoNZgrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Tambahkan Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* Sesuaikan dengan tinggi elemen parent */
+            width: 100%; /* Pastikan container mengambil lebar penuh */
+        }
+
+        .g-recaptcha {
+            transform: scale(1); /* Pastikan skala tetap normal */
+            transform-origin: center;
+            margin: auto; /* Tambahkan margin otomatis */
+        }
+
+        @media (max-width: 768px) {
+            .g-recaptcha {
+                transform: scale(0.85); /* Sesuaikan ukuran untuk perangkat kecil */
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-white">
@@ -79,45 +102,14 @@
                         </div>
                     </div>
 
-                    {{-- <div class="form-group boxed">
-                        {!! NoCaptcha::renderJs() !!}
-                        {!! NoCaptcha::display() !!}
-                    </div> --}}
-                    <!-- Gambar Captcha -->
-                    {{-- <div class="text-center">
-                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'math')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
-                        
-                        <!-- Tombol Refresh menggunakan ikon -->
-                        <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm w-20 h-20">
-                            <i class="fas fa-sync-alt"></i> <!-- Font Awesome refresh icon -->
-                        </button>
-                    </div> --}}
-
-                    <!-- Input untuk Captcha -->
-                    {{-- <div class="form-group w-75 mx-auto">
-                        <input type="text" name="captcha" class="form-control" placeholder="Enter captcha" required>
-                        @error('captcha')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div> --}}
-
-                      <!-- Gambar Captcha -->
-                      <div class="text-center">
-                        <img src="{{ captcha_src(env('CAPTCHA_STYLE', 'math')) }}" alt="captcha" id="captcha_image" class="img-fluid mb-1 border border-secondary">
-                        
-                        <!-- Tombol Refresh menggunakan ikon -->
-                        <button type="button" onclick="refreshCaptcha()" class="btn btn-secondary btn-sm w-20 h-20">
-                            <i class="fas fa-sync-alt"></i> <!-- Font Awesome refresh icon -->
-                        </button>
-                    </div>
-
-                    <!-- Input untuk Captcha -->
-                    <div class="form-group w-75 mx-auto">
-                        <input type="text" name="captcha" class="form-control" placeholder="Enter captcha" required>
-                        @error('captcha')
+                    <!-- Google reCAPTCHA -->
+                    <div class="recaptcha-container">
+                        <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                        @error('g-recaptcha-response')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+
 
                     <!-- Tombol Login -->
                     <div class="form-button-group">
