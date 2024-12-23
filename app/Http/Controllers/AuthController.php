@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ReCaptcha;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -14,47 +15,36 @@ class AuthController extends Controller
     {
         // Validasi input
         $request->validate([
-            'role' => 'required',
-            'nik' => 'required|string',
+            'role' => 'required|in:admin,karyawan', // Role harus sesuai pilihan
+            'nik' => 'required|string', // Bisa berupa NIK atau email
             'password' => 'required|string',
-            'captcha' => 'required|captcha'
-            // 'g-recaptcha-response' => 'required|captcha',
-        ],
-        [
-           'captcha.captcha' => 'Captcha tidak valid. Silakan coba lagi.'
-        ],
-        );
-        // $validator = Validator::make($request->all(), [
-        //     'role' => 'required',
-        //     'nik' => 'required|string',
-        //     'password' => 'required|string',
-        //     'g-recaptcha-response' => 'required|captcha', // Validasi Google reCAPTCHA
-        // ]);
+            'g-recaptcha-response' => 'required', // Pastikan reCAPTCHA diisi
+        ], [
+            'g-recaptcha-response.captcha' => 'Captcha tidak valid. Silakan coba lagi.',
+            'role.in' => 'Role yang dipilih tidak valid.',
+        ]);
 
-        // if ($validator->fails()) {
-        //     return back()->withErrors($validator)->withInput();
-        // }
-
-
+        // Menyiapkan kredensial
         $credentials = ['password' => $request->password];
 
-        // Memilih guard berdasarkan role
         if ($request->role === 'admin') {
-            $credentials['email'] = $request->nik; // Menggunakan email untuk login admin
+            $credentials['email'] = $request->nik; // Admin login dengan email
             if (Auth::guard('user')->attempt($credentials)) {
-                return redirect('/panel/dashboardadmin');
+                return redirect('/panel/dashboardadmin')->with('success', 'Login berhasil sebagai Admin.');
             }
         } elseif ($request->role === 'karyawan') {
-            // $credentials['nik'] = $request->nik; // Menggunakan NIK untuk login karyawan
-            $credentials['id_karyawan'] = $request->nik;
+            $credentials['id_karyawan'] = $request->nik; // Karyawan login dengan NIK
             if (Auth::guard('karyawan')->attempt($credentials)) {
-                return redirect('/dashboard');
+                return redirect('/dashboard')->with('success', 'Login berhasil sebagai Karyawan.');
             }
         }
 
         // Jika login gagal
-        return redirect('/')->with(['warning' => 'NIK / Email atau Password Salah']);
+        return redirect('/')
+            ->withInput()
+            ->with('warning', 'NIK / Email atau Password salah, atau Role tidak sesuai.');
     }
+
     public function prosesLogout()
     {
         // Cek apakah guard 'karyawan' yang sedang aktif
