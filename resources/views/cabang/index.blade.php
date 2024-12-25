@@ -52,9 +52,9 @@
                                 <form action="/cabang" method="GET">
                                     <div class="row">
                                         <div class="col-10">
-                                            <select name="kode_cabang" class="form-select" id="">
-                                                <option value="">Semua Cabang</option>
-                                            </select>
+                                            <input type="text" name="nama_cabang" id="nama_cabang"
+                                                        class="form-control" style="padding: 4px .75rem; border: 1px solid #aaa;" placeholder="Nama Cabang"
+                                                        value="{{ Request('nama_cabang') }}">
                                         </div>
                                         <div class="col-2">
                                             <div class="form-group">
@@ -249,6 +249,11 @@
 
 @push('myscript')
 <script>
+
+    $(document).ready(function() {
+        $('.select-search').select2();
+    });
+
     $(function() {
         $("#kode_cabang").mask("AAAAA");
         $("#btnTambahCabang").click(function() {

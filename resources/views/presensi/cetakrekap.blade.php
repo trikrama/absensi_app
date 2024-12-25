@@ -62,6 +62,12 @@
             width: 297mm !important;
             height: auto !important;
         }
+        @media print {
+            body.A4.landscape .sheet {
+                width: 297mm;
+                height: 210mm;
+            }
+        }
     </style>
 </head>
 
@@ -126,7 +132,8 @@
             <tr>
                 {{-- <th rowspan="2">Nik</th> --}}
                 <th rowspan="2">Nama Karyawan</th>
-                <th colspan="{{ $jmlhari }}">Bulan {{ $namabulan[$bulan] }} {{ $tahun }}</th>
+                <th rowspan="2">Jabatan</th>
+                <th style="width: 0.5%" colspan="{{ $jmlhari }}">Bulan {{ $namabulan[$bulan] }} {{ $tahun }}</th>
                 <th rowspan="2">H</th>
                 <th rowspan="2">I</th>
                 <th rowspan="2">S</th>
@@ -145,7 +152,7 @@
                 <tr>
                     {{-- <td>{{ $r->nik }}</td> --}}
                     <td>{{ $r->nama_lengkap }}</td>
-
+                    <td>{{ $r->jabatan }}</td>
                     <?php
                     $jml_hadir = 0;
                     $jml_izin = 0;

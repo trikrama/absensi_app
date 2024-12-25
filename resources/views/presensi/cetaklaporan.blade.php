@@ -84,22 +84,11 @@
                 </td>
             </tr>
         </table>
-        <table class="tabeldatakaryawan">
+        <table style="width: 100%" class="tabeldatakaryawan">
             <tr>
-                <td style="text-align: left">NIK</td>
-                <td>:</td>
-                <td style="text-align: left">{{ $karyawan->nik }}</td>
-                <td rowspan="7" >
-                    @php
-                        $path = Storage::url('uploads/karyawan/' . $karyawan->foto);
-                    @endphp
-                    <img src="{{ url($path) }}" alt="" width="150px" height="150">
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: left">Nama Karyawan</td>
-                <td>:</td>
-                <td style="text-align: left">{{ $karyawan->nama_lengkap }}</td>
+                <td style="text-align: left; width: 5%">Nama Karyawan</td>
+                <td style="width: 1%">:</td>
+                <td style="text-align: left; width: 30%">{{ $karyawan->nama_lengkap }}</td>
             </tr>
             <tr>
                 <td style="text-align: left">Jabatan</td>
@@ -131,9 +120,9 @@
                 <th>Foto</th>
                 <th>Jam Pulang</th>
                 <th>Foto</th>
-                <th>Status</th>
+                {{-- <th>Status</th> --}}
                 <th>Keterangan</th>
-                <th>Jml Jam</th>
+                {{-- <th>Jml Jam</th> --}}
             </tr>
 
             @foreach ($presensi as $d)
@@ -174,7 +163,7 @@
                                 <img src="{{ asset('assets/img/camera.jpg') }}" alt="" class="foto">
                             @endif
                         </td>
-                        <td style="text-align: center">{{ $d->status }}</td>
+                        {{-- <td style="text-align: center">{{ $d->status }}</td> --}}
                         <td>
                             @if ($d->jam_in > $d->jam_masuk)
                                 Terlambat {{ $terlambat_desimal }} Jam
@@ -182,9 +171,9 @@
                                 Tepat Waktu
                             @endif
                         </td>
-                        <td>
+                        {{-- <td>
                             {{ $total_jam }}
-                        </td>
+                        </td> --}}
                     </tr>
                 @else
                     <tr>
@@ -194,9 +183,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td style="text-align: center">{{ $d->status }}</td>
+                        {{-- <td style="text-align: center">{{ $d->status }}</td> --}}
                         <td>{{ $d->keterangan }}</td>
-                        <td></td>
+                        {{-- <td></td> --}}
                     </tr>
                 @endif
             @endforeach

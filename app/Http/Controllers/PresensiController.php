@@ -330,7 +330,7 @@ class PresensiController extends Controller
 
         // Validasi input
         $request->validate([
-            'foto' => 'image|mimes:png,jpg|max:1024',
+            'foto' => 'image|mimes:png,jpg,jpeg|max:1024',
         ]);
 
         DB::beginTransaction();
@@ -534,13 +534,13 @@ class PresensiController extends Controller
     public function monitoring()
     {
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
-        $departemen = DB::table('departemen')->orderBy('kode_dept')->get();
-        return view('presensi.monitoring', compact('cabang', 'departemen'));
+        $jabatan = DB::table('jabatan')->orderBy('nama_jabatan')->get();
+        return view('presensi.monitoring', compact('cabang', 'jabatan'));
     }
 
     public function getpresensi(Request $request)
     {
-        $kode_dept = Auth::guard('user')->user()->kode_dept;
+        $nama_jabatan = Auth::guard('user')->user()->nama_jabatan;
         $kode_cabang = Auth::guard('user')->user()->kode_cabang;
         $user = User::find(Auth::guard('user')->user()->id);
 
@@ -548,7 +548,7 @@ class PresensiController extends Controller
 
         $query = Karyawan::query();
         $query->selectRaw(
-            'karyawan.nik, nama_lengkap, karyawan.kode_dept, karyawan.kode_cabang,
+            'karyawan.nik, nama_lengkap, karyawan.jabatan, karyawan.kode_cabang,
         datapresensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,
         datapresensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan'
         );
@@ -574,13 +574,13 @@ class PresensiController extends Controller
             $query->where('karyawan.kode_cabang', $request->kode_cabang);
         }
 
-        if (!empty($request->kode_dept)) {
-            $query->where('karyawan.kode_dept', $request->kode_dept);
+        if (!empty($request->nama_jabatan)) {
+            $query->where('karyawan.jabatan', $request->nama_jabatan);
         }
 
         if ($user->hasRole('admin departemen')) {
             $query->where('karyawan.kode_cabang', $kode_cabang);
-            $query->where('karyawan.kode_dept', $kode_dept);
+            // $query->where('karyawan.kode_dept', $kode_dept);
         }
         // $query->orderBy('nama_lengkap');
         $query->orderBy('kode_cabang');

@@ -32,8 +32,8 @@ class KaryawanController extends Controller
             $query->where('nama_lengkap', 'like', '%' . $request->nama_karyawan . '%');
         }
 
-        if (!empty($request->kode_dept)) {
-            $query->where('karyawan.kode_dept', $request->kode_dept);
+        if (!empty($request->jabatan)) {
+            $query->where('karyawan.jabatan', $request->jabatan);
         }
 
         if (!empty($request->kode_cabang)) {

@@ -52,33 +52,33 @@
                                     </div>
                                 </div>
                             @endrole
-                            <div class="row mt-2">
+                            <div class="row mt-3">
                                 <div class="col-12">
                                     <form action="/karyawan" method="GET">
                                         <div class="row">
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <input type="text" name="nama_karyawan" id="nama_karyawan"
-                                                        class="form-control" placeholder="Nama Karyawan"
+                                                        class="form-control" style="padding: 4px .75rem; border: 1px solid #aaa;" placeholder="Nama Karyawan"
                                                         value="{{ Request('nama_karyawan') }}">
                                                 </div>
                                             </div>
                                             @role('administrator', 'user')
                                                 <div class="col-3">
                                                     <div class="form-group">
-                                                        <select name="kode_dept" id="kode_dept" class="form-select">
-                                                            <option value="">Departemen</option>
-                                                            @foreach ($departemen as $d)
+                                                        <select name="jabatan" id="jabatan" class="form-select select-search">
+                                                            <option value="">Semua Jabatan</option>
+                                                            @foreach ($jabatan as $d)
                                                                 <option
-                                                                    {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }}
-                                                                    value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
+                                                                    {{ Request('jabatan') == $d->nama_jabatan ? 'selected' : '' }}
+                                                                    value="{{ $d->nama_jabatan }}">{{ $d->nama_jabatan }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-group">
-                                                        <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                                        <select name="kode_cabang" id="kode_cabang" class="form-select select-search">
                                                             <option value="">Semua Cabang</option>
                                                             @foreach ($cabang as $d)
                                                                 <option
@@ -110,18 +110,18 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row">
                                 <div class="col-12">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>NIK</th>
+                                                <th>ID Login</th>
                                                 <th>Nama</th>
                                                 <th>Jabatan</th>
                                                 <th>No. HP</th>
                                                 <th>Foto</th>
-                                                <th>Departemen</th>
+                                                {{-- <th>Departemen</th> --}}
                                                 <th>Cabang</th>
                                                 <th>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -177,7 +177,7 @@
                                                         @endif
 
                                                     </td>
-                                                    <td>{{ $d->nama_dept }}</td>
+                                                    {{-- <td>{{ $d->nama_dept }}</td> --}}
                                                     <td>{{ $d->kode_cabang }}</td>
                                                     <td class="text-center">
                                                         @if ($d->status_location == 1)
@@ -582,6 +582,11 @@
 
 @push('myscript')
     <script>
+
+        $(document).ready(function() {
+            $('.select-search').select2();
+        });
+
         $(function() {
             $("#nik").mask("000000000000000000");
             $("#no_hp").mask("0000000000000");

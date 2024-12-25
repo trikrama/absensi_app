@@ -244,7 +244,7 @@
                         </span>
                     </a>
                     <div
-                        class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
+                        class="dropdown-menu {{ request()->is(['karyawan','jabatan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
                                 @role('administrator|admin departemen', 'user')
@@ -254,10 +254,14 @@
                                     </a>
                                 @endrole
                                 @role('administrator', 'user')
-                                    <a class="dropdown-item {{ request()->is(['departemen']) ? 'active' : '' }}"
-                                        href="/departemen">
+                                    <a class="dropdown-item {{ request()->is(['jabatan']) ? 'active' : '' }}"
+                                        href="/jabatan">
                                         Jabatan
                                     </a>
+                                    {{-- <a class="dropdown-item {{ request()->is(['departemen']) ? 'active' : '' }}"
+                                        href="/departemen">
+                                        Departemen
+                                    </a> --}}
 
                                     <a class="dropdown-item {{ request()->is(['cabang']) ? 'active' : '' }}"
                                         href="/cabang">

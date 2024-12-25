@@ -8,9 +8,23 @@ use Illuminate\Support\Facades\Redirect;
 
 class CabangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
+        // Ambil parameter nama_cabang dari request
+        $namaCabang = $request->get('nama_cabang');
+
+        // Query untuk mendapatkan data cabang
+        $query = DB::table('cabang')->orderBy('kode_cabang');
+
+        // Tambahkan filter pencarian jika nama_cabang tersedia
+        if ($namaCabang) {
+            $query->where('nama_cabang', 'like', '%' . $namaCabang . '%');
+        }
+
+        // Eksekusi query dan ambil data
+        $cabang = $query->get();
+
+        // Kembalikan ke view dengan data cabang
         return view('cabang.index', compact('cabang'));
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
+use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\HariliburController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InstrumentController;
@@ -216,6 +217,14 @@ Route::group(['middleware' => ['role:administrator,user']], function () {
     Route::post('/departemen/edit', [DepartemenController::class, 'edit']);
     Route::post('/departemen/{kode_dept}/update', [DepartemenController::class, 'update']);
     Route::post('/departemen/{kode_dept}/delete', [DepartemenController::class, 'delete']);
+
+    //Jabatan
+    Route::get('/jabatan', [JabatanController::class, 'index']);
+    // ->middleware('permission:view-departemen,user');
+    Route::post('/jabatan/store', [JabatanController::class, 'store']);
+    Route::post('/jabatan/edit', [JabatanController::class, 'edit']);
+    Route::post('/jabatan/{kode_dept}/update', [JabatanController::class, 'update']);
+    Route::post('/jabatan/{kode_dept}/delete', [JabatanController::class, 'delete']);
 
     //Presensi
 

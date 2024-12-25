@@ -73,7 +73,7 @@
                                     {{-- akhir filter nama --}}
                                     <div class="col-md-3">
                                         <div class="form-group mb-3">
-                                            <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                            <select name="kode_cabang" id="kode_cabang" class="form-select select-search">
                                                 <option value="">Semua Cabang</option>
                                                 @foreach ($cabang as $d)
                                                     <option value="{{ $d->kode_cabang }}">
@@ -84,11 +84,12 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group mb-3">
-                                            <select name="kode_dept" id="kode_dept" class="form-select">
-                                                <option value="">Semua Departemen</option>
-                                                @foreach ($departemen as $d)
-                                                    <option value="{{ $d->kode_dept }}">
-                                                        {{ strtoupper($d->nama_dept) }}</option>
+                                            <select name="jabatan" id="jabatan" class="form-select select-search">
+                                                <option value="">Semua Jabatan</option>
+                                                @foreach ($jabatan as $d)
+                                                    <option
+                                                        {{ Request('jabatan') == $d->nama_jabatan ? 'selected' : '' }}
+                                                        value="{{ $d->nama_jabatan }}">{{ $d->nama_jabatan }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -130,7 +131,7 @@
                                                     {{-- <th>Nik</th> --}}
                                                     <th>Nama Karyawan</th>
                                                     <th>Cabang</th>
-                                                    <th>Dept</th>
+                                                    <th>Jabatan</th>
                                                     <th>Jadwal</th>
                                                     <th>Jam Masuk</th>
                                                     <th>Foto</th>
@@ -184,6 +185,10 @@
 @endsection
 @push('myscript')
     <script>
+        $(document).ready(function() {
+            $('.select-search').select2();
+        });
+
         $(function() {
             $("#tanggal").datepicker({
                 autoclose: true,
@@ -194,7 +199,7 @@
             function loadpresensi() {
                 var tanggal = $("#tanggal").val();
                 var kode_cabang = $("#kode_cabang").val();
-                var kode_dept = $("#kode_dept").val();
+                var nama_jabatan = $("#jabatan").val();
                 var nama_karyawan = $("#nama_karyawan").val();
                 $.ajax({
                     type: 'POST',
@@ -204,7 +209,7 @@
                         tanggal: tanggal,
                         nama_karyawan: nama_karyawan,
                         kode_cabang: kode_cabang,
-                        kode_dept: kode_dept
+                        nama_jabatan: nama_jabatan
                     },
                     cache: false,
                     success: function(respond) {
@@ -236,7 +241,7 @@
                 loadrekap();
             });
             
-            $("#kode_dept").change(function(e) {
+            $("#jabatan").change(function(e) {
                 loadpresensi();
                 loadrekap();
             });

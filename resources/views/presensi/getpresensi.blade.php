@@ -25,7 +25,7 @@ function selisih($jam_masuk, $jam_keluar)
             {{-- <td>{{ $d->nik }}</td> --}}
             <td>{{ $d->nama_lengkap }}</td>
             <td>{{ $d->kode_cabang }}</td>
-            <td>{{ $d->kode_dept }}</td>
+            <td>{{ $d->jabatan }}</td>
             <td>
                 {{ $d->nama_jam_kerja }} ({{ $d->jam_masuk }} s/d {{ $d->jam_pulang }})
             </td>
@@ -111,7 +111,7 @@ function selisih($jam_masuk, $jam_keluar)
             {{-- <td>{{ $d->nik }}</td> --}}
             <td>{{ $d->nama_lengkap }}</td>
             <td>{{ $d->kode_cabang }}</td>
-            <td>{{ $d->kode_dept }}</td>
+            <td>{{ $d->jabatan }}</td>
             <td>
                 <span class="badge bg-danger">Belum</span>
             </td>
