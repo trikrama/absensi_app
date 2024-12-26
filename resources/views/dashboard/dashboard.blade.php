@@ -311,8 +311,8 @@
                                                 <span class="danger">Terlambat {{ $jmlterlambatSplit[0] }} Jam {{ $jmlterlambatSplit[1] }} Menit
                                                 </span>
                                                 <br>
-                                                <span class="danger">(Jumlah Jam Kerja : {{ $jmlterlambatdesimal }} Jam)
-                                                </span>
+                                                {{-- <span class="danger">(Jumlah Jam Kerja : {{ $jmlterlambatdesimal }} Jam)
+                                                </span> --}}
                                             @else
                                                 <span style="color:green">Tepat Waktu</span>
                                             @endif

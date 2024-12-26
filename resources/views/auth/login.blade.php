@@ -36,10 +36,12 @@
         }
 
         @media (max-width: 768px) {
-            .g-recaptcha {
-                transform: scale(0.85); /* Sesuaikan ukuran untuk perangkat kecil */
+            .form-button-group {
+                position: static; /* Tidak sticky */
+                padding-bottom: 16px; /* Tambahkan jarak bawah */
             }
         }
+        
     </style>
 </head>
 
@@ -57,7 +59,7 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="{{ asset('assets/img/login/login.webp') }}" alt="image" class="form-image">
+                <img src="{{ asset('assets/img/login/skmlogo1.png') }}" alt="image" class="form-image">
             </div>
             <div class="section mt-1">
                 <h1>E-Presensi </h1>

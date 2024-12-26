@@ -26,7 +26,7 @@
                                     <div class="row mt-1">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <select name="kode_cabang" id="kode_cabang" class="form-select">
+                                                <select name="kode_cabang" id="kode_cabang" class="form-select select-search">
                                                     <option value="">Semua Cabang</option>
                                                     @foreach ($cabang as $d)
                                                         <option value="{{ $d->kode_cabang }}">{{ strtoupper($d->nama_cabang) }}
@@ -159,4 +159,12 @@
             </div>
         </div>
     </div>
+@push('myscript')
+<script>
+    $(document).ready(function() {
+        $('.select-search').select2();
+    });
+</script>
+@endpush
+
 @endsection

@@ -689,8 +689,8 @@
 
             $("#awal_jam_masuk, #jam_masuk, #akhir_jam_masuk, #jam_pulang,#awal_jam_istirahat,#akhir_jam_istirahat")
                 .mask("00:00");
-            $("#nama_jam_kerja")
-                .mask("AAAAAAAAAAAAAA");
+            // $("#nama_jam_kerja")
+            //     .mask("AAAAAAAAAAAAAA");
 
             $("#btnTambahJK").click(function() {
                 $("#modal-inputjk").modal("show");
