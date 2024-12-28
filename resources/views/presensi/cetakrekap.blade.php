@@ -95,21 +95,6 @@
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">
 
-        {{-- <table style="width: 100%">
-            <tr>
-                <td style="width: 30px; border: 1px solid #131212;">
-                    <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="70" height="70" alt="">
-                </td>
-                <td style="border: 1px solid #131212">
-                    <span id="title" style="text-align: center">
-                        REKAP PRESENSI KARYAWAN<br>
-                        PERIODE {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
-                        PT. SINDUE KARYA MANDIRI<br>
-                    </span>
-                    <span><i>JL. MH. Thamrin No. 62, Besusu Timur, Palu Timur </i></span>
-                </td>
-            </tr>
-        </table> --}}
         <table style="width: 100%;">
             <tr>
                 {{-- <td style="width: 30px; border: 1px solid #131212; text-align: center; vertical-align: middle;">
@@ -240,7 +225,7 @@
         <table width="100%" style="margin-top:100px">
             <tr>
                 <td></td>
-                <td style="text-align: center">Tasikmalaya, {{ date('d-m-Y') }}</td>
+                <td style="text-align: center">Palu, {{ date('d-m-Y') }}</td>
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align:bottom" height="100px">

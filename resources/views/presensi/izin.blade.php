@@ -11,7 +11,7 @@
         <div class="right"></div>
     </div>
 
-    <style>
+    {{-- <style>
         .historicontent {
             display: flex;
             gap: 1px;
@@ -30,7 +30,163 @@
         .card {
             border: 1px solid rgb(0, 136, 255);
         }
+    </style> --}}
+    <style>
+        /* Global Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        /* Card Style */
+        .card {
+            border: 1px solid rgb(0, 136, 255);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+    
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    
+        /* Flexbox Container */
+        .historicontent {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+        }
+    
+        /* Icon Styling */
+        .iconpresensi {
+            flex-shrink: 0;
+        }
+    
+        .iconpresensi ion-icon {
+            font-size: 48px;
+        }
+    
+        /* Data Presensi */
+        .datapresensi-container {
+            flex-grow: 1;
+        }
+    
+        .datapresensi-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    
+        .datapresensi-header small {
+            color: #666;
+            display: block;
+            margin-top: 5px;
+        }
+    
+        .datapresensi-description {
+            margin: 10px 0;
+        }
+    
+        .datapresensi-description p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.5;
+        }
+    
+        /* Footer with Status and Days */
+        .datapresensi-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+    
+        .status .badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    
+        .hari {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: right;
+        }
+    
+        /* Badge Colors */
+        .status .badge.bg-success {
+            background-color: #28a745;
+            color: white;
+        }
+    
+        .status .badge.bg-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+    
+        .status .badge.bg-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+    
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .historicontent {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+    
+            .datapresensi-container {
+                width: 100%;
+            }
+    
+            .datapresensi-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+    
+            .hari {
+                text-align: left;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .iconpresensi ion-icon {
+                font-size: 40px;
+            }
+    
+            .datapresensi-header h3 {
+                font-size: 0.9rem;
+            }
+    
+            .datapresensi-header small {
+                font-size: 0.8rem;
+            }
+    
+            .datapresensi-description p {
+                font-size: 0.8rem;
+            }
+    
+            .status .badge {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+    
+            .hari {
+                font-size: 0.8rem;
+            }
+        }
     </style>
+    
     <!-- * App Header -->
 @endsection
 @section('content')
@@ -96,13 +252,8 @@
         </div>
     </div>
 
-    <div class="row" style="position: fixed; width:100%; margin:auto; overflow-y:scroll; height:430px">
+    {{-- <div class="row" style="position: fixed; width:100%; margin:auto; overflow-y:scroll; height:430px">
         <div class="col">
-            {{-- @if ($dataizin->isEmpty())
-                <div class="alert  alert-outline-warning">
-                    <p>Data Belum Aada</p>
-                </div>
-            @endif --}}
             @foreach ($dataizin as $d)
                 @php
                     if ($d->status == 'i') {
@@ -131,9 +282,9 @@
                                         style="font-size: 48px; color:rgb(237, 128, 5)"></ion-icon>
                                 @endif
                             </div>
-                            {{-- <div class="datapresensi-container" style="display: flex; flex-direction: column; gap: 10px;  padding: 10px;">
+                            {{-- <div class="datapresensi-container" style="display: flex; flex-direction: column; gap: 10px;  padding: 10px;"> --}}
                                 <!-- Bagian Keterangan -->
-                                <div class="datapresensi" style="flex: 1;">
+                                {{-- <div class="datapresensi" style="flex: 1;">
                                     <h3 style="margin: 0;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} ({{ $status }})</h3>
                                     <small>{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}</small>
                                     <p style="margin: 5px 0; line-height: 1.4;">
@@ -148,10 +299,10 @@
                                             </span>
                                         @endif
                                     </p>
-                                </div>
+                                </div> --}}
                             
                                 <!-- Bagian Status -->
-                                <div class="status" style="text-align: right; flex: 0;">
+                                {{-- <div class="status" style="text-align: right; flex: 0;">
                                     @if ($d->status_approved == 0)
                                         <span class="badge bg-warning">Pending</span>
                                     @elseif($d->status_approved == '1')
@@ -161,8 +312,8 @@
                                     @endif
                                     <p style="margin: 5px 0 0; font-weight: bold;">{{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari</p>
                                 </div>
-                            </div> --}}
-                            <div class="datapresensi-container" style="padding: 15px; margin-bottom: 10px;">
+                            </div> --}} 
+                            {{-- <div class="datapresensi-container" style="padding: 15px; margin-bottom: 10px;">
                                 <!-- Bagian Header -->
                                 <div class="datapresensi-header" style="margin-bottom: 10px;">
                                     <h3 style="margin: 0; font-size: 1rem;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} ({{ $status }})</h3>
@@ -183,8 +334,8 @@
                                         @endif
                                     </p>
                                 </div>
-                            
-                                <!-- Bagian Status dan Hari -->
+                             --}}
+                                {{-- <!-- Bagian Status dan Hari -->
                                 <div class="datapresensi-footer" style="display: flex; justify-content: space-between; align-items: center;">
                                     <div class="status">
                                         <span class="badge bg-danger">
@@ -210,12 +361,99 @@
                                         {{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari
                                     </div>
                                 </div>
+                            </div>--}}
+                            <div class="row" style="position: fixed; width:100%; margin:auto; overflow-y:scroll; height:430px">
+                                <div class="col">
+                                    @foreach ($dataizin as $d)
+                                        @php
+                                            if ($d->status == 'i') {
+                                                $status = 'Izin';
+                                            } elseif ($d->status == 's') {
+                                                $status = 'Sakit';
+                                            } elseif ($d->status == 'c') {
+                                                $status = 'Cuti';
+                                            } else {
+                                                $status = 'Not Found';
+                                            }
+                                        @endphp
+                                        <div class="card mt-1 card_izin" kode_izin="{{ $d->kode_izin }}" status_approved="{{ $d->status_approved }}"
+                                            data-toggle="modal" data-target="#actionSheetIconed">
+                                            <div class="card-body">
+                                                <div class="historicontent">
+                                                    <div class="iconpresensi">
+                                                        @if ($d->status == 'i')
+                                                            <ion-icon name="document-outline"
+                                                                style="font-size: 48px; color:rgb(21, 95, 207)"></ion-icon>
+                                                        @elseif($d->status == 's')
+                                                            <ion-icon name="medkit-outline"
+                                                                style="font-size: 48px; color:rgb(191, 7, 65)"></ion-icon>
+                                                        @elseif($d->status == 'c')
+                                                            <ion-icon name="calendar-outline"
+                                                                style="font-size: 48px; color:rgb(237, 128, 5)"></ion-icon>
+                                                        @endif
+                                                    </div>
+                                                    
+                                                    <div class="datapresensi-container" style="padding: 15px; margin-bottom: 10px;">
+                                                        <!-- Bagian Header -->
+                                                        <div class="datapresensi-header" style="margin-bottom: 10px;">
+                                                            <h3 style="margin: 0; font-size: 1rem;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} ({{ $status }})</h3>
+                                                            <small style="color: #666;">{{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}</small>
+                                                        </div>
+                                                    
+                                                        <!-- Bagian Keterangan -->
+                                                        <div class="datapresensi-description" style="margin-bottom: 15px;">
+                                                            <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #333;">
+                                                                {{ $d->keterangan }}
+                                                                @if ($d->status == 'c')
+                                                                    <span class="badge bg-warning">{{ $d->nama_cuti }}</span>
+                                                                @endif
+                                                                @if (!empty($d->doc_sid))
+                                                                    <span style="color: blue; cursor: pointer;">
+                                                                        <ion-icon name="document-attach-outline"></ion-icon> Lihat SID
+                                                                    </span>
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    
+                                                        <!-- Bagian Status dan Hari -->
+                                                        <div class="datapresensi-footer" style="display: flex; justify-content: space-between;">
+                                                            <div class="status">
+                                                                @if ($d->status_approved == '3' || $d->status_approved == '2')
+                                                                <span class="badge bg-danger">
+                                                                    <a href="{{ asset('storage/uploads/approval/' . $d->doc_persetujuan) }}" class="text-white" target="_blank" download>
+                                                                        Download Lampiran
+                                                                    </a>
+                                                                </span>
+                                                                @endif
+                                                                @if ($d->status_approved == 0 || $d->status_approved == 1)
+                                                                    <span class="badge bg-warning">Pending</span>
+                                                                @elseif($d->status_approved == '3')
+                                                                    <span class="badge bg-success">Disetujui</span>
+                                                                @elseif($d->status_approved == '2')
+                                                                    <span class="badge bg-danger">Ditolak</span>
+                        
+                                                                @endif
+                                                            </div>
+                                                            <div class="text-danger">
+                                                                @if($d->status_approved == '2')
+                                                                    <p>{{ $d->ket_tolak }}</p>
+                                                                @endif
+                                                            </div>
+                                                            <div class="hari" style="font-weight: bold; font-size: 0.9rem;">
+                                                                {{ hitunghari($d->tgl_izin_dari, $d->tgl_izin_sampai) }} Hari
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                             
-                            
-                        </div>
+                        {{--</div>
                     </div>
-                </div>
+                </div> --}}
                 {{-- <ul class="listview image-listview">
             <li>
                 <div class="item">
@@ -235,9 +473,9 @@
 </div>
 </li>
 </ul> --}}
-            @endforeach
+            {{-- @endforeach
         </div>
-    </div>
+    </div> --}}
     <div class="fab-button animate bottom-right dropdown" style="margin-bottom:70px">
         <a href="#" class="fab bg-primary" data-toggle="dropdown">
             <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>

@@ -247,7 +247,7 @@
                         class="dropdown-menu {{ request()->is(['karyawan','jabatan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('administrator|admin departemen', 'user')
+                                @role('administrator|admin departemen|pimpinan', 'user')
                                     <a class="dropdown-item {{ request()->is(['karyawan']) ? 'active' : '' }}"
                                         href="/karyawan">
                                         Karyawan
@@ -267,6 +267,8 @@
                                         href="/cabang">
                                         Kantor Cabang
                                     </a>
+                                @endrole
+                                @role('administrator|pimpinan', 'user')
                                     <a class="dropdown-item {{ request()->is(['cuti']) ? 'active' : '' }}" href="/cuti">
                                         Cuti
                                     </a>
@@ -422,7 +424,7 @@
                                 Konfigurasi
                             </span>
                         </a>
-                        <div class="dropdown-menu  {{ request()->is(['konfigurasi', 'konfigurasi/*']) ? 'show' : '' }}">
+                        <div class="dropdown-menu  {{ request()->is(['konfigurasi', 'konfigurasi/*, signature']) ? 'show' : '' }}">
 
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
@@ -437,6 +439,10 @@
                                     <a class="dropdown-item  {{ request()->is(['konfigurasi/jamkerjadept']) ? 'active' : '' }}"
                                         href="/konfigurasi/jamkerjadept">
                                         Jam Kerja Departemen
+                                    </a>
+                                    <a class="dropdown-item  {{ request()->is(['signature']) ? 'active' : '' }}"
+                                        href="/signature">
+                                        TTD
                                     </a>
                                     <a class="dropdown-item  {{ request()->is(['konfigurasi/users']) ? 'active' : '' }}"
                                         href="/konfigurasi/users">

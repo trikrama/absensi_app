@@ -163,7 +163,6 @@
                                 <img src="{{ asset('assets/img/camera.jpg') }}" alt="" class="foto">
                             @endif
                         </td>
-                        {{-- <td style="text-align: center">{{ $d->status }}</td> --}}
                         <td>
                             @if ($d->jam_in > $d->jam_masuk)
                                 Terlambat {{ $terlambat_desimal }} Jam
@@ -171,9 +170,6 @@
                                 Tepat Waktu
                             @endif
                         </td>
-                        {{-- <td>
-                            {{ $total_jam }}
-                        </td> --}}
                     </tr>
                 @else
                     <tr>
@@ -196,16 +192,96 @@
                 <td colspan="2" style="text-align: right">Palu, {{ date('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td style="text-align: center; vertical-align:bottom" height="100px">
-                    <u>Andika</u><br>
-                    <i><b>HRD Manager</b></i>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd1)
+                        @if ($ttd1->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd1->name }}</u><br>
+                        <i><b>{{ $ttd1->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
                 </td>
-                <td style="text-align: right; vertical-align:bottom">
-                    <u>Tri Krama</u><br>
-                    <i><b>Direktur</b></i>
+                <td style="text-align: right; vertical-align:bottom" height="150px">
+                    @if ($ttd2)
+                        @if ($ttd2->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd2->name }}</u><br>
+                        <i><b>{{ $ttd2->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
                 </td>
             </tr>
         </table>
+    </section>
+
+
+    {{-- Aktivitas --}}
+    <section class="sheet padding-10mm">
+        <h2>
+            Laporan Aktivitas Karyawan
+        </h2>
+       
+        <table class="tabelpresensi">
+            <tr>
+                <th>No.</th>
+                <th>Tanggal</th>
+                <th>Jam</th>
+                <th>Keterangan</th>
+                <th>Foto</th>
+
+            @foreach ($aktivitas as $d)
+                    @php
+                        $path_in = Storage::url('uploads/aktivitas/' . $d->foto);
+                    @endphp 
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ date('d-m-Y', strtotime($d->tanggal_aktivitas)) }}</td>
+                        <td>{{ $d->waktu_aktivitas }}</td>
+                        <td>{{ $d->deskripsi}}</td>
+                        <td><img src="{{ url($path_in) }}" alt="" class="foto"></td>
+                    </tr>
+            @endforeach
+        </table>
+
+        <table width="100%" style="margin-top:100px">
+            <tr>
+                <td colspan="2" style="text-align: right">Palu, {{ date('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd1)
+                        @if ($ttd1->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd1->name }}</u><br>
+                        <i><b>{{ $ttd1->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
+                </td>
+                <td style="text-align: right; vertical-align:bottom" height="150px">
+                    @if ($ttd2)
+                        @if ($ttd2->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd2->name }}</u><br>
+                        <i><b>{{ $ttd2->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
+                </td>
+            </tr>
+        </table>
+        
+        
     </section>
 
 </body>

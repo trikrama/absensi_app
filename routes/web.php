@@ -18,10 +18,12 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\ManajemenTugasController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\TugasController;
 use App\Http\Controllers\UserController;
 use App\Models\Instrument;
 use App\Models\Karyawan;
+use App\Models\Signature;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -108,7 +110,7 @@ Route::middleware(['auth:karyawan'])->group(function () {
 
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
 // Route::middleware(['auth', 'role:administrator|admin departemen,user'])->group(function () {
-Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
+Route::group(['middleware' => ['role:administrator|admin departemen|pimpinan,user']], function () {
     // Route::middleware(['auth:user'])->group(function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogout']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
@@ -197,10 +199,7 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
 
 
 //ROute yang Hanya bisa di akses oleh Administrator
-Route::group(['middleware' => ['role:administrator,user']], function () {
-
-
-
+Route::group(['middleware' => ['role:administrator|pimpinan,user']], function () {
     //Karyawan
     Route::get('/karyawan/{nik}/details', [KaryawanController::class, 'show']);
     Route::post('/karyawan/{id}/profile', [KaryawanController::class, 'storeProfile'])->name('karyawan.storeProfile');
@@ -289,6 +288,15 @@ Route::group(['middleware' => ['role:administrator,user']], function () {
     Route::post('/cuti/edit', [CutiController::class, 'edit']);
     Route::post('/cuti/{kode_cuti}/update', [CutiController::class, 'update']);
     Route::post('/cuti/{kode_cuti}/delete', [CutiController::class, 'delete']);
+
+    Route::controller(SignatureController::class)->group(function () {
+        Route::get('/signature', 'index')->name('signatures.index');
+        Route::get('/signatures/create', 'create')->name('signatures.create');
+        Route::post('/signatures/store', 'store')->name('signatures.store');
+        Route::get('/signatures/{id}/edit', 'edit')->name('signatures.edit');
+        Route::put('/signatures/{id}', 'update')->name('signatures.update');
+        Route::delete('/signatures/{id}/deteteUmum', 'destroy')->name('signatures.destroy');
+    });
 });
 
 

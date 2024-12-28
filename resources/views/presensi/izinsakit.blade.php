@@ -207,13 +207,14 @@
                                 </th>
                                 <th>Keterangan</th>
                                 <th>Status Approve</th>
-                                {{-- @role('administrator', 'user') --}}
+                                @role('administrator|pimpinan', 'user')
                                     <th>Aksi</th>
-                                {{-- @endrole --}}
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($izinsakit as $d)
+                            @role('pimpinan', 'user')
+                                @foreach ($izinsakit_pimpinan as $d)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $d->kode_izin }}</td>
@@ -226,15 +227,17 @@
                                     <td>{{ $d->jabatan }}</td>
                                     <td>{{ $d->kode_dept }}</td>
                                     <td>{{ $d->kode_cabang }}</td>
-                                    <td>
-                                        @if ($d->status == 'i')
-                                            Izin
-                                        @elseif ($d->status == 's')
-                                            Sakit
-                                        @elseif ($d->status = 'c')
-                                            Cuti
-                                        @endif
-                                    </td>
+                                    {{-- @role('administrator|admin departemen', 'user') --}}
+                                        <td>
+                                            @if ($d->status == 'i')
+                                                Izin
+                                            @elseif ($d->status == 's')
+                                                Sakit
+                                            @elseif ($d->status = 'c')
+                                                Cuti
+                                            @endif
+                                        </td>
+                                    {{-- @endrole --}}
                                     <td>
                                         @if (!empty($d->doc_sid))
                                             @php
@@ -255,7 +258,113 @@
                                     </td>
                                     <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
                                     <td>
-                                        @if ($d->status_approved == 1)
+                                        @if ($d->status_approved == 3)
+                                            <span class="badge bg-success">Disetujui</span>
+                                        @elseif($d->status_approved == 2)
+                                            <span class="badge bg-danger">Ditolak</span>
+                                        @elseif($d->status_approved == 1 || $d->status_approved == 0)
+                                            <span class="badge bg-warning">Pending</span>
+                                        @endif
+                                    </td>
+                                    @role('administrator|pimpinan', 'user')
+                                        <td>
+                                            @if ($d->status_approved == 1)
+                                                <a href="#" class="btn btn-sm btn-primary approve1"
+                                                    kode_izin="{{ $d->kode_izin }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon icon-tabler icon-tabler-external-link" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5">
+                                                        </path>
+                                                        <path d="M10 14l10 -10"></path>
+                                                        <path d="M15 4l5 0l0 5"></path>
+                                                    </svg>
+                                                </a>
+                                            @elseif($d->status_approved == 3)
+                                                <a href="/presensi/{{ $d->kode_izin }}/batalkanizinsakit"
+                                                    class="btn btn-sm bg-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon icon-tabler icon-tabler-square-rounded-x" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M10 10l4 4m0 -4l-4 4"></path>
+                                                        <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z">
+                                                        </path>
+                                                    </svg>
+                                                    Batalkan
+                                                </a>
+                                            @endif
+                                        @endrole
+                                            <a href="#" class="btn btn-sm btn-primary detail"
+                                                        kode_izin="{{ $d->kode_izin }}">
+                                                        {{-- <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon icon-tabler icon-tabler-external-link" width="24"
+                                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5">
+                                                            </path>
+                                                            <path d="M10 14l10 -10"></path>
+                                                            <path d="M15 4l5 0l0 5"></path>
+                                                        </svg> --}}
+                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                                        </td>
+                                </tr>
+                                @endforeach
+                            @endrole
+                            {{-- @role('administrator|admin departemen', 'user') --}}
+                            @role('administrator|admin departemen', 'user')
+                            @foreach ($izinsakit as $d)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $d->kode_izin }}</td>
+                                    <td>
+                                        {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
+                                        {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
+                                    </td>
+                                    <td>{{ $d->nik }}</td>
+                                    <td>{{ $d->nama_lengkap }}</td>
+                                    <td>{{ $d->jabatan }}</td>
+                                    <td>{{ $d->kode_dept }}</td>
+                                    <td>{{ $d->kode_cabang }}</td>
+                                    {{-- @role('administrator|admin departemen', 'user') --}}
+                                        <td>
+                                            @if ($d->status == 'i')
+                                                Izin
+                                            @elseif ($d->status == 's')
+                                                Sakit
+                                            @elseif ($d->status = 'c')
+                                                Cuti
+                                            @endif
+                                        </td>
+                                    {{-- @endrole --}}
+                                    <td>
+                                        @if (!empty($d->doc_sid))
+                                            @php
+                                                $path = Storage::url('uploads/sid/' . $d->doc_sid);
+                                            @endphp
+                                            <a href="{{ url($path) }}" target="_blank">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-paperclip" width="24"
+                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path
+                                                        d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
+                                                </svg>
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
+                                    <td>
+                                        @if ($d->status_approved == 1 || $d->status_approved == 3 )
                                             <span class="badge bg-success">Disetujui</span>
                                         @elseif($d->status_approved == 2)
                                             <span class="badge bg-danger">Ditolak</span>
@@ -314,6 +423,7 @@
                                         </td>
                                 </tr>
                             @endforeach
+                            @endrole
                         </tbody>
                     </table>
                     {{ $izinsakit->links('vendor.pagination.bootstrap-5') }}
@@ -336,8 +446,14 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <select name="status_approved" id="status_approved" class="form-select">
-                                        <option value="1">Disetujui</option>
-                                        <option value="2">Ditolak</option>
+                                        @role('pimpinan', 'user')
+                                            <option value="3">Disetujui</option>
+                                            <option value="2">Ditolak</option>
+                                        @endrole
+                                        @role('administrator', 'user')
+                                            <option value="1">Disetujui</option>
+                                            <option value="2">Ditolak</option>
+                                        @endrole
                                     </select>
                                 </div>
                             </div>
@@ -420,6 +536,12 @@
     <script>
         $(function() {
             $(".approve").click(function(e) {
+                e.preventDefault();
+                var kode_izin = $(this).attr("kode_izin");
+                $("#kode_izin_form").val(kode_izin);
+                $("#modal-izinsakit").modal("show");
+            });
+            $(".approve1").click(function(e) {
                 e.preventDefault();
                 var kode_izin = $(this).attr("kode_izin");
                 $("#kode_izin_form").val(kode_izin);

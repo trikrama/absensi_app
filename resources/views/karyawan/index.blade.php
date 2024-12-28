@@ -653,8 +653,9 @@
 
             $("#frmKaryawan").submit(function() {
                 var nik = $("#nik").val();
+                console.log(nik);
                 var nama_lengkap = $("#nama_lengkap").val();
-                var jabatan = $("#jabatan").val();
+                var jabatan = $("#frmKaryawan").find("#jabatan").val();
                 var no_hp = $("#no_hp").val();
                 var kode_dept = $("#frmKaryawan").find("#kode_dept").val();
                 var kode_cabang = $("#frmKaryawan").find("#kode_cabang").val();

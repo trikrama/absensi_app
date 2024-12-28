@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
     public function proseslogin(Request $request)
     {
         // Validasi input
@@ -18,7 +19,7 @@ class AuthController extends Controller
             'role' => 'required|in:admin,karyawan', // Role harus sesuai pilihan
             'nik' => 'required|string', // Bisa berupa NIK atau email
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required', // Pastikan reCAPTCHA diisi
+            // 'g-recaptcha-response' => 'required', // Pastikan reCAPTCHA diisi
         ], [
             'g-recaptcha-response.captcha' => 'Captcha tidak valid. Silakan coba lagi.',
             'role.in' => 'Role yang dipilih tidak valid.',

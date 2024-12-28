@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use App\Models\Aktivitas;
 use App\Models\Pengajuanizin;
 use App\Models\Profile;
+use App\Models\Signature;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -721,7 +723,12 @@ class PresensiController extends Controller
             header("Content-Disposition: attachment; filename=Laporan Presensi Karyawan $time.xls");
             return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi'));
         }
-        return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi'));
+
+        $aktivitas = Aktivitas::query()->where('nik', $nik)->get();
+        $ttd1 = Signature::where('type', 'TTD1')->first();
+        $ttd2 = Signature::where('type', 'TTD2')->first();
+        
+        return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi', 'aktivitas', 'ttd1', 'ttd2'));
     }
 
     public function rekap()
@@ -1193,6 +1200,7 @@ class PresensiController extends Controller
         $user = User::find(Auth::guard('user')->user()->id);
 
         $query = Pengajuanizin::query();
+        $query1 = Pengajuanizin::query();
         $query->select(
             'kode_izin',
             'tgl_izin_dari',
@@ -1207,44 +1215,70 @@ class PresensiController extends Controller
             'karyawan.kode_dept',
             'doc_sid'
         );
+        $query1->select(
+            'kode_izin',
+            'tgl_izin_dari',
+            'tgl_izin_sampai',
+            'pengajuan_izin.nik',
+            'nama_lengkap',
+            'jabatan',
+            'status',
+            'status_approved',
+            'keterangan',
+            'karyawan.kode_cabang',
+            'karyawan.kode_dept',
+            'doc_sid'
+        );
         $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $query1->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
+            $query1->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
         }
 
         if (!empty($request->nik)) {
             // $query->where('pengajuan_izin.nik', $request->nik);
             $query->where('pengajuan_izin.nik', 'like', '%' . $request->nik . '%');
+            $query1->where('pengajuan_izin.nik', 'like', '%' . $request->nik . '%');
         }
 
         if (!empty($request->nama_lengkap)) {
             $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
+            $query1->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
         }
-
+        
         if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
             $query->where('status_approved', $request->status_approved);
+            $query1->where('status_approved', $request->status_approved);
         }
 
         if ($user->hasRole('admin departemen')) {
             $query->where('karyawan.kode_dept', $kode_dept);
+            $query1->where('karyawan.kode_dept', $kode_dept);
             $query->where('karyawan.kode_cabang', $kode_cabang);
+            $query1->where('karyawan.kode_cabang', $kode_cabang);
         }
 
         if (!empty($request->kode_cabang)) {
             $query->where('karyawan.kode_cabang', $request->kode_cabang);
+            $query1->where('karyawan.kode_cabang', $request->kode_cabang);
         }
 
         if (!empty($request->kode_dept)) {
             $query->where('karyawan.kode_dept', $request->kode_dept);
+            $query1->where('karyawan.kode_dept', $request->kode_dept);
         }
 
+
+        $izinsakit_pimpinan = $query1->where('status', 'c')->where('status_approved', '1')->orWhere ('status_approved', '3')->orderBy('tgl_izin_dari', 'desc')->get();
         $query->orderBy('tgl_izin_dari', 'desc');
-        $izinsakit = $query->paginate(10);
+        $izinsakit = $query->paginate(10); 
         $izinsakit->appends($request->all());
+
 
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
         $departemen = DB::table('departemen')->orderBy('kode_dept')->get();
-        return view('presensi.izinsakit', compact('izinsakit', 'cabang', 'departemen'));
+        return view('presensi.izinsakit', compact('izinsakit', 'cabang', 'departemen', 'izinsakit_pimpinan'));
     }
 
     public function approveizinsakit(Request $request)
@@ -1267,7 +1301,7 @@ class PresensiController extends Controller
                         'tgl_presensi' => $tgl_dari,
                         'status' => $status,
                         'kode_izin' => $kode_izin
-                    ]);
+                    ]); 
                     $tgl_dari = date("Y-m-d", strtotime("+1 days", strtotime($tgl_dari)));
                 }
             }
