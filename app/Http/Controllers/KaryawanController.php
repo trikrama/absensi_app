@@ -148,36 +148,13 @@ class KaryawanController extends Controller
             }
 
             // Insert data ke tabel profil menggunakan Eloquent
-            // $profil = new Profile([
-            //     'nik' => $nik,
-            //     'tempat_lahir' => $request->tempat_lahir,
-            //     'tanggal_lahir' => $request->tanggal_lahir,
-            //     'nama_ibu_kandung' => $request->nama_ibu_kandung,
-            //     'jenis_kelamin' => $request->jenis_kelamin,
-            //     'agama' => $request->agama,
-            //     'status_menikah' => $request->status_menikah,
-            //     'alamat_ktp' => $request->alamat_ktp,
-            //     'nomor_kk' => $request->nomor_kk,
-            //     'pendidikan_terakhir' => $request->pendidikan_terakhir,
-            //     'institusi' => $request->institusi,
-            //     'masa_aktif_sim' => $request->masa_aktif_sim,
-            //     'pendidikan_satpam' => $request->pendidikan_satpam,
-            //     'tahun_pelatihan' => $request->tahun_pelatihan,
-            //     'no_kta' => $request->no_kta,
-            //     'penerbit_kta' => $request->penerbit_kta,
-            //     'masa_aktif_kta' => $request->masa_aktif_kta,
-            //     'no_registrasi' => $request->no_registrasi,
-            //     'tmt_awal_penugasan' => $request->tmt_awal_penugasan,
-            //     'nama_bank' => $request->nama_bank,
-            //     'no_rekening' => $request->no_rekening,
-            //     'no_bpjs_kesehatan' => $request->no_bpjs_kesehatan,
-            //     'no_bpjs_ketenagakerjaan' => $request->no_bpjs_ketenagakerjaan,
-            //     'no_npwp' => $request->no_npwp
-            // ]);
+            $profil = new Profile([
+                'nik' => $nik,
+            ]);
 
 
             // // Simpan data profil terkait dengan karyawan
-            // $karyawan->profil()->save($profil);
+            $karyawan->profil()->save($profil);
 
             // Commit transaksi jika berhasil
             DB::commit();
