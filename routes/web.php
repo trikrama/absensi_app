@@ -167,17 +167,24 @@ Route::group(['middleware' => ['role:administrator|admin departemen|pimpinan,use
         Route::get('/inspection/tambah', 'tambah');
         Route::post('/inspection/store', 'store');
         Route::post('/inspection/storeInspection', 'storeInspection')->name('inspection.store');
-        Route::get('/inspection/edit/{id}', 'edit');
-        Route::put('/inspection/update/{id}', 'update');
-        Route::delete('/inspection/delete/{id}', 'delete');
-        // Route::get('/inspection/mulai/{id}', 'mulai');
+        Route::get('/inspection/edit/{id}', 'edit')->name('inspection.edit');
+        Route::put('/inspection/update/{id}', 'update')->name('inspection.update');
+        Route::delete('/inspection/delete/{id}', 'delete')->name('inspection.delete');
+        Route::get('/inspection/detail_kunjungan/{id}', 'detail_kunjungan')->name('inspection.detail_kunjungan');
+        // Route::get('/inspection/mulai', 'mulai');
         Route::get('/inspection/mulai/{id}', 'mulai');
         Route::get('/inspection/detailInspection/{id}', 'detailInspection');
-        Route::get('/get-karyawan-by-dept', 'getKaryawanByDept')->name('getKaryawanByDept');
+        Route::get('/get-karyawan-by-dept', 'getKaryawanByDept')->name('get-karyawan-by-dept');
         Route::post('/get-instruments', 'getInstrumentsByDept')->name('get-instruments');
-
-
+        Route::get('/inspection/detailInspectionEdit/{id}', 'detailInspectionEdit')->name('inspection.detailInspectionEdit');
+        Route::put('/inspection/detailInspectionUpdate', 'detailInspectionUpdate')->name('inspection.detailInspectionUpdate');
+        Route::delete('/inspection/detailInspectionDelete/{id}', 'detailInspectionDelete')->name('inspection.detailInspectionDelete');
+        
+        Route::get('/inspection/create', 'create');
     });
+
+    Route::get('/inspection/get-pertanyaan', [InspectionController::class, 'getPertanyaan'])->name('inspection.getPertanyaan');
+
 
     Route::controller(TugasController::class)->group(function () {
         Route::get('/tugas', 'index')->name('tugas.index');

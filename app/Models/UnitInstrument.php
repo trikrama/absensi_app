@@ -27,6 +27,11 @@ class UnitInstrument extends Model
         return $this->belongsTo(Departemen::class, 'kode_dept', 'kode_dept');
     }
 
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
+    }
+
     /**
      * Get the instrument associated with the unit instrument.
      */

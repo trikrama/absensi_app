@@ -43,7 +43,7 @@
 <div class="container mt-5">
     <h1 class="mb-4 text-center">Pemeriksaan Karyawan</h1>
     <h2 class="text-center text-primary">{{ $data->karyawan->nama_lengkap }}</h2>
-    <p class="lead text-center">Unit Kerja: <strong>{{ $data->departemen->nama_dept }}</strong></p>
+    <p class="lead text-center">Penempatan: <strong>{{ $data->cabang }}</strong></p>
 
     @foreach ($groupedDetails as $title => $details)
         <h3 class="mt-4 text-primary">{{ $title }}</h3> <!-- Menampilkan judul instrument_title -->
@@ -115,7 +115,7 @@
         // Informasi Nama dan Penempatan
         doc.setFontSize(12);
         addText("Nama   \t\t\t: {{ $data->karyawan->nama_lengkap }}", 10, 10);
-        addText("Penempatan\t\t: {{ $data->departemen->nama_dept }}", 10, 10);
+        addText("Penempatan\t\t: {{ $data->cabang }}", 10, 10);
 
        // Tabel Indikator Penilaian
         const tableBody = [];

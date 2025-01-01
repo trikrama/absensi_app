@@ -14,6 +14,7 @@ class DetailInspection extends Model
 
     // Kolom yang bisa diisi secara massal
     protected $fillable = [
+        'id_pemeriksaan_perorang',
         'id_pemeriksaan',
         'id_instrumen',
         'indikator',

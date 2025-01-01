@@ -17,6 +17,11 @@ class Jabatan extends Model
         'nama_jabatan',
     ];
 
+    public function instruments()
+    {
+        return $this->hasMany(Instrument::class, 'id', 'id'); // foreign key dan primary key
+    }
+
     // Kolom yang tidak boleh diisi secara massal (optional)
     // protected $guarded = [];
 

@@ -9,7 +9,7 @@ class Inspection extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nik','user_id', 'kode_dept', 'lokasi', 'tgl_pemeriksaan', 'tujuan', 'status', 'keterangan', 'foto_bukti'];
+    protected $fillable = ['nik','user_id', 'kode_dept', 'lokasi', 'waktu_mulai', 'tgl_pemeriksaan', 'tujuan', 'status', 'keterangan', 'foto_bukti'];
 
     public function answers()
     {
@@ -35,6 +35,11 @@ class Inspection extends Model
     public function departemen()
     {
         return $this->belongsTo(Departemen::class, 'kode_dept', 'kode_dept'); // foreign key dan primary key
+    }
+
+    public function inspectionAnswers()
+    {
+        return $this->hasMany(InspectionAnswer::class, 'inspection_id', 'id');
     }
 
 }

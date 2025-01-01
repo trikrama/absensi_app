@@ -1,7 +1,7 @@
 @extends('layouts.admin.tabler')
 
 @section('content')
-<title>Pemeriksaan | HaloMutiara!</title>
+<title>Pemeriksaan</title>
 
 {{-- <style>
     .bg-diagonal-gradient{
@@ -100,6 +100,9 @@
     <div class="d-flex justify-content-end">
         <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm">Tambah Instrument</a>
     </div>
+    <div class="d-flex justify-content-end">
+        <a href="{{ url('/inspection/create') }}" class="btn btn-warning btn-sm">Tambah Laporan</a>
+    </div>
     {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
     <div class="card mt-2">
         <div class="card-body">
@@ -118,7 +121,7 @@
                             </select>
                         </div> --}}
                     {{-- </div> --}}
-                    <div class="col-md-4 mb-3">
+                    {{-- <div class="col-md-4 mb-3">
                         <div class="form-group">
                             <label for="unit">Pilih Unit Yang Akan Diperiksa</label>
                             <select name="unit" class="form-control form-control-sm">
@@ -165,37 +168,45 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="card mt-4">
         <div class="card-body">
             <table class="table table-striped">
-                <thead>
+                <thead class="text-center">
                     <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Periksa Unit</th>
                         <th>Tanggal Pemeriksaan</th>
-                        <th>Status</th>
+                        <th>Koordinator</th>
+                        <th>Waktu</th>
+                        <th>Lokasi</th>
+                        <th>Jumlah Personel</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody  class="text-center">
                     @php $no = 1; @endphp
                     @foreach ($data as $row)
                     <tr>
                         <td>{{ $no++ }}</td>
-                        <td>{{ $row->user->name }}</td>
-                        <td>{{ $row->departemen->nama_dept }}</td>
                         <td>{{ $row->tgl_pemeriksaan }}</td>
-                        <td>{{ $row->status }}</td>
+                        <td>{{ $row->user->name }}</td>
+                        <td>{{ $row->waktu_mulai }}</td>
+                        <td>{{ $row->lokasi }}</td>
+                        <td>{{ $row->jml_personel }}</td>
                         <td>
-                            <a href="{{ url('/inspection/edit/'.$row->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form method="POST" action="{{ url('/inspection/delete/'.$row->id) }}" class="d-inline">
+                            <a href="{{ route('inspection.edit', $row->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            {{-- <form method="POST" action="{{ url('/inspection/delete/'.$row->id) }}" class="d-inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" data-id="{{ $row->id }}" class="btn btn-danger btn-sm">Hapus</button>
+                            </form> --}}
+                            <form method="POST" action="{{ route('inspection.delete', $row->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                             </form>
-                            <a href="{{ url('/inspection/detailInspection/'.$row->id) }}" class="btn btn-info btn-sm">Lihat Detail</a>
+                            {{-- <a href="{{ url('/inspection/detailInspection/'.$row->id) }}" class="btn btn-info btn-sm">Lihat Detail</a> --}}
+                            <a href="{{ url('/inspection/detail_kunjungan/'.$row->id) }}" class="btn btn-info btn-sm"> Lihat</a>
                         </td>
                     </tr>
                     @endforeach

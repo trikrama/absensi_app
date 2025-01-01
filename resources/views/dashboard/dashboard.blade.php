@@ -383,7 +383,6 @@
                                             <span>
                                                 {{ $d->keterangan }}
                                             </span>
-
                                         </div>
                                     </div>
                                 </div>
