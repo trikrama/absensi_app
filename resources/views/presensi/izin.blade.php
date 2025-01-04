@@ -425,13 +425,24 @@
                                                                     </a>
                                                                 </span>
                                                                 @endif
-                                                                @if ($d->status_approved == 0 || $d->status_approved == 1)
-                                                                    <span class="badge bg-warning">Pending</span>
-                                                                @elseif($d->status_approved == '3')
-                                                                    <span class="badge bg-success">Disetujui</span>
-                                                                @elseif($d->status_approved == '2')
-                                                                    <span class="badge bg-danger">Ditolak</span>
-                        
+                                                                @if ($d->status == 'c')
+                                                                    @if ($d->status_approved == 0 || $d->status_approved == '1' )
+                                                                        <span class="badge bg-warning">Pending</span>
+                                                                    @elseif($d->status_approved == '3')
+                                                                        <span class="badge bg-success">Disetujui</span>
+                                                                    @elseif($d->status_approved == '2')
+                                                                        <span class="badge bg-danger">Ditolak</span>
+                                                                    @endif
+                                                                @else
+                                                                    @if ($d->status_approved == 0 )
+                                                                            <span class="badge bg-warning">Pending</span>
+                                                                        @elseif($d->status_approved == '1')
+                                                                            <span class="badge bg-success">Disetujui</span>
+                                                                        @elseif($d->status_approved == '3')
+                                                                            <span class="badge bg-success">Disetujui</span>
+                                                                        @elseif($d->status_approved == '2')
+                                                                            <span class="badge bg-danger">Ditolak</span>
+                                                                        @endif
                                                                 @endif
                                                             </div>
                                                             <div class="text-danger">
@@ -538,7 +549,11 @@
             $(".card_izin").click(function(e) {
                 var kode_izin = $(this).attr("kode_izin");
                 var status_approved = $(this).attr("status_approved");
+                var status = $(this).attr("status");
 
+                if (status_approved == 2) {
+                    
+                }
                 if (status_approved == 1) {
                     Swal.fire({
                         title: 'Oops !',

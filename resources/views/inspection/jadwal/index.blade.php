@@ -3,23 +3,6 @@
 @section('content')
 <title>Pemeriksaan</title>
 
-{{-- <style>
-    .bg-diagonal-gradient{
-        background: linear-gradient(45deg, #effefd, #d9f7f5);
-    }
-    .datepicker {
-        background-color: white;
-        border: none;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-    .datepicker--cell.-selected-, .datepicker--cell.-current- {
-        background-color: #4f46e5;
-        color: white;
-    }
-    .datepicker--cell:hover {
-        background-color: #a5b4fc;
-    }
-</style> --}}
 <div class="row">
     <div class="col-12">
         @if (Session::get('success'))
@@ -40,138 +23,65 @@
 <div class="container-fluid px-4 py-3">
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex">
-            {{-- <p class="font-weight-bold text-muted">Admin / Pemeriksaan / </p> --}}
             <a href="javascript:;" class="font-weight-bold text-lg text-info hover:text-teal-500">Pemeriksaan</a>
         </div>
-        {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
-        {{-- <form class="d-flex gap-2" method="POST" action="{{ url('/inspection/jadwal') }}">@csrf
-            <div class="form-group">
-                <select name="cari_user" id="id_user" class="form-control form-control-sm">
-                    <option value="">Pemeriksa</option>
-                    @foreach($data_user as $row)
-                        <option value="{{ $row->id }}" {{ request('cari_user') == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
-                    @endforeach
-                </select>
-            </div> --}}
-            {{-- <pre>
-                @php
-                    dd($data_unit);
-                @endphp
-            </pre> --}}
-            {{-- <div class="form-group">
-                <select name="cari_unit" id="id_unit" class="form-control form-control-sm">
-                    <option value="">Unit Di Periksa</option>
-                    @foreach($data_unit as $row => $nama)
-                        <option value="{{ $row }}" {{ request('cari_unit') == $row ? 'selected' : '' }}>{{ $nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <i data-icon="solar:calendar-bold-duotone" class="iconify text-md"></i>
-                <input name="cari_tgl" id="rangedatepicker" value="{{ request('cari_tgl') }}" class="form-control form-control-sm" placeholder="Rentang Tanggal">
-            </div>
-            <button type="submit" class="btn btn-teal btn-sm">Cari</button>
-        </form> --}}
-        {{-- @endif --}}
     </div>
 </div>
 
 
 <div class="container-fluid px-4">
-    {{-- @if($pemeriksaan)
-        @if($pemeriksaan->status == "BELUM")
-            <div class="alert alert-warning d-flex justify-content-between align-items-center">
-                <p>Anda Telah Terjadwal Di Hari Ini! Klik Tombol Di Samping Untuk Memulai Pemeriksaan.</p> --}}
-                {{-- <a href="/inspection/mulai" id="confirmButton" data-id="{{ $pemeriksaan->id }}" data-id_unit="{{ $pemeriksaan->kode_dept }}" class="btn btn-teal btn-sm">
-                    <p>Mulai Pemeriksaan</p>
-                    <i data-icon="tabler:chevrons-right" class="iconify text-lg"></i>
-                </a> --}}
-                {{-- <a href="{{ url('/inspection/mulai/'.$pemeriksaan->id) }}" class="btn btn-warning btn-sm">Mulai Pemeriksaan</a>
-            </div>
-        @else
-            <div class="alert alert-success text-center">
-                <p>Anda Telah Menyelesaikan Tugas Pemeriksaan, Terimakasih Selamat Bertugas.</p>
-            </div>
-        @endif
-    @endif --}}
-
-    {{-- <a href="{{ url('/inspection/mulai') }}" class="btn btn-warning btn-sm">Mulai Pemeriksaan</a> --}}
-
-    <div class="d-flex justify-content-end">
-        <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm">Tambah Instrument</a>
+    <!-- Header Buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-primary">Jadwal Pemeriksaan</h3>
+        <div>
+            <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm me-2">Tambah Instrument</a>
+            <a href="{{ url('/inspection/create') }}" class="btn btn-success btn-sm">Tambah Laporan</a>
+        </div>
     </div>
-    <div class="d-flex justify-content-end">
-        <a href="{{ url('/inspection/create') }}" class="btn btn-warning btn-sm">Tambah Laporan</a>
-    </div>
-    {{-- @if(in_array(auth()->user()->role, ['ADMIN', 'KBAND', 'KUNIT'])) --}}
-    <div class="card mt-2">
+
+    <!-- Filter Section -->
+    <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title">Tambahkan Jadwal Pemeriksaan</h5>
-            <form method="POST" action="{{ url('/inspection/store') }}" id="form-pemeriksaan">
+            <h5 class="card-title">Filter Jadwal Pemeriksaan</h5>
+            <form method="GET" action="{{ url('inspection/jadwal') }}" id="form-filter">
                 @csrf
                 <div class="row">
-                    {{-- <div class="col-md-4 mb-3"> --}}
-                        {{-- <div class="form-group">
-                            <label for="pemeriksa">Pilih Pemeriksa</label>
-                            <select name="pemeriksa" class="form-control form-control-sm">
-                                <option value="">Pilih Pemeriksa</option>
-                                @foreach($data_user as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-                    {{-- </div> --}}
-                    {{-- <div class="col-md-4 mb-3">
-                        <div class="form-group">
-                            <label for="unit">Pilih Unit Yang Akan Diperiksa</label>
-                            <select name="unit" class="form-control form-control-sm">
-                                <option value="">Pilih Unit</option>
-                                @foreach($data_unit as $row => $nama)
-                                    <option value="{{ $row }}">{{ $nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <!-- Filter Tanggal -->
+                    <div class="col-md-4 mb-3">
+                        <label for="tanggal_dari" class="form-label">Tanggal Dari:</label>
+                        <input type="date" class="form-control" name="tanggal_dari" value="{{ request('tanggal_dari') }}">
                     </div>
                     <div class="col-md-4 mb-3">
-                        <div class="form-group">
-                            <label for="lokasi">Lokasi Pemeriksaan</label>
-                            <select name="lokasi" class="form-control form-control-sm">
-                                <option value="">Pilih Lokasi</option>
-                                @foreach($data_cabang as $row => $nama)
-                                    <option value="{{ $row }}">{{ $nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <label for="tanggal_sampai" class="form-label">Tanggal Sampai:</label>
+                        <input type="date" class="form-control" name="tanggal_sampai" value="{{ request('tanggal_sampai') }}">
                     </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="form-group">
-                        <label for="tujuan">Tujuan</label>
-                        <input type="text" name="tujuan" id="tujuan" class="form-control form-control-sm" placeholder="Tujuan Pemeriksaan">
-                    </div>
-                </div>
-                <div class="row">
+
+                    <!-- Filter Koordinator -->
                     <div class="col-md-4 mb-3">
-                        <div class="form-group">
-                            <label for="tgl_pemeriksaan">Tanggal Pemeriksaan</label>
-                            <input type="date" id="datepicker" 
-                                   value="{{ date('Y-m-d') }}" 
-                                   name="tgl_pemeriksaan"
-                                   class="form-control" 
-                                   placeholder="Tanggal Pemeriksaan"
-                                   autocomplete="off">
-                        </div>
+                        <label for="koordinator" class="form-label">Koordinator:</label>
+                        <select class="form-control" name="koordinator">
+                            <option value="">Pilih Koordinator</option>
+                            @foreach ($data_user as $user)
+                                <option value="{{ $user->id }}" {{ request('koordinator') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-4 mb-3 d-flex align-items-end">
-                        <button type="submit" id="btn-submit" class="btn btn-primary btn-sm w-100">Mulai Pemeriksaan</button>
-                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Filter</button>
                 </div>
             </form>
         </div>
-    </div> --}}
+    </div>
 
-    <div class="card mt-4">
+    <!-- Data Table -->
+    <div class="card">
         <div class="card-body">
+            <h5 class="card-title">Daftar Jadwal Pemeriksaan</h5>
             <table class="table table-striped">
                 <thead class="text-center">
                     <tr>
@@ -184,7 +94,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody  class="text-center">
+                <tbody class="text-center">
                     @php $no = 1; @endphp
                     @foreach ($data as $row)
                     <tr>
@@ -195,31 +105,25 @@
                         <td>{{ $row->lokasi }}</td>
                         <td>{{ $row->jml_personel }}</td>
                         <td>
-                            <a href="{{ route('inspection.edit', $row->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            {{-- <form method="POST" action="{{ url('/inspection/delete/'.$row->id) }}" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" data-id="{{ $row->id }}" class="btn btn-danger btn-sm">Hapus</button>
-                            </form> --}}
+                            <a href="{{ route('inspection.edit', $row->id) }}" class="btn btn-warning btn-sm me-1">Edit</a>
                             <form method="POST" action="{{ route('inspection.delete', $row->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                <button type="submit" class="btn btn-danger btn-sm me-1">Hapus</button>
                             </form>
-                            {{-- <a href="{{ url('/inspection/detailInspection/'.$row->id) }}" class="btn btn-info btn-sm">Lihat Detail</a> --}}
-                            <a href="{{ url('/inspection/detail_kunjungan/'.$row->id) }}" class="btn btn-info btn-sm"> Lihat</a>
+                            <a href="{{ url('/inspection/detail_kunjungan/'.$row->id) }}" class="btn btn-info btn-sm">Lihat</a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-3">
+                {{ $data->links() }}
+            </div>
         </div>
     </div>
-
-    <div class="mt-3">
-        {{ $data->links() }}
-    </div>
-    {{-- @endif --}}
 </div>
+
 @endsection
 
 @push('myscript')

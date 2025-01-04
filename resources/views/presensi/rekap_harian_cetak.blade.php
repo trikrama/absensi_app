@@ -23,6 +23,7 @@
 
     <!-- Custom Styles -->
     <style>
+        
         @page {
             size: A4 landscape;
             margin: 15mm; /* Margin dari ujung halaman */
@@ -104,7 +105,7 @@
     </style>
 </head>
 
-<body class="A4 landscape">
+<body class="landscape">
 
     <section class="sheet">
         <!-- Header Section -->
@@ -113,12 +114,15 @@
         <div id="header-title">PT. SINDUE KARYA MANDIRI</div>
         <div id="header-subtitle">Jalan. MH Thamrin No.63, Besusu Tim., Kec. Palu Tim., Kota Palu, Sulawesi Tengah</div>
 
+        {{-- <button id="downloadBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Download Rekap Presensi
+        </button> --}}
         <!-- Table Section -->
         @if($rekapHarian->count() > 0)
         <table class="tabelpresensi">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>No</th>
                     <th>NIK</th>
                     <th>Nama Lengkap</th>
                     <th>Departemen</th>
@@ -148,9 +152,20 @@
         @endif
 
         <!-- Signature Section -->
-        <div class="signature-section">
+        {{-- <div class="signature-section">
             <div class="signature-box">
+                
                 Palu, {{ date('d-m-Y') }}<br>
+                @if ($ttd1)
+                    @if ($ttd1->image)
+                        <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                    @endif
+                    <br>
+                    <u>{{ $ttd1->name }}</u><br>
+                    <i><b>{{ $ttd1->position }}</b></i>
+                @else
+                    <span class="text-muted">Tidak ada TTD</span>
+                @endif
                 <span>HRD Manager</span>
                 <div class="signature-line">Andika</div>
             </div>
@@ -159,10 +174,42 @@
                 <span>Direktur</span>
                 <div class="signature-line">Tri Krama</div>
             </div>
-        </div>
-        <button id="downloadBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+        </div> --}}
+        <table width="100%" style="margin-top:70px">
+            <tr>
+                <td></td>
+                <td style="text-align: center">Palu, {{ date('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd1)
+                        @if ($ttd1->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd1->name }}</u><br>
+                        <i><b>{{ $ttd1->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
+                </td>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd2)
+                        @if ($ttd2->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd2->name }}</u><br>
+                        <i><b>{{ $ttd2->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
+                </td>
+            </tr>
+        </table>
+        {{-- <button id="downloadBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
             Download Rekap Presensi
-        </button>
+        </button> --}}
     </section>
 
     <script>

@@ -58,15 +58,15 @@
         <table style="width: 100%">
             <tr>
                 <td style="width: 30px">
-                    <img src="{{ asset('assets/img/logopresensi.png') }}" width="70" height="70" alt="">
+                    <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="120" height="120" alt="">
                 </td>
                 <td>
                     <span id="title">
-                        REKAP PRESENSI KARYAWAN<br>
+                        LAPORAN PRESENSI KARYAWAN<br>
                         PERIODE {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
-                        PT. ADAM ADIFA<br>
+                        PT. SINDUE KARYA MANDIRI<br>
                     </span>
-                    <span><i>Jln. H. Dahlan No. 75, Kecamatan Sindangrasa, Kabupaten Ciamis</i></span>
+                    <span><i>Jalan. MH Thamrin No.63, Besusu Tim., Kec. Palu Tim., Kota Palu, Sulawesi Tengah</i></span>
                 </td>
             </tr>
         </table>

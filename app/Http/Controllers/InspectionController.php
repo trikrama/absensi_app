@@ -33,16 +33,34 @@ class InspectionController extends Controller
             }])
             ->orderBy('created_at', 'desc');
 
-        if ($req->input('cari_tgl')) {
-            $range = explode(',', $req->input('cari_tgl'));
-            $query->whereBetween('tgl_pemeriksaan', $range);
+        // Filter Tanggal (Tambahan)
+        $tanggalDari = $req->input('tanggal_dari');
+        $tanggalSampai = $req->input('tanggal_sampai');
+
+        if ($tanggalDari && !$tanggalSampai) {
+            $query->whereDate('tgl_pemeriksaan', '=', $tanggalDari);
+        } elseif (!$tanggalDari && $tanggalSampai) {
+            $query->whereDate('tgl_pemeriksaan', '=', $tanggalSampai);
+        } elseif ($tanggalDari && $tanggalSampai) {
+            $query->whereBetween('tgl_pemeriksaan', [$tanggalDari, $tanggalSampai]);
         }
-        if ($req->input('cari_user')) {
-            $query->where('user_id', $req->input('cari_user'));
+
+        // Filter Koordinator (Tambahan)
+        $koordinator = $req->input('koordinator');
+        if ($koordinator) {
+            $query->where('user_id', $koordinator);
         }
-        if ($req->input('cari_unit')) {
-            $query->where('kode_dept', $req->input('cari_unit'));
-        }
+
+        // if ($req->input('cari_tgl')) {
+        //     $range = explode(',', $req->input('cari_tgl'));
+        //     $query->whereBetween('tgl_pemeriksaan', $range);
+        // }
+        // if ($req->input('cari_user')) {
+        //     $query->where('user_id', $req->input('cari_user'));
+        // }
+        // if ($req->input('cari_unit')) {
+        //     $query->where('kode_dept', $req->input('cari_unit'));
+        // }
 
         // $userId = Auth::id();
         $userId = Auth::guard('user')->user()->id;
@@ -327,12 +345,40 @@ class InspectionController extends Controller
         // Kirim data ke view
         return view('inspection.jadwal.mulai', compact('data_jabatan', 'data'));
     }
+    // public function detail_kunjungan($id)
+    // {
+    //     $data = Inspection::find($id);
+    //     $detail_kunjungan = InspectionAnswer::where('inspection_id', $id)->get();
+    //     return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan'));
+    // }
+
     public function detail_kunjungan($id)
     {
         $data = Inspection::find($id);
-        $detail_kunjungan = InspectionAnswer::where('inspection_id', $id)->get();
+
+        // Get filters
+        $nama_petugas = request('nama_petugas');
+        $jabatan = request('jabatan');
+        $cabang = request('cabang');
+
+        // Query with filters
+        $detail_kunjungan = InspectionAnswer::where('inspection_id', $id)
+            ->when($nama_petugas, function ($query, $nama_petugas) {
+                return $query->whereHas('karyawan', function ($q) use ($nama_petugas) {
+                    $q->where('nama_lengkap', 'like', '%' . $nama_petugas . '%');
+                });
+            })
+            ->when($jabatan, function ($query, $jabatan) {
+                return $query->where('jabatan', 'like', '%' . $jabatan . '%');
+            })
+            ->when($cabang, function ($query, $cabang) {
+                return $query->where('cabang', 'like', '%' . $cabang . '%');
+            })
+            ->get();
+
         return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan'));
     }
+
 
     // public function mulai($id)
     // public function mulai(Request $request, $id)
@@ -787,19 +833,19 @@ class InspectionController extends Controller
                 $jawaban = $detail['jawaban'];
                 $totalNilai += $jawaban; // Hitung total nilai
 
-                
+
                 // dd($karyawan->nik, "-", $inspection->id, "-", $detail['id_instrumen'], "-", $indikator, "-", $jawaban, "-", $detail['keterangan'], "-", $fotoPath);
-                
+
                 $existingDetail = DetailInspection::where([
                     'id' => $detail['id_instrumen'],
                     'id_pemeriksaan_perorang' => $karyawan->nik,
                     'id_pemeriksaan' => $inspection->id,
                 ])->first();
-                    
+
                 $instrument = Instrument::find($existingDetail->id_instrumen);
                 $indikator = $instrument ? $instrument->deskripsi : 'Deskripsi tidak ditemukan'; // Berikan default value jika null
                 // dd($existingDetail);
-                
+
                 // dd($indikator);
                 // Jika data ditemukan, lakukan update
                 if ($existingDetail) {
@@ -827,7 +873,7 @@ class InspectionController extends Controller
             // }
 
             DB::commit();
-    
+
             return redirect()->route('inspection.detail_kunjungan', ['id' => $request->inspection_id])
                 ->with('success', 'Data pemeriksaan berhasil diperbarui.');
         } catch (\Exception $e) {

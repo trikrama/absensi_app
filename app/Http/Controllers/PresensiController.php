@@ -649,7 +649,7 @@ class PresensiController extends Controller
         $presensi = $query->get();
 
         $total = $presensi->count();
-        
+
         $rekap = [
             'hadir' => $presensi->where('status', 'h')->count(),
             // 'lambat' => $presensi->where('status', 'l')->count(),
@@ -727,7 +727,7 @@ class PresensiController extends Controller
         $aktivitas = Aktivitas::query()->where('nik', $nik)->get();
         $ttd1 = Signature::where('type', 'TTD1')->first();
         $ttd2 = Signature::where('type', 'TTD2')->first();
-        
+
         return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi', 'aktivitas', 'ttd1', 'ttd2'));
     }
 
@@ -786,7 +786,8 @@ class PresensiController extends Controller
             IFNULL(total_jam,'NA'),'|',
             IFNULL(lintashari,'NA'),'|',
             IFNULL(awal_jam_istirahat,'NA'),'|',
-            IFNULL(akhir_jam_istirahat,'NA'),'|'
+            IFNULL(akhir_jam_istirahat,'NA'),'|',
+            IFNULL(pengajuan_izin.tl,'NA') -- Tambahkan field 'tl'
             ),NULL)) as tgl_" . $i . ",";
 
             $field_date .= "tgl_" . $i . ",";
@@ -810,8 +811,11 @@ class PresensiController extends Controller
 
         $query = Karyawan::query();
         $query->selectRaw(
-            "$field_date karyawan.nik, nama_lengkap, jabatan"
+            "$field_date karyawan.nik, nama_lengkap, jabatan, kode_cabang"
         );
+
+        // dd($query->toSql());
+        // -- MAX(pengajuan_izin.tl) AS tl -- Tambahkan field 'tl' dengan alias
 
         $query->leftJoin(
             DB::raw("(
@@ -843,6 +847,8 @@ class PresensiController extends Controller
         $query->orderBy('nama_lengkap');
         $rekap = $query->get();
 
+        // dd($rekap);
+
 
         //dd($rekap);
         if (isset($_POST['exportexcel'])) {
@@ -853,8 +859,12 @@ class PresensiController extends Controller
             header("Content-Disposition: attachment; filename=Rekap Presensi Karyawan $time.xls");
         }
 
-        $data = ['bulan', 'tahun', 'namabulan', 'rekap', 'rangetanggal', 'jmlhari', 'datalibur', 'harilibur'];
+        $ttd1 = Signature::where('type', 'TTD1')->first();
+        $ttd2 = Signature::where('type', 'TTD2')->first();
+
+        $data = ['bulan', 'tahun', 'namabulan', 'rekap', 'rangetanggal', 'jmlhari', 'datalibur', 'harilibur', 'ttd1', 'ttd2'];
         // dd($rekap);
+
 
         if ($request->jenis_laporan == 1) {
             return view('presensi.cetakrekap', compact($data));
@@ -888,7 +898,7 @@ class PresensiController extends Controller
     public function rekapHarian(Request $request)
     {
         $tanggal = $request->tanggal ?? date('Y-m-d'); // Default ke tanggal hari ini jika tidak diinputkan
-        
+
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         // Ambil data karyawan dan absensi berdasarkan tanggal
@@ -940,7 +950,7 @@ class PresensiController extends Controller
         if (!empty($request->kode_cabang)) {
             $query->where('karyawan.kode_cabang', $request->kode_cabang);
         }
-        
+
         // $query->orderBy('nama_lengkap');
         $query->orderBy('karyawan.nama_lengkap');
         $rekapHarian = $query->get();
@@ -1032,7 +1042,7 @@ class PresensiController extends Controller
         // Ambil data karyawan dan absensi berdasarkan tanggal
         // $rekapHarian = DB::table('karyawan')
         //     ->select(
-            //         'karyawan.nik',
+        //         'karyawan.nik',
         //         'karyawan.nama_lengkap',
         //         'departemen.nama_dept',
         //         'presensi.jam_in',
@@ -1076,7 +1086,7 @@ class PresensiController extends Controller
         if (!empty($request->cabang)) {
             $query->where('karyawan.kode_cabang', $request->cabang);
         }
-        
+
         // $query->orderBy('nama_lengkap');
         $query->orderBy('karyawan.nama_lengkap');
         $rekapHarian = $query->get();
@@ -1089,8 +1099,11 @@ class PresensiController extends Controller
             return view('presensi.rekapHarianExcel', compact('tanggal', 'rekapHarian', 'namabulan'));
         }
 
+        $ttd1 = Signature::where('type', 'TTD1')->first();
+        $ttd2 = Signature::where('type', 'TTD2')->first();
+
         // Tampilkan view laporan harian
-        return view('presensi.rekap_harian_cetak', compact('tanggal', 'rekapHarian', 'namabulan'));
+        return view('presensi.rekap_harian_cetak', compact('tanggal', 'rekapHarian', 'namabulan', 'ttd1', 'ttd2'));
         // $tanggal = $request->tanggal ?? date('Y-m-d');
         // $splitTgl =  explode('-', $tanggal);
         // $bulan = $splitTgl[1];
@@ -1246,7 +1259,7 @@ class PresensiController extends Controller
             $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
             $query1->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
         }
-        
+
         if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
             $query->where('status_approved', $request->status_approved);
             $query1->where('status_approved', $request->status_approved);
@@ -1270,9 +1283,9 @@ class PresensiController extends Controller
         }
 
 
-        $izinsakit_pimpinan = $query1->where('status', 'c')->where('status_approved', '1')->orWhere ('status_approved', '3')->orderBy('tgl_izin_dari', 'desc')->get();
+        $izinsakit_pimpinan = $query1->where('status', 'c')->where('status_approved', '1')->orWhere('status_approved', '3')->orderBy('tgl_izin_dari', 'desc')->get();
         $query->orderBy('tgl_izin_dari', 'desc');
-        $izinsakit = $query->paginate(10); 
+        $izinsakit = $query->paginate(10);
         $izinsakit->appends($request->all());
 
 
@@ -1293,16 +1306,31 @@ class PresensiController extends Controller
         $status = $dataizin->status;
         DB::beginTransaction();
         try {
-            if ($status_approved == 1) {
-                while (strtotime($tgl_dari) <= strtotime($tgl_sampai)) {
-
-                    DB::table('presensi')->insert([
-                        'nik' => $nik,
-                        'tgl_presensi' => $tgl_dari,
-                        'status' => $status,
-                        'kode_izin' => $kode_izin
-                    ]); 
-                    $tgl_dari = date("Y-m-d", strtotime("+1 days", strtotime($tgl_dari)));
+            if ($status == 'c') {
+                if ($status_approved == 3) {
+                    while (strtotime($tgl_dari) <= strtotime($tgl_sampai)) {
+    
+                        DB::table('presensi')->insert([
+                            'nik' => $nik,
+                            'tgl_presensi' => $tgl_dari,
+                            'status' => $status,
+                            'kode_izin' => $kode_izin
+                        ]);
+                        $tgl_dari = date("Y-m-d", strtotime("+1 days", strtotime($tgl_dari)));
+                    }
+                }
+            } else {
+                if ($status_approved == 1) {
+                    while (strtotime($tgl_dari) <= strtotime($tgl_sampai)) {
+    
+                        DB::table('presensi')->insert([
+                            'nik' => $nik,
+                            'tgl_presensi' => $tgl_dari,
+                            'status' => $status,
+                            'kode_izin' => $kode_izin
+                        ]);
+                        $tgl_dari = date("Y-m-d", strtotime("+1 days", strtotime($tgl_dari)));
+                    }
                 }
             }
 
@@ -1326,7 +1354,7 @@ class PresensiController extends Controller
                 $ket_tolak = $request->ket_tolak;
             }
 
-            
+
             DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->update([
                 'status_approved' => $status_approved,
                 'doc_persetujuan' => $doc_persetujuan,
@@ -1351,7 +1379,7 @@ class PresensiController extends Controller
         //     return Redirect::back()->with(['warning' => 'Data Gagal Di Update']);
         // }
     }
-    
+
     public function batalkanizinsakit($kode_izin)
     {
 

@@ -41,6 +41,24 @@
             <div class="form-group">
                 <input type="text" id="jml_hari" name="jml_hari" class="form-control" autocomplete="off" placeholder="Jumlah Hari" readonly>
             </div>
+            
+            <div class="form-group">
+                <label for="turun_lapangan">Turun Lapangan</label>
+                <p>
+                    <label>
+                        <input name="turun_lapangan" type="radio" value="Ya" />
+                        <span>Ya</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="turun_lapangan" type="radio" value="Tidak" checked />
+                        <span>Tidak</span>
+                    </label>
+                </p>
+            </div>
+            
+            
             <div class="form-group">
                 <textarea id="keterangan" name="keterangan" class="form-control" autocomplete="off"
                     placeholder="Keterangan" rows="4" style="resize: none;"></textarea>

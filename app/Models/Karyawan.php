@@ -49,4 +49,8 @@ class Karyawan extends Authenticatable
     public function inspection_answer(){
         return $this->hasMany(InspectionAnswer::class, 'nik', 'nik');
     }
+
+    public function cabang(){
+        return $this->hasOne(Cabang::class, 'kode_cabang', 'kode_cabang');
+    }
 }

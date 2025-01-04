@@ -110,7 +110,7 @@ Route::middleware(['auth:karyawan'])->group(function () {
 
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
 // Route::middleware(['auth', 'role:administrator|admin departemen,user'])->group(function () {
-Route::group(['middleware' => ['role:administrator|admin departemen|pimpinan,user']], function () {
+Route::group(['middleware' => ['role:administrator|admin departemen|pimpinan|koordinator,user']], function () {
     // Route::middleware(['auth:user'])->group(function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogout']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);

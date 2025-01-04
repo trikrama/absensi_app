@@ -259,11 +259,13 @@
                                     <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
                                     <td>
                                         @if ($d->status_approved == 3)
-                                            <span class="badge bg-success">Disetujui</span>
+                                            <span class="badge bg-success">Disetujui Pimpinan</span>
                                         @elseif($d->status_approved == 2)
                                             <span class="badge bg-danger">Ditolak</span>
-                                        @elseif($d->status_approved == 1 || $d->status_approved == 0)
-                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif($d->status_approved == 1)
+                                            <span class="badge bg-primary">Disetujui HRD</span>
+                                        @elseif($d->status_approved == 0)
+                                            <span class="badge bg-info">Pending</span>
                                         @endif
                                     </td>
                                     @role('administrator|pimpinan', 'user')
@@ -364,8 +366,10 @@
                                     </td>
                                     <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
                                     <td>
-                                        @if ($d->status_approved == 1 || $d->status_approved == 3 )
-                                            <span class="badge bg-success">Disetujui</span>
+                                        @if ($d->status_approved == 3) 
+                                            <span class="badge bg-success">Disetujui Pimpinan</span>
+                                        @elseif ($d->status_approved == 1)
+                                            <span class="badge bg-primary">Disetujui HRD</span>
                                         @elseif($d->status_approved == 2)
                                             <span class="badge bg-danger">Ditolak</span>
                                         @else

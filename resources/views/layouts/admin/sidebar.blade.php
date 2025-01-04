@@ -204,7 +204,8 @@
         </div>
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
-                <li class="nav-item">
+            @role('administrator|admin departemen|koordinator', 'user')
+                <li class="nav-item"> 
                     <a class="nav-link" href="/panel/dashboardadmin">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <!-- Download SVG icon from http://tabler-icons.io/i/home -->
@@ -223,6 +224,7 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
+                    @role('administrator|admin departemen', 'user')
                     <a class="nav-link dropdown-toggle {{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
                         aria-expanded="{{ request()->is(['karyawan', 'departemen', 'cabang']) ? 'true' : '' }}">
@@ -243,11 +245,13 @@
                             Data Master
                         </span>
                     </a>
+                        @endrole
+                    @endrole
                     <div
                         class="dropdown-menu {{ request()->is(['karyawan','jabatan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('administrator|admin departemen|pimpinan', 'user')
+                                @role('administrator|admin departemen', 'user')
                                     <a class="dropdown-item {{ request()->is(['karyawan']) ? 'active' : '' }}"
                                         href="/karyawan">
                                         Karyawan
@@ -277,6 +281,7 @@
                         </div>
                     </div>
                 </li>
+                @role('administrator|admin departemen', 'user')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('presensi/monitoring') ? 'active' : '' }}"
                         href="/presensi/monitoring">
@@ -366,6 +371,8 @@
                         </div>
                     </div>
                 </li>
+                @endrole
+                @role('administrator|admin departemen|koordinator', 'user')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->is(['presensi/laporan', 'presensi/rekap']) ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
@@ -391,10 +398,12 @@
                         class="dropdown-menu {{ request()->is(['tugas', 'manajemen_tugas/kunjungan']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
+                                @role('administrator|admin departemen', 'user')
                                 <a class="dropdown-item {{ request()->is(['tugas']) ? 'active' : '' }}"
                                     href="/tugas">
                                     Upload Tugas
                                 </a>
+                                @endrole
                                 <a class="dropdown-item {{ request()->is(['manajemen_tugas/kunjungan']) ? 'active' : '' }}"
                                     href="/inspection/jadwal">
                                     Kunjungan
@@ -403,6 +412,7 @@
                         </div>
                     </div>
                 </li>
+                @endrole
                 @role('administrator', 'user')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->is(['konfigurasi', 'konfigurasi/*']) ? 'show' : '' }}"

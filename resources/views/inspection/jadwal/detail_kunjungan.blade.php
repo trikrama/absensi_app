@@ -3,23 +3,6 @@
 @section('content')
 <title>Pemeriksaan</title>
 
-{{-- <style>
-    .bg-diagonal-gradient{
-        background: linear-gradient(45deg, #effefd, #d9f7f5);
-    }
-    .datepicker {
-        background-color: white;
-        border: none;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-    .datepicker--cell.-selected-, .datepicker--cell.-current- {
-        background-color: #4f46e5;
-        color: white;
-    }
-    .datepicker--cell:hover {
-        background-color: #a5b4fc;
-    }
-</style> --}}
 <div class="row">
     <div class="col-12">
         @if (Session::get('success'))
@@ -85,8 +68,34 @@
    <div class="d-flex justify-content-end">
         <a href="{{ url('/inspection/mulai/'.$data->id) }}" class="btn btn-warning btn-sm">Tambah Penilaian</a>
     </div>
+    <!-- Filter Section -->
+    {{-- <div class="card mt-4">
+        <div class="card-body">
+            
+        </div>
+    </div> --}}
+
      <div class="card mt-4">
         <div class="card-body">
+            <form action="{{ url('/inspection/detail_kunjungan/' . $data->id) }}" method="GET" class="row g-3 mb-3 align-items-end d-flex">
+                <div class="col-md-3 me-3">
+                    <label for="nama_petugas" class="form-label">Nama Petugas</label>
+                    <input type="text" name="nama_petugas" id="nama_petugas" class="form-control" value="{{ request('nama_petugas') }}">
+                </div>
+                <div class="col-md-3 me-3">
+                    <label for="jabatan" class="form-label">Jabatan</label>
+                    <input type="text" name="jabatan" id="jabatan" class="form-control" value="{{ request('jabatan') }}">
+                </div>
+                <div class="col-md-3 me-3">
+                    <label for="cabang" class="form-label">Cabang</label>
+                    <input type="text" name="cabang" id="cabang" class="form-control" value="{{ request('cabang') }}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ url('/inspection/detail_kunjungan/' . $data->id) }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+            
             <table class="table table-striped">
                 <thead class="text-center">
                     <tr>
@@ -109,17 +118,12 @@
                         <td>{{ $row->nilai }}</td>
                         <td>
                             <a href="{{ route('inspection.detailInspectionEdit', $row->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            {{-- <form method="POST" action="{{ url('/inspection/delete/'.$row->id) }}" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" data-id="{{ $row->id }}" class="btn btn-danger btn-sm">Hapus</button>
-                            </form> --}}
                             <form action="{{ route('inspection.detailInspectionDelete', $row->id) }}" method="POST" class="d-inline" id="delete-form-{{ $row->id }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $row->id }})">Hapus</button>
                             </form>
                             <a href="{{ url('/inspection/detailInspection/'.$row->id) }}" class="btn btn-info btn-sm">Lihat Detail</a>
-                            {{-- <button id="downloadPdf" class="btn btn-primary btn-sm" >Cetak</button> --}}
                         </td>
                     </tr>
                     @endforeach
@@ -128,9 +132,6 @@
         </div>
     </div>
 
-    {{-- <div class="mt-3">
-        {{ $data->links() }}
-    </div>  --}}
     
 </div>
 @endsection

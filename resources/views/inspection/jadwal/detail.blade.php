@@ -117,9 +117,58 @@
         addText("Nama   \t\t\t: {{ $data->karyawan->nama_lengkap }}", 10, 10);
         addText("Penempatan\t\t: {{ $data->cabang }}", 10, 10);
 
-       // Tabel Indikator Penilaian
-        const tableBody = [];
+    //    Tabel Indikator Penilaian
+        // const groupedDetails = @json($groupedDetails);
+        // let tableBody = [];
+        // const totalTitles = Object.keys(groupedDetails).length - 1; // Hitung total title
+        // let currentIndex = 0;
+        // @foreach($groupedDetails as $title => $details)
+        //     currentIndex++;
+        //     // Tambahkan baris untuk Title dengan gaya khusus
+        //     tableBody.push([
+        //         { content: {!! json_encode($loop->iteration) !!}, styles: { fontStyle: 'bold', halign: 'center' } }, 
+        //         { content: '{{ $title }}', styles: { fontStyle: 'bold' } },
+        //         { content: '', styles: { fontStyle: 'bold' } }
+        //     ]);
+            
+        //     if (currentIndex === 4) {
+        //         // Buat tabel baru di halaman berikutnya
+        //         doc.addPage(); // Tambahkan halaman baru
+        //         currentY = 10;
+        //         // tableBody = []; // Reset tableBody untuk tabel baru
+        //     }
+            
+        //         @foreach($details as $detail)
+        //         // Tambahkan baris untuk indikator
+        //             tableBody.push([
+        //                 '', // Kolom pertama kosong untuk indikator
+        //                 '{{ $detail->indikator }}', 
+        //                 '{{ $detail->jawaban }}'
+        //             ]);
+        //         @endforeach
+        //     @endforeach
+
+
+        // // Mulai Tabel
+        // doc.autoTable({
+        //     head: [['No', 'Indikator Penilaian', 'Nilai']],
+        //     body: tableBody,
+        //     startY: currentY, // Gunakan posisi Y saat ini
+        //     margin: { top: 4, bottom: 10 },
+        //     didDrawPage: function (data) {
+        //         currentY = data.cursor.y + 10; // Perbarui posisi Y berdasarkan akhir tabel
+        //     },
+        // });
+        const groupedDetails = @json($groupedDetails);
+        let tableBody = [];
+        const totalTitles1 = Object.keys(groupedDetails).length - 1; // Hitung total title
+        const totalTitles = Object.keys(groupedDetails).length; // Hitung total title
+        let currentIndex = 0;
+
+
         @foreach($groupedDetails as $title => $details)
+            currentIndex++;
+
             // Tambahkan baris untuk Title dengan gaya khusus
             tableBody.push([
                 { content: {!! json_encode($loop->iteration) !!}, styles: { fontStyle: 'bold', halign: 'center' } }, 
@@ -135,18 +184,29 @@
                     '{{ $detail->jawaban }}'
                 ]);
             @endforeach
+
+            // Jika mencapai batas (misalnya, currentIndex === 4), buat tabel baru di halaman berikutnya
+            if (currentIndex % totalTitles1 === 0 || currentIndex === totalTitles) {
+                // Render tabel saat ini
+                doc.autoTable({
+                    head: [['No', 'Indikator Penilaian', 'Nilai']],
+                    body: tableBody,
+                    startY: currentY, // Posisi Y saat ini
+                    margin: { top: 10 },
+                    didDrawPage: function (data) {
+                        currentY = data.cursor.y + 10; // Perbarui posisi Y untuk halaman berikutnya
+                    },
+                });
+
+                // Tambahkan halaman baru jika bukan elemen terakhir
+                if (currentIndex !== totalTitles) {
+                    doc.addPage();
+                    currentY = 10; // Reset posisi Y di halaman baru
+                    tableBody = []; // Reset tableBody untuk tabel baru
+                }
+            }
         @endforeach
 
-        // Mulai Tabel
-        doc.autoTable({
-            head: [['No', 'Indikator Penilaian', 'Nilai']],
-            body: tableBody,
-            startY: currentY, // Gunakan posisi Y saat ini
-            margin: { top: 4, bottom: 10 },
-            didDrawPage: function (data) {
-                currentY = data.cursor.y + 10; // Perbarui posisi Y berdasarkan akhir tabel
-            },
-        });
 
         // Tambahkan Catatan dalam Kotak dengan Label
         const addDynamicBoxedText = (label, text) => {
@@ -207,5 +267,6 @@
     });
 
 </script>
+
 
 @endsection

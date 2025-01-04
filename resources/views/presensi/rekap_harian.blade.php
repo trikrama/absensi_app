@@ -30,7 +30,7 @@
                     target="_blank">
                     Cetak Rekap Harian
                 </a>
-                <button type="submit" name="exportexcel" class="btn btn-success">Export Excel</button>
+                {{-- <button type="submit" name="exportexcel" class="btn btn-success">Export Excel</button> --}}
             </div>
         </div>
 

@@ -16,6 +16,7 @@ class UnitInstrument extends Model
      */
     protected $fillable = [
         'departemen_id',
+        'id_jabatan',
         'instrument_id',
     ];
 
@@ -30,7 +31,7 @@ class UnitInstrument extends Model
     public function jabatan()
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatan', 'id');
-    }
+    }   
 
     /**
      * Get the instrument associated with the unit instrument.
