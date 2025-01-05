@@ -43,7 +43,7 @@
             </div>
             
             <div class="form-group">
-                <label for="turun_lapangan">Turun Lapangan</label>
+                <label for="turun_lapangan">Turun Lapangan/ Dinas</label>
                 <p>
                     <label>
                         <input name="turun_lapangan" type="radio" value="Ya" />

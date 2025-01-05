@@ -494,7 +494,7 @@
         <div class="dropdown-menu">
             <a class="dropdown-item bg-primary" href="/izinabsen">
                 <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
-                <p>Izin Absen</p>
+                <p>Izin Absen/ Dinas</p>
             </a>
 
             <a class="dropdown-item bg-primary" href="/izinsakit">

@@ -39,6 +39,32 @@ function hitungjamterlambatdesimal($jam_masuk, $jam_presensi)
     return  $desimalterlambat;
 }
 
+function hitungjamterlambatdesimal_text($jam_masuk, $jam_presensi)
+{
+    $j1 = strtotime($jam_masuk);
+    $j2 = strtotime($jam_presensi);
+
+    $diffterlambat = $j2 - $j1;
+
+    if ($diffterlambat <= 0) {
+        return "Tidak terlambat";
+    }
+
+    $jamterlambat = floor($diffterlambat / 3600);
+    $sisa = $diffterlambat % 3600;
+    $menitterlambat = floor($sisa / 60);
+    $detikterlambat = $sisa % 60;
+
+    if ($jamterlambat > 0) {
+        return "Terlambat $jamterlambat Jam " . ($menitterlambat > 0 ? "$menitterlambat Menit " : "") . ($detikterlambat > 0 ? "$detikterlambat Detik" : "");
+    } elseif ($menitterlambat > 0) {
+        return "Terlambat $menitterlambat Menit " . ($detikterlambat > 0 ? "$detikterlambat Detik" : "");
+    } else {
+        return "Terlambat $detikterlambat Detik";
+    }
+}
+
+
 
 
 function hitunghari($tanggal_mulai, $tanggal_akhir)

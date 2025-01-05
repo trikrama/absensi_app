@@ -262,10 +262,10 @@
                                         href="/jabatan">
                                         Jabatan
                                     </a>
-                                    {{-- <a class="dropdown-item {{ request()->is(['departemen']) ? 'active' : '' }}"
+                                    <a class="dropdown-item {{ request()->is(['departemen']) ? 'active' : '' }}"
                                         href="/departemen">
                                         Departemen
-                                    </a> --}}
+                                    </a>
 
                                     <a class="dropdown-item {{ request()->is(['cabang']) ? 'active' : '' }}"
                                         href="/cabang">

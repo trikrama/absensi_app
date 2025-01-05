@@ -131,7 +131,8 @@
                         $path_in = Storage::url('uploads/absensi/' . $d->foto_in);
                         $path_out = Storage::url('uploads/absensi/' . $d->foto_out);
                         $terlambat = hitungjamterlambat($d->jam_masuk, $d->jam_in);
-                        $terlambat_desimal = hitungjamterlambatdesimal($d->jam_masuk, $d->jam_in);
+                        $terlambat_desimal = hitungjamterlambatdesimal_text($d->jam_masuk, $d->jam_in);
+                        // dd($d->jam_masuk, $d->jam_in);
                         $j_terlambat = explode(':', $terlambat);
                         $jam_terlambat = intVal($j_terlambat[0]);
                         if ($jam_terlambat < 1) {
@@ -165,7 +166,7 @@
                         </td>
                         <td>
                             @if ($d->jam_in > $d->jam_masuk)
-                                Terlambat {{ $terlambat_desimal }} Jam
+                                {{ $terlambat_desimal }}
                             @else
                                 Tepat Waktu
                             @endif
