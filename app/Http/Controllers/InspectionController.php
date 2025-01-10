@@ -51,6 +51,12 @@ class InspectionController extends Controller
             $query->where('user_id', $koordinator);
         }
 
+        // $id_role = Auth::guard('user')->user()->id;
+        // // $role = $role->; 
+        // dd($id_role);
+
+
+
         // if ($req->input('cari_tgl')) {
         //     $range = explode(',', $req->input('cari_tgl'));
         //     $query->whereBetween('tgl_pemeriksaan', $range);
@@ -70,7 +76,7 @@ class InspectionController extends Controller
             ->whereDate('tgl_pemeriksaan', $today)
             ->first();
 
-        $data = $query->paginate(10);
+        $data = $query->paginate(5);
         // dd($data);
         $data_user = User::all();
         $departemen = Departemen::all();
@@ -352,9 +358,40 @@ class InspectionController extends Controller
     //     return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan'));
     // }
 
+    // public function detail_kunjungan($id)
+    // {
+    //     $data = Inspection::find($id);
+    //     $jabatan_list = Jabatan::pluck('id', 'nama_jabatan');
+    //     $cabang_list = Cabang::pluck('kode_cabang', 'nama_cabang');
+
+    //     // Get filters
+    //     $nama_petugas = request('nama_petugas');
+    //     $jabatan = request('jabatan');
+    //     $cabang = request('cabang');
+
+    //     // Query with filters
+    //     $detail_kunjungan = InspectionAnswer::where('inspection_id', $id)
+    //         ->when($nama_petugas, function ($query, $nama_petugas) {
+    //             return $query->whereHas('karyawan', function ($q) use ($nama_petugas) {
+    //                 $q->where('nama_lengkap', 'like', '%' . $nama_petugas . '%');
+    //             });
+    //         })
+    //         ->when($jabatan, function ($query, $jabatan) {
+    //             return $query->where('jabatan', 'like', '%' . $jabatan . '%');
+    //         })
+    //         ->when($cabang, function ($query, $cabang) {
+    //             return $query->where('cabang', 'like', '%' . $cabang . '%');
+    //         })
+    //         ->paginate(5);
+
+    //     return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan'));
+    // }
+
     public function detail_kunjungan($id)
     {
         $data = Inspection::find($id);
+        $jabatan_list = Jabatan::pluck('nama_jabatan', 'id');
+        $cabang_list = Cabang::pluck('nama_cabang', 'kode_cabang');
 
         // Get filters
         $nama_petugas = request('nama_petugas');
@@ -369,15 +406,16 @@ class InspectionController extends Controller
                 });
             })
             ->when($jabatan, function ($query, $jabatan) {
-                return $query->where('jabatan', 'like', '%' . $jabatan . '%');
+                return $query->where('jabatan', $jabatan);
             })
             ->when($cabang, function ($query, $cabang) {
-                return $query->where('cabang', 'like', '%' . $cabang . '%');
+                return $query->where('cabang', $cabang);
             })
-            ->get();
+            ->paginate(5);
 
-        return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan'));
+        return view('inspection.jadwal.detail_kunjungan', compact('data', 'detail_kunjungan', 'jabatan_list', 'cabang_list'));
     }
+
 
 
     // public function mulai($id)

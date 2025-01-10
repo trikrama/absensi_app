@@ -66,8 +66,6 @@
                 width: 297mm;
                 height: 210mm;
                 margin: 2mm 2mm
-                /* margin: auto; Memastikan halaman di tengah */
-                /* padding: 0; Hilangkan padding ekstra */
             }
         }
     </style>
@@ -247,7 +245,7 @@
                 <td style="text-align: center; vertical-align:bottom" height="150px">
                     @if ($ttd1)
                         @if ($ttd1->image)
-                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" height="100px" style="max-height: 100px;">
                         @endif
                         <br>
                         <u>{{ $ttd1->name }}</u><br>
@@ -259,7 +257,7 @@
                 <td style="text-align: center; vertical-align:bottom" height="150px">
                     @if ($ttd2)
                         @if ($ttd2->image)
-                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" style="max-height: 100px;">
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" height="100px" style="max-height: 100px;">
                         @endif
                         <br>
                         <u>{{ $ttd2->name }}</u><br>

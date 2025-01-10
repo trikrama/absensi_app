@@ -100,7 +100,7 @@
 @endsection
 
 @push('myscript')
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         window.onload = function() {
             jam();
         }
@@ -121,6 +121,23 @@
         function set(e) {
             e = e < 10 ? '0' + e : e;
             return e;
+        }
+    </script> --}}
+    <script type="text/javascript">
+        window.onload = function() {
+            jam();
+        }
+    
+        function jam() {
+            var e = document.getElementById('jam');
+            var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // Mendapatkan zona waktu lokal
+            var options = { timeZone: timezone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }; // Opsi format waktu
+            var d = new Date();
+            var timeString = d.toLocaleTimeString([], options); // Mengonversi waktu ke string sesuai zona waktu
+    
+            e.innerHTML = timeString; // Menampilkan waktu ke elemen
+    
+            setTimeout(jam, 1000); // Memanggil fungsi jam setiap detik
         }
     </script>
     <script>

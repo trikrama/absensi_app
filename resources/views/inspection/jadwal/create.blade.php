@@ -58,7 +58,11 @@
         
             <!-- Tombol Submit -->
             <div class="text-center">
-                <button type="submit" id="btn-submit" class="btn btn-primary btn-sm mt-4">Kirim Laporan</button>
+                <button type="submit" id="btn-submit" class="btn btn-primary btn-sm mt-4 me-4">Kirim Laporan</button>
+                <!-- Tombol Kembali -->
+                    <a href="{{ route('inspection.jadwal.index') }}" class="btn btn-secondary btn-sm mt-4">
+                        <i class="fas fa-arrow-left"></i> Batal
+                    </a>
             </div>
         </form>
         

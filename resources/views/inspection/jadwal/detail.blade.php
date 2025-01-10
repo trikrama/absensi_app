@@ -77,9 +77,10 @@
 
     <!-- Tombol Kembali -->
     <div class="mb-3">
-        <a href="{{ route('inspection.jadwal.index') }}" class="btn btn-secondary">
+        {{-- <a href="{{ route('inspection.jadwal.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali ke Jadwal Inspeksi
-        </a>
+        </a> --}}
+        <a href="{{ url('/inspection/detail_kunjungan/'.$data->inspection_id) }}" class="btn btn-info">Kembali</a>
         <button id="downloadPdf" class="btn btn-primary" >Download PDF</button>
     </div>
 </div>

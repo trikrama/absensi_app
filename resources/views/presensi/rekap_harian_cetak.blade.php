@@ -21,6 +21,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
     <!-- Custom Styles -->
     <style>
         
@@ -107,6 +110,10 @@
 
 <body class="landscape">
 
+    <button id="downloadExcelBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+        Download Rekap Presensi Excel
+    </button>
+    
     <section class="sheet">
         <!-- Header Section -->
         <div id="header-title">REKAP PRESENSI KARYAWAN</div>
@@ -356,6 +363,19 @@
             link.href = URL.createObjectURL(blob);
             link.download = `rekap_presensi-${tanggal}.pdf`;
             link.click();
+        });
+
+        // Excel Download Logic
+        document.getElementById("downloadExcelBtn").addEventListener("click", function () {
+            const table = document.querySelector(".tabelpresensi");
+            if (!table) {
+                alert("Tidak ada tabel untuk di-download!");
+                return;
+            }
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.table_to_sheet(table);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Presensi");
+            XLSX.writeFile(workbook, "Rekap_Presensi.xlsx");
         });
     </script>
 

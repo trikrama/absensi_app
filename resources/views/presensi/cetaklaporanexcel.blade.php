@@ -15,7 +15,11 @@
     <!-- Set also "landscape" if you need -->
     <style>
         @page {
-            size: A4
+            size: A4 landscape;
+        }
+
+        body {
+            margin: 2px;
         }
 
         #title {
@@ -61,7 +65,7 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 
-<body class="A4">
+<body class="A4 landscape">
     <?php
     function selisih($jam_masuk, $jam_keluar)
     {
@@ -84,51 +88,51 @@
         <table style="width: 100%">
             <tr>
                 <td style="width: 30px">
-                    <img src="{{ asset('assets/img/logopresensi.png') }}" width="70" height="70" alt="">
+                    <img src="{{ asset('assets/img/logo_skm/logo_skm.png') }}" width="70" height="70" alt="">
                 </td>
                 <td>
                     <span id="title">
                         LAPORAN PRESENSI KARYAWAN<br>
                         PERIODE {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
-                        PT. ADAM ADIFA<br>
+                        PT. SINDUE KARYA MANDIRI<br>
                     </span>
-                    <span><i>Jln. H. Dahlan No. 75, Kecamatan Sindangrasa, Kabupaten Ciamis</i></span>
+                    <span><i>Jalan. MH Thamrin No.63, Besusu Tim., Kec. Palu Tim., Kota Palu, Sulawesi Tengah</i></span>
                 </td>
             </tr>
         </table>
         <table class="tabeldatakaryawan">
-            <tr>
+            {{-- <tr>
                 <td rowspan="6">
                     @php
                         $path = Storage::url('uploads/karyawan/' . $karyawan->foto);
                     @endphp
                     <img src="{{ url($path) }}" alt="" width="120px" height="150">
                 </td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>NIK</td>
-                <td>:</td>
-                <td>{{ $karyawan->nik }}</td>
+                {{-- <td width="2px">:</td> --}}
+                <td style="text-align: left"> : {{ $karyawan->nik }}</td>
             </tr>
             <tr>
                 <td>Nama Karyawan</td>
-                <td>:</td>
-                <td>{{ $karyawan->nama_lengkap }}</td>
+                {{-- <td>:</td> --}}
+                <td> : {{ $karyawan->nama_lengkap }}</td>
             </tr>
             <tr>
                 <td>Jabatan</td>
-                <td>:</td>
-                <td>{{ $karyawan->jabatan }}</td>
+                {{-- <td>:</td> --}}
+                <td> : {{ $karyawan->jabatan }}</td>
             </tr>
             <tr>
                 <td>Departemen</td>
-                <td>:</td>
-                <td>{{ $karyawan->nama_dept }}</td>
+                {{-- <td>:</td> --}}
+                <td> : {{ $karyawan->nama_dept }}</td>
             </tr>
             <tr>
                 <td>No. HP</td>
-                <td>:</td>
-                <td>{{ $karyawan->no_hp }}</td>
+                {{-- <td>:</td> --}}
+                <td style="text-align: left"> : {{ $karyawan->no_hp }}</td>
             </tr>
         </table>
         <table class="tabelpresensi">

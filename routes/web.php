@@ -233,7 +233,7 @@ Route::group(['middleware' => ['role:administrator|pimpinan,user']], function ()
     Route::post('/jabatan/{kode_dept}/delete', [JabatanController::class, 'delete']);
 
     //Presensi
-
+    Route::get('/presensi/detail_izin_sakit', [PresensiController::class, 'detail_izin_sakit']);
     Route::post('/presensi/approveizinsakit', [PresensiController::class, 'approveizinsakit']);
     Route::get('/presensi/{kode_izin}/batalkanizinsakit', [PresensiController::class, 'batalkanizinsakit']);
 

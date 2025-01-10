@@ -129,7 +129,12 @@
                 </table>
             </div>
         @endforeach
-        
+         <!-- Tombol Kembali -->
+         <div class="mb-3 mt-3">
+            <a href="{{ route('inspection.jadwal.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </div>
 
 </div>
 @endsection

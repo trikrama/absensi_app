@@ -8,6 +8,7 @@ use App\Models\Pengajuanizin;
 use App\Models\Profile;
 use App\Models\Signature;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -65,19 +66,61 @@ class PresensiController extends Controller
     {
         $kode_jam_kerja = $kode_jam_kerja != "null" ? Crypt::decrypt($kode_jam_kerja) : $kode_jam_kerja;
         $nik = Auth::guard('karyawan')->user()->nik;
-        $hariini = date("Y-m-d");
-        $jamsekarang = date("H:i");
-        $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
+
+        // $hariini = date("Y-m-d");
+        // $jamsekarang = date("H:i:s");
+        // $timezone = Auth::guard('karyawan')->user()->timezone ?? 'Asia/Makassar'; // Default ke Asia/Makassar
+        // $timezone = Auth::user(); // Default ke Asia/Makassar
+        // $hariini1 = Carbon::now($timezone)->toDateString();
+        // $jamsekarang1 = Carbon::now('UTC')->toTimeString();
+        // dd($hariini, " -------------- ", $jamsekarang, " -------------- ", $timezone, " -------------- ", $hariini1, " -------------- ", $jamsekarang1);
+        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
+        $timezoneCabang = $lok_kantor->zona_waktu; // 'WIB', 'WITA', atau 'WIT'
+
+        // Mengambil waktu saat ini dalam UTC
+        // $jamsekarangUTC = Carbon::now($timezoneCabang);
+        $jamsekarang = Carbon::now($timezoneCabang);
+
+
+        // // Menentukan offset berdasarkan zona waktu
+        // switch ($timezoneCabang) {
+        //     case 'WIB':
+        //         $jamsekarang = $jamsekarangUTC->subHour(); // WIB = UTC+7
+        //         break;
+        //     case 'WITA':
+        //         $jamsekarang = $jamsekarangUTC; // WITA = UTC+8
+        //         break;
+        //     case 'WIT':
+        //         $jamsekarang = $jamsekarangUTC->addHour(); // WIT = UTC+9
+        //         break;
+        //     default:
+        //         $jamsekarang = $jamsekarangUTC; // Default ke UTC jika tidak ada zona waktu
+        //         break;
+        // }
+
+        // dd($jamsekarang);
+
+        // Mengambil hari ini dalam format yang diinginkan
+        $hariini = $jamsekarang->toDateString();
+        $jamsekarangFormatted = $jamsekarang->format('H:i');
+
+        // dd($hariini, " -------------- ", $jamsekarangFormatted);
+
+        // $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
+        $tgl_sebelumnya = Carbon::parse($hariini)->subDay()->toDateString();
         $cekpresensi_sebelumnya = DB::table('presensi')
             ->join('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('tgl_presensi', $tgl_sebelumnya)
             ->where('nik', $nik)
             ->first();
 
+        // dd($cekpresensi_sebelumnya);
+
         $ceklintashari_presensi = $cekpresensi_sebelumnya != null  ? $cekpresensi_sebelumnya->lintashari : 0;
 
         if ($ceklintashari_presensi == 1) {
-            if ($jamsekarang < "08:00") {
+            if ($jamsekarangFormatted < "08:00") {
                 $hariini = $tgl_sebelumnya;
             }
         }
@@ -120,6 +163,7 @@ class PresensiController extends Controller
             $jamkerja = DB::table('jam_kerja')->where('kode_jam_kerja', $kode_jam_kerja)->first();
         }
 
+
         if ($datapresensi != null && $datapresensi->status != "h") {
             return view('presensi.notifizin');
         } else if ($jamkerja == null) {
@@ -131,12 +175,22 @@ class PresensiController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $kode_jam_kerja = $request->kode_jam_kerja;
         $nik = Auth::guard('karyawan')->user()->nik;
         $status_location = Auth::guard('karyawan')->user()->status_location;
-        $hariini = date("Y-m-d");
-        $jamsekarang = date("H:i");
-        $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
+
+        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
+        $timezoneCabang = $lok_kantor->zona_waktu; // 'WIB', 'WITA', atau 'WIT'
+        $jamsekarangZone = Carbon::now($timezoneCabang);
+        $hariini = $jamsekarangZone->toDateString();
+        $jamsekarang = $jamsekarangZone->format('H:i');
+
+        // $hariini = date("Y-m-d");
+        // $jamsekarang = date("H:i");
+        // $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
+        $tgl_sebelumnya = Carbon::parse($hariini)->subDay()->toDateString();
         $cekpresensi_sebelumnya = DB::table('presensi')
             ->join('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('tgl_presensi', $tgl_sebelumnya)
@@ -145,11 +199,13 @@ class PresensiController extends Controller
 
         $ceklintashari_presensi = $cekpresensi_sebelumnya != null  ? $cekpresensi_sebelumnya->lintashari : 0;
 
-        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        // $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
         $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
-        $tgl_presensi = $ceklintashari_presensi == 1 && $jamsekarang < "08:00" ? $tgl_sebelumnya : date("Y-m-d");
-        $jam = date("H:i:s");
-        $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
+        // $tgl_presensi = $ceklintashari_presensi == 1 && $jamsekarang < "08:00" ? $tgl_sebelumnya : date("Y-m-d");
+        $tgl_presensi = $ceklintashari_presensi == 1 && $jamsekarang < "08:00" ? $tgl_sebelumnya : $hariini;
+        // $jam = date("H:i:s");
+        $jam = $jamsekarangZone->format('H:i');;
+        // $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
         $lok = explode(",", $lok_kantor->lokasi_cabang);
         $latitudekantor = $lok[0];
         $longitudekantor = $lok[1];
@@ -211,7 +267,11 @@ class PresensiController extends Controller
         $fileName = $formatName . ".png";
         $file = $folderPath . $fileName;
 
-        $tgl_pulang = $jamkerja->lintashari == 1 ? date('Y-m-d', strtotime("+ 1 days", strtotime($tgl_presensi))) : $tgl_presensi;
+        // $tgl_pulang = $jamkerja->lintashari == 1 ? date('Y-m-d', strtotime("+ 1 days", strtotime($tgl_presensi))) : $tgl_presensi;
+        $tgl_pulang = $jamkerja->lintashari == 1
+            ? Carbon::parse($hariini)->addDay()->toDateString() // Menambahkan satu hari
+            : Carbon::parse($hariini)->toDateString();
+
         $jam_pulang = $hariini . " " . $jam;
         $jamkerja_pulang = $tgl_pulang . " " . $jamkerja->jam_pulang;
         $datakaryawan = DB::table('karyawan')->where('nik', $nik)->first();
@@ -1202,8 +1262,29 @@ class PresensiController extends Controller
         // }
     }
 
+    public function detail_izin_sakit(Request $request){
 
-
+        $kode_izin = $request->kode_izin;
+        // $dataizin = DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->first();
+        $query = Pengajuanizin::query();
+        $query->select(
+            'kode_izin',
+            'tgl_izin_dari',
+            'tgl_izin_sampai',
+            'pengajuan_izin.nik',
+            'nama_lengkap',
+            'jabatan',
+            'status',
+            'status_approved',
+            'keterangan',
+            'karyawan.kode_cabang',
+            'karyawan.kode_dept',
+            'doc_sid'
+        );
+        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $dataizin = $query->where('kode_izin', $kode_izin)->first();
+        return view('presensi.detail_izin_sakit', compact('dataizin'));
+    }
 
     public function izinsakit(Request $request)
     {
@@ -1309,7 +1390,7 @@ class PresensiController extends Controller
             if ($status == 'c') {
                 if ($status_approved == 3) {
                     while (strtotime($tgl_dari) <= strtotime($tgl_sampai)) {
-    
+
                         DB::table('presensi')->insert([
                             'nik' => $nik,
                             'tgl_presensi' => $tgl_dari,
@@ -1322,7 +1403,7 @@ class PresensiController extends Controller
             } else {
                 if ($status_approved == 1) {
                     while (strtotime($tgl_dari) <= strtotime($tgl_sampai)) {
-    
+
                         DB::table('presensi')->insert([
                             'nik' => $nik,
                             'tgl_presensi' => $tgl_dari,

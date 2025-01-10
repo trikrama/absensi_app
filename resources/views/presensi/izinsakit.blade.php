@@ -189,13 +189,13 @@
                                 <th>No.</th>
                                 <th>Kode Izin</th>
                                 <th>Tanggal</th>
-                                <th>Nik</th>
+                                {{-- <th>Nik</th> --}}
                                 <th>Nama Karyawan</th>
-                                <th>Jabatan</th>
-                                <th>Departemen</th>
-                                <th>Cabang</th>
+                                {{-- <th>Jabatan</th> --}}
+                                {{-- <th>Departemen</th> --}}
+                                {{-- <th>Cabang</th> --}}
                                 <th>Status</th>
-                                <th>
+                                {{-- <th>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paperclip"
                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                         stroke="currentColor" fill="none" stroke-linecap="round"
@@ -204,8 +204,8 @@
                                         <path
                                             d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
                                     </svg>
-                                </th>
-                                <th>Keterangan</th>
+                                </th> --}}
+                                {{-- <th>Keterangan</th> --}}
                                 <th>Status Approve</th>
                                 @role('administrator|pimpinan', 'user')
                                     <th>Aksi</th>
@@ -222,11 +222,11 @@
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
                                     </td>
-                                    <td>{{ $d->nik }}</td>
+                                    {{-- <td>{{ $d->nik }}</td> --}}
                                     <td>{{ $d->nama_lengkap }}</td>
-                                    <td>{{ $d->jabatan }}</td>
+                                    {{-- <td>{{ $d->jabatan }}</td>
                                     <td>{{ $d->kode_dept }}</td>
-                                    <td>{{ $d->kode_cabang }}</td>
+                                    <td>{{ $d->kode_cabang }}</td> --}}
                                     {{-- @role('administrator|admin departemen', 'user') --}}
                                         <td>
                                             @if ($d->status == 'i')
@@ -238,7 +238,7 @@
                                             @endif
                                         </td>
                                     {{-- @endrole --}}
-                                    <td>
+                                    {{-- <td>
                                         @if (!empty($d->doc_sid))
                                             @php
                                                 $path = Storage::url('uploads/sid/' . $d->doc_sid);
@@ -255,8 +255,8 @@
                                                 </svg>
                                             </a>
                                         @endif
-                                    </td>
-                                    <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
+                                    </td> --}}
+                                    {{-- <td  class="text-wrap text-break">{{ $d->keterangan }}</td> --}}
                                     <td>
                                         @if ($d->status_approved == 3)
                                             <span class="badge bg-success">Disetujui Pimpinan</span>
@@ -330,11 +330,11 @@
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
                                     </td>
-                                    <td>{{ $d->nik }}</td>
+                                    {{-- <td>{{ $d->nik }}</td> --}}
                                     <td>{{ $d->nama_lengkap }}</td>
-                                    <td>{{ $d->jabatan }}</td>
+                                    {{-- <td>{{ $d->jabatan }}</td>
                                     <td>{{ $d->kode_dept }}</td>
-                                    <td>{{ $d->kode_cabang }}</td>
+                                    <td>{{ $d->kode_cabang }}</td> --}}
                                     {{-- @role('administrator|admin departemen', 'user') --}}
                                         <td>
                                             @if ($d->status == 'i')
@@ -346,7 +346,7 @@
                                             @endif
                                         </td>
                                     {{-- @endrole --}}
-                                    <td>
+                                    {{-- <td>
                                         @if (!empty($d->doc_sid))
                                             @php
                                                 $path = Storage::url('uploads/sid/' . $d->doc_sid);
@@ -362,9 +362,9 @@
                                                         d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
                                                 </svg>
                                             </a>
-                                        @endif
+                                        @endif --}}
                                     </td>
-                                    <td  class="text-wrap text-break">{{ $d->keterangan }}</td>
+                                    {{-- <td  class="text-wrap text-break">{{ $d->keterangan }}</td> --}}
                                     <td>
                                         @if ($d->status_approved == 3) 
                                             <span class="badge bg-success">Disetujui Pimpinan</span>
@@ -511,10 +511,10 @@
                     <h5 class="modal-title">Detail Izin/Sakit</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
+                <div class="modal-body" id="loaddetail">
+                    {{-- <div class="row mb-3">
                         <div class="col-4 text-end fw-bold">Nama</div>
-                        <div class="col-8 text-start">: <span id="nama-detail">John Doe</span></div>
+                        <div class="col-8 text-start">: <span id="nama-detail">{{}}</span></div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-4 text-end fw-bold">Jabatan</div>
@@ -529,7 +529,7 @@
                         <div class="col-8 text-start">: 
                             <a href="#" id="lampiran-detail" class="text-decoration-underline text-primary" target="_blank">Lihat Lampiran</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -551,10 +551,22 @@
                 $("#kode_izin_form").val(kode_izin);
                 $("#modal-izinsakit").modal("show");
             });
+
             $(".detail").click(function(e) {
-                e.preventDefault();
-                // var kode_izin = $(this).attr("kode_izin");
-                // $("#kode_izin_form").val(kode_izin);
+                // e.preventDefault();
+                var kode_izin = $(this).attr("kode_izin");
+                $.ajax({
+                    type: 'GET',
+                    url: '/presensi/detail_izin_sakit',
+                    cache: false,
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        kode_izin: kode_izin
+                    },
+                    success: function(respond) {
+                        $("#loaddetail").html(respond);
+                    }
+                });
                 $("#modal-izinsakit-detail").modal("show");
             });
 

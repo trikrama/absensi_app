@@ -34,7 +34,9 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="text-primary">Jadwal Pemeriksaan</h3>
         <div>
+            @role('administrator|admin departemen', 'user')
             <a href="{{ url('/instrument') }}" class="btn btn-warning btn-sm me-2">Tambah Instrument</a>
+            @endrole
             <a href="{{ url('/inspection/create') }}" class="btn btn-success btn-sm">Tambah Laporan</a>
         </div>
     </div>
@@ -118,7 +120,7 @@
                 </tbody>
             </table>
             <div class="mt-3">
-                {{ $data->links() }}
+                {{ $data->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </div>

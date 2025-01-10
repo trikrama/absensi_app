@@ -65,8 +65,11 @@
         </div>
     </div>
 
-   <div class="d-flex justify-content-end">
-        <a href="{{ url('/inspection/mulai/'.$data->id) }}" class="btn btn-warning btn-sm">Tambah Penilaian</a>
+   <div class="d-flex justify-content-end mr-4">
+        <a href="{{ url('/inspection/mulai/'.$data->id) }}" class="btn btn-warning btn- mt-4 me-2">Tambah Penilaian</a>
+        <a href="{{ route('inspection.jadwal.index') }}" class="btn btn-secondary btn-xl mt-4">
+            <i class="fas fa-arrow-left"></i> Batal
+        </a>
     </div>
     <!-- Filter Section -->
     {{-- <div class="card mt-4">
@@ -84,11 +87,25 @@
                 </div>
                 <div class="col-md-3 me-3">
                     <label for="jabatan" class="form-label">Jabatan</label>
-                    <input type="text" name="jabatan" id="jabatan" class="form-control" value="{{ request('jabatan') }}">
+                    <select name="jabatan" id="jabatan" class="form-select">
+                        <option value="">Pilih Jabatan</option>
+                        @foreach ($jabatan_list as $id => $nama_jabatan)
+                            <option value="{{ $nama_jabatan }}" {{ request('jabatan') == $nama_jabatan ? 'selected' : '' }}>
+                                {{ $nama_jabatan }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-3 me-3">
                     <label for="cabang" class="form-label">Cabang</label>
-                    <input type="text" name="cabang" id="cabang" class="form-control" value="{{ request('cabang') }}">
+                    <select name="cabang" id="cabang" class="form-select">
+                        <option value="">Pilih Cabang</option>
+                        @foreach ($cabang_list as $kode_cabang => $nama_cabang)
+                            <option value="{{ $nama_cabang }}" {{ request('cabang') == $nama_cabang ? 'selected' : '' }}>
+                                {{ $nama_cabang }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">Filter</button>
@@ -129,6 +146,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $detail_kunjungan->links('vendor.pagination.bootstrap-5') }}
         </div>
     </div>
 
