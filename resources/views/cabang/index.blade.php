@@ -210,6 +210,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 6v6l4 2"></path>
+                                        <path d="M12 3a9 9 0 1 0 9 9a9 9 0 1 0 -9 -9"></path>
+                                    </svg>
+                                </span>
+                                <select class="form-control" name="zona_waktu" id="zona_waktu">
+                                    <option value="WIB">WIB</option>
+                                    <option value="WITA">WITA</option>
+                                    <option value="WIT">WIT</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row mt-2">
                         <div class="col-12">
                             <div class="form-group">

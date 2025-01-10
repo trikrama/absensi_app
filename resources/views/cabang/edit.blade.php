@@ -69,6 +69,11 @@
             </div>
         </div>
     </div>
+    <select class="form-control" name="zona_waktu" id="zona_waktu">
+        <option value="WIB" {{ $cabang->zona_waktu == 'WIB' ? 'selected' : '' }}>WIB</option>
+        <option value="WITA" {{ $cabang->zona_waktu == 'WITA' ? 'selected' : '' }}>WITA</option>
+        <option value="WIT" {{ $cabang->zona_waktu == 'WIT' ? 'selected' : '' }}>WIT</option>
+    </select>
     <div class="row mt-2">
         <div class="col-12">
             <div class="form-group">

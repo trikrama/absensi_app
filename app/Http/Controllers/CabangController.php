@@ -47,12 +47,14 @@ class CabangController extends Controller
         $nama_cabang = $request->nama_cabang;
         $lokasi_cabang = $request->lokasi_cabang;
         $radius_cabang = $request->radius_cabang;
+        $zona_waktu = $request->zona_waktu;
         try {
             $data = [
                 'kode_cabang' => $kode_cabang,
                 'nama_cabang' => $nama_cabang,
                 'lokasi_cabang' => $lokasi_cabang,
-                'radius_cabang' => $radius_cabang
+                'radius_cabang' => $radius_cabang,
+                'zona_waktu' => $zona_waktu
             ];
             DB::table('cabang')->insert($data);
             return Redirect::back()->with(['success' => 'Data Berhasil Disimpan']);
@@ -74,12 +76,14 @@ class CabangController extends Controller
         $nama_cabang = $request->nama_cabang;
         $lokasi_cabang = $request->lokasi_cabang;
         $radius_cabang = $request->radius_cabang;
+        $zona_waktu = $request->zona_waktu;
 
         try {
             $data = [
                 'nama_cabang' => $nama_cabang,
                 'lokasi_cabang' => $lokasi_cabang,
-                'radius_cabang' => $radius_cabang
+                'radius_cabang' => $radius_cabang, 
+                'zona_waktu' => $zona_waktu
             ];
             DB::table('cabang')
                 ->where('kode_cabang', $kode_cabang)
