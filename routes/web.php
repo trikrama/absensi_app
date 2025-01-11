@@ -144,6 +144,7 @@ Route::group(['middleware' => ['role:administrator|admin departemen|pimpinan|koo
 
 
     Route::get('/presensi/izinsakit', [PresensiController::class, 'izinsakit']);
+    Route::get('/presensi/getDetailPengajuanIzin', [PresensiController::class, 'getDetailPengajuanIzin']);
 
     Route::post('/koreksipresensi', [PresensiController::class, 'koreksipresensi']);
     Route::post('/storekoreksipresensi', [PresensiController::class, 'storekoreksipresensi']);

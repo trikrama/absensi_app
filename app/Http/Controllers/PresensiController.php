@@ -1202,6 +1202,39 @@ class PresensiController extends Controller
         // }
     }
 
+    public function getDetailPengajuanIzin(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'kode_izin' => 'required|string|exists:pengajuan_izin,kode_izin',
+        ]);
+    
+        // Ambil data berdasarkan kode_izin
+        $izin = DB::table('pengajuan_izin')
+            ->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
+            ->select(
+                'karyawan.nama_lengkap',
+                'karyawan.jabatan',
+                'pengajuan_izin.keterangan',
+                'pengajuan_izin.doc_sid'
+            )
+            ->where('pengajuan_izin.kode_izin', $request->kode_izin)
+            ->first();
+    
+        if ($izin) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'nama' => $izin->nama_lengkap,
+                    'jabatan' => $izin->jabatan,
+                    'keterangan' => $izin->keterangan,
+                    'doc_sid' => asset('storage/' . $izin->doc_sid), // Pastikan path storage sesuai
+                ],
+            ]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 
 
 
@@ -1226,6 +1259,7 @@ class PresensiController extends Controller
             'keterangan',
             'karyawan.kode_cabang',
             'karyawan.kode_dept',
+            'cabang.nama_cabang',
             'doc_sid'
         );
         $query1->select(
@@ -1240,10 +1274,13 @@ class PresensiController extends Controller
             'keterangan',
             'karyawan.kode_cabang',
             'karyawan.kode_dept',
+            'cabang.nama_cabang',
             'doc_sid'
         );
         $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $query->join('cabang', 'karyawan.kode_cabang', '=', 'cabang.kode_cabang');
         $query1->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $query1->join('cabang', 'karyawan.kode_cabang', '=', 'cabang.kode_cabang');
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
             $query1->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);

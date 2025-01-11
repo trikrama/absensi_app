@@ -187,24 +187,25 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Kode Izin</th>
+                                <!--<th>Kode Izin</th>-->
                                 <th>Tanggal</th>
-                                <th>Nik</th>
+                                <!--<th>Nik</th>-->
                                 <th>Nama Karyawan</th>
-                                <th>Jabatan</th>
-                                <th>Departemen</th>
-                                <th>Cabang</th>
+                                <!--<th>Jabatan</th>-->
+                                <!--<th>Departemen</th>-->
+                                <!--<th>Cabang</th>-->
                                 <th>Status</th>
-                                <th>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paperclip"
-                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
-                                    </svg>
-                                </th>
+                                <th>Lampiran</th>
+                                <!--<th>-->
+                                <!--    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paperclip"-->
+                                <!--        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"-->
+                                <!--        stroke="currentColor" fill="none" stroke-linecap="round"-->
+                                <!--        stroke-linejoin="round">-->
+                                <!--        <path stroke="none" d="M0 0h24v24H0z" fill="none" />-->
+                                <!--        <path-->
+                                <!--            d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />-->
+                                <!--    </svg>-->
+                                <!--</th>-->
                                 <th>Keterangan</th>
                                 <th>Status Approve</th>
                                 @role('administrator|pimpinan', 'user')
@@ -217,16 +218,16 @@
                                 @foreach ($izinsakit_pimpinan as $d)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $d->kode_izin }}</td>
+                                    <!--<td>{{ $d->kode_izin }}</td>-->
                                     <td>
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
                                     </td>
-                                    <td>{{ $d->nik }}</td>
+                                    <!--<td>{{ $d->nik }}</td>-->
                                     <td>{{ $d->nama_lengkap }}</td>
-                                    <td>{{ $d->jabatan }}</td>
-                                    <td>{{ $d->kode_dept }}</td>
-                                    <td>{{ $d->kode_cabang }}</td>
+                                    <!--<td>{{ $d->jabatan }}</td>-->
+                                    <!--<td>{{ $d->kode_dept }}</td>-->
+                                    <!--<td>{{ $d->kode_cabang }}</td>-->
                                     {{-- @role('administrator|admin departemen', 'user') --}}
                                         <td>
                                             @if ($d->status == 'i')
@@ -238,21 +239,13 @@
                                             @endif
                                         </td>
                                     {{-- @endrole --}}
-                                    <td>
+                                    <td align="center">
                                         @if (!empty($d->doc_sid))
                                             @php
                                                 $path = Storage::url('uploads/sid/' . $d->doc_sid);
                                             @endphp
                                             <a href="{{ url($path) }}" target="_blank">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-paperclip" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path
-                                                        d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
-                                                </svg>
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-invoice"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
                                             </a>
                                         @endif
                                     </td>
@@ -315,7 +308,7 @@
                                                             <path d="M10 14l10 -10"></path>
                                                             <path d="M15 4l5 0l0 5"></path>
                                                         </svg> --}}
-                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-zoom-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /><path d="M8 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M16 16l-2.5 -2.5" /></svg>
                                         </td>
                                 </tr>
                                 @endforeach
@@ -325,16 +318,20 @@
                             @foreach ($izinsakit as $d)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $d->kode_izin }}</td>
+                                    <!--<td>{{ $d->kode_izin }}</td>-->
                                     <td>
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
                                         {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
                                     </td>
-                                    <td>{{ $d->nik }}</td>
-                                    <td>{{ $d->nama_lengkap }}</td>
-                                    <td>{{ $d->jabatan }}</td>
-                                    <td>{{ $d->kode_dept }}</td>
-                                    <td>{{ $d->kode_cabang }}</td>
+                                    <!--<td>{{ $d->nik }}</td>-->
+                                    <td>
+                                        {{ $d->nama_lengkap }}<br>
+                                        <span class="badge" style="background-color: #ececec;color: gray;"><small>{{ $d->jabatan }}</small></span><br>
+                                        <span class="badge" style="background-color: #ececec;color: gray;"><small>{{ $d->nama_cabang }}</small></span>
+                                    </td>
+                                    <!--<td>{{ $d->jabatan }}</td>-->
+                                    <!--<td>{{ $d->kode_dept }}</td>-->
+                                    <!--<td>{{ $d->kode_cabang }}</td>-->
                                     {{-- @role('administrator|admin departemen', 'user') --}}
                                         <td>
                                             @if ($d->status == 'i')
@@ -352,15 +349,7 @@
                                                 $path = Storage::url('uploads/sid/' . $d->doc_sid);
                                             @endphp
                                             <a href="{{ url($path) }}" target="_blank">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-paperclip" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path
-                                                        d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" />
-                                                </svg>
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-invoice"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 7l1 0" /><path d="M9 13l6 0" /><path d="M13 17l2 0" /></svg>
                                             </a>
                                         @endif
                                     </td>
@@ -423,7 +412,7 @@
                                                             <path d="M10 14l10 -10"></path>
                                                             <path d="M15 4l5 0l0 5"></path>
                                                         </svg> --}}
-                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-zoom-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /><path d="M8 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M16 16l-2.5 -2.5" /></svg>
                                         </td>
                                 </tr>
                             @endforeach
@@ -524,12 +513,12 @@
                         <div class="col-4 text-end fw-bold">Keterangan</div>
                         <div class="col-8 text-start">: <span id="keterangan-detail">Sedang sakit demam tinggi</span></div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-4 text-end fw-bold">Lampiran</div>
-                        <div class="col-8 text-start">: 
-                            <a href="#" id="lampiran-detail" class="text-decoration-underline text-primary" target="_blank">Lihat Lampiran</a>
-                        </div>
-                    </div>
+                    <!--<div class="row mb-3">-->
+                    <!--    <div class="col-4 text-end fw-bold">Lampiran</div>-->
+                    <!--    <div class="col-8 text-start">: -->
+                    <!--        <a href="#" id="lampiran-detail" class="text-decoration-underline text-primary" target="_blank">Lihat Lampiran</a>-->
+                    <!--    </div>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>
@@ -551,11 +540,39 @@
                 $("#kode_izin_form").val(kode_izin);
                 $("#modal-izinsakit").modal("show");
             });
-            $(".detail").click(function(e) {
-                e.preventDefault();
-                // var kode_izin = $(this).attr("kode_izin");
-                // $("#kode_izin_form").val(kode_izin);
-                $("#modal-izinsakit-detail").modal("show");
+            // $(".detail").click(function(e) {
+            //     e.preventDefault();
+            //     // var kode_izin = $(this).attr("kode_izin");
+            //     // $("#kode_izin_form").val(kode_izin);
+            //     $("#modal-izinsakit-detail").modal("show");
+            // });
+            $(document).on('click', '.detail', function () {
+                // Ambil kode izin dari atribut tombol
+                var kode_izin = $(this).attr('kode_izin');
+            
+                // Lakukan request AJAX
+                $.ajax({
+                    url: '/presensi/getDetailPengajuanIzin', // Route yang akan diarahkan ke controller
+                    type: 'GET',
+                    data: { kode_izin: kode_izin },
+                    success: function (response) {
+                        if (response.success) {
+                            // Isi modal dengan data yang diterima
+                            $('#nama-detail').text(response.data.nama);
+                            $('#jabatan-detail').text(response.data.jabatan);
+                            $('#keterangan-detail').text(response.data.keterangan);
+                            $('#lampiran-detail').attr('href', response.data.doc_sid).text('Lihat Lampiran');
+            
+                            // Tampilkan modal
+                            $('#modal-izinsakit-detail').modal('show');
+                        } else {
+                            alert('Gagal mengambil data.');
+                        }
+                    },
+                    error: function () {
+                        alert('Terjadi kesalahan saat mengambil data.');
+                    }
+                });
             });
 
             $("#dari,  ").datepicker({
