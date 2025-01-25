@@ -193,7 +193,7 @@ class PresensiController extends Controller
         // $after3jam = isset($jamkerjacek) ? Carbon::parse($jamkerjacek->jam_pulang)->addHours(3)->toTimeString() : "08:00";
         $after3jam = isset($jamkerjacek) ? Carbon::parse($jamkerjacek->jam_pulang)->addHours(3)->toTimeString() : "08:00";
         // $tgl_presensi = $ceklintashari_presensi == 1 && $jamsekarang < "08:00" ? $tgl_sebelumnya : $hariini;
-        if (isset($jamkerjacek) && $ceklintashari_presensi == 1 && $jamsekarang < $after3jam) {
+        if (isset($jamkerjacek) && $ceklintashari_presensi == 1 && $jamsekarang < $after3jam && $cekpresensi_sebelumnya->jam_out == null) {
             $tgl_presensi = $tgl_sebelumnya;
         } else {
             $tgl_presensi = $hariini;
@@ -274,7 +274,7 @@ class PresensiController extends Controller
         if ($status_location == 1 && $radius > $lok_kantor->radius_cabang) {
             echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda " . $radius . " meter dari Kantor|radius";
         } else {
-            if ($cek > 0) {
+            if ($cek > 0 && $datapresensi->jam_out == null) {
                 if ($jam_pulang < $jamkerja_pulang) {
                     echo "error|Maaf Belum Waktunya Pulang |out";
                 } else if (!empty($datapresensi->jam_out) && $ceklintashari_presensi != 1) {
@@ -332,7 +332,10 @@ class PresensiController extends Controller
                     }
                 }
             } else {
-                if ($jam < $jamkerja->awal_jam_masuk) {
+                $exist = DB::table('presensi')->where('nik', $nik)->where('tgl_presensi', $hariini)->first();
+                if (!empty($exist) && $exist->jam_out != null) {
+                    echo "error|Maaf Anda Sudah Melakukan Presensi Hari Ini|in";
+                } else if ($jam < $jamkerja->awal_jam_masuk) {
                     echo "error|Maaf Belum Waktunya Melakuan Presensi|in";
                 } else if ($jam > $jamkerja->akhir_jam_masuk) {
                     echo "error|Maaf Waktu Untuk Presensi Sudah Habis |in";
