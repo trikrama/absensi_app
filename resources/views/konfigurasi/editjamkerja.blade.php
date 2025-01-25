@@ -371,38 +371,94 @@
     const totalJamInput = document.getElementById('total_jam_edit');
 
     // Fungsi untuk menghitung total jam kerja
-    function hitungTotalJam() {
-        const jamMasuk = jamMasukInput.value;
-        const jamKeluar = jamKeluarInput.value;
+    // function hitungTotalJam() {
+    //     const jamMasuk = jamMasukInput.value;
+    //     const jamKeluar = jamKeluarInput.value;
         
-        // Jika kedua waktu sudah diisi
-        if (jamMasuk && jamKeluar) {
-            const [masukJam, masukMenit] = jamMasuk.split(':').map(num => parseInt(num));
-            const [keluarJam, keluarMenit] = jamKeluar.split(':').map(num => parseInt(num));
+    //     // Jika kedua waktu sudah diisi
+    //     if (jamMasuk && jamKeluar) {
+    //         const [masukJam, masukMenit] = jamMasuk.split(':').map(num => parseInt(num));
+    //         const [keluarJam, keluarMenit] = jamKeluar.split(':').map(num => parseInt(num));
 
-            // Membuat objek Date untuk jam masuk dan keluar
-            const masukDate = new Date(0, 0, 0, masukJam, masukMenit); 
-            const keluarDate = new Date(0, 0, 0, keluarJam, keluarMenit);
+    //         // Membuat objek Date untuk jam masuk dan keluar
+    //         const masukDate = new Date(0, 0, 0, masukJam, masukMenit); 
+    //         const keluarDate = new Date(0, 0, 0, keluarJam, keluarMenit);
 
-            // Menghitung selisih waktu (dalam menit)
-            const diff = (keluarDate - masukDate) / 60000;
+    //         // Menghitung selisih waktu (dalam menit)
+    //         const diff = (keluarDate - masukDate) / 60000;
 
-            // Jika keluar lebih awal dari masuk (misal jam keluar setelah tengah malam), tambah 24 jam
-            if (diff < 0) {
-                keluarDate.setHours(keluarDate.getHours() + 24);
+    //         // Jika keluar lebih awal dari masuk (misal jam keluar setelah tengah malam), tambah 24 jam
+    //         if (diff < 0) {
+    //             keluarDate.setHours(keluarDate.getHours() + 24);
+    //         }
+
+    //         // Hitung total jam dan menit
+    //         const totalJam = Math.floor(diff / 60);
+    //         const totalMenit = diff % 60;
+
+    //         // Tampilkan total jam dan menit
+    //         // totalJamInput.value = `${totalJam} jam ${totalMenit} menit`;
+    //         totalJamInput.value = totalJam;
+    //     } else {
+    //         totalJamInput.value = '';
+    //     }
+    // }
+
+    function hitungTotalJam() {
+                const jamMasuk = jamMasukInput.value;
+                const jamKeluar = jamKeluarInput.value;
+
+                if (jamMasuk && jamKeluar) {
+                    const [masukJam, masukMenit] = jamMasuk.split(':').map(num => parseInt(num, 10));
+                    const [keluarJam, keluarMenit] = jamKeluar.split(':').map(num => parseInt(num, 10));
+
+                    // Membuat objek Date untuk jam masuk dan keluar
+                    const masukDate = new Date(0, 0, 0, masukJam, masukMenit);
+                    const keluarDate = new Date(0, 0, 0, keluarJam, keluarMenit);
+
+                    if (keluarDate <= masukDate) {
+                        keluarDate.setDate(keluarDate.getDate() + 1); // Tambahkan 1 hari ke jam keluar
+                    }
+
+                    // Menghitung selisih waktu kerja (dalam menit)
+                    let diff = (keluarDate - masukDate) / 60000;
+
+                    // Periksa status istirahat
+                    // if (statusIstirahat.value === "1") {
+                    //     const awalIstirahat = awalJamIstirahat.value;
+                    //     const akhirIstirahat = akhirJamIstirahat.value;
+
+                    //     if (awalIstirahat && akhirIstirahat) {
+                    //         const [istirahatAwalJam, istirahatAwalMenit] = awalIstirahat.split(':').map(num => parseInt(num, 10));
+                    //         const [istirahatAkhirJam, istirahatAkhirMenit] = akhirIstirahat.split(':').map(num => parseInt(num, 10));
+
+                    //         const istirahatAwalDate = new Date(0, 0, 0, istirahatAwalJam, istirahatAwalMenit);
+                    //         const istirahatAkhirDate = new Date(0, 0, 0, istirahatAkhirJam, istirahatAkhirMenit);
+
+                    //         if (istirahatAkhirDate <= istirahatAwalDate) {
+                    //             istirahatAkhirDate.setDate(istirahatAkhirDate.getDate() + 1); // Tambahkan 1 hari ke akhir istirahat
+                    //         }
+
+                    //         const istirahatDiff = (istirahatAkhirDate - istirahatAwalDate) / 60000;
+
+                    //         // Kurangi waktu istirahat dari total waktu kerja
+                    //         diff -= istirahatDiff;
+                    //     }
+                    // }
+
+                    // Hitung total jam dan menit
+                    const totalJam = Math.floor(diff / 60);
+                    const totalMenit = diff % 60;
+
+                    // Tampilkan total jam dan menit di input dan set atribut data-totaljam
+                    totalJamInput.value = `${totalJam}`;
+                    totalJamInput.setAttribute('data-totaljam', totalJam);
+                } else {
+                    // Kosongkan input dan atribut jika salah satu waktu belum diisi
+                    totalJamInput.value = '';
+                    totalJamInput.removeAttribute('data-totaljam');
+                }
             }
-
-            // Hitung total jam dan menit
-            const totalJam = Math.floor(diff / 60);
-            const totalMenit = diff % 60;
-
-            // Tampilkan total jam dan menit
-            // totalJamInput.value = `${totalJam} jam ${totalMenit} menit`;
-            totalJamInput.value = totalJam;
-        } else {
-            totalJamInput.value = '';
-        }
-    }
 
     // Event listener untuk input jam masuk dan keluar
     jamMasukInput.addEventListener('input', hitungTotalJam);

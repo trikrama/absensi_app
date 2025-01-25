@@ -134,12 +134,16 @@ class KonfigurasiController extends Controller
         $jamkerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
         $cekjamkerja = DB::table('konfigurasi_jamkerja')->where('nik', $nik)->count();
         $bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        // dd($cekjamkerja);
+        $days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
         if ($cekjamkerja > 0) {
             $setjamkerja = DB::table('konfigurasi_jamkerja')->where('nik', $nik)->get();
-            return view('konfigurasi.editsetjamkerja', compact('karyawan', 'jamkerja', 'setjamkerja', 'bulan'));
+            $setjamkerjaMap = [];
+            foreach ($setjamkerja as $item) {
+                $setjamkerjaMap[$item->hari] = $item;
+            }
+            return view('konfigurasi.editsetjamkerja', compact('karyawan', 'jamkerja', 'setjamkerja', 'bulan', 'days', 'setjamkerjaMap'));
         } else {
-            return view('konfigurasi.setjamkerja', compact('karyawan', 'jamkerja', 'bulan'));
+            return view('konfigurasi.setjamkerja', compact('karyawan', 'jamkerja', 'bulan', 'days'));
         }
     }
 

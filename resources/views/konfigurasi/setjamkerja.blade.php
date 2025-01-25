@@ -90,23 +90,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        Senin
-                                                        <input type="hidden" name="hari[]" value="Senin">
-                                                    </td>
-                                                    <td>
-                                                        <select name="kode_jam_kerja[]" id="kode_jam_kerja"
-                                                            class="form-select">
-                                                            <option value="">Pilih Jam Kerja</option>
-                                                            @foreach ($jamkerja as $d)
-                                                                <option value="{{ $d->kode_jam_kerja }}">
-                                                                    {{ $d->nama_jam_kerja }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
+                                                @foreach ($days as $day)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $day }}
+                                                            <input type="hidden" name="hari[]" value="Senin">
+                                                        </td>
+                                                        <td>
+                                                            <select name="kode_jam_kerja[]" id="kode_jam_kerja"
+                                                                class="form-select">
+                                                                <option value="">Pilih Jam Kerja</option>
+                                                                @foreach ($jamkerja as $d)
+                                                                    <option value="{{ $d->kode_jam_kerja }}">
+                                                                        {{ $d->nama_jam_kerja }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                {{-- <tr>
                                                     <td>Selasa
                                                         <input type="hidden" name="hari[]" value="Selasa">
                                                     </td>
@@ -198,7 +200,7 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                         <button class="btn btn-primary w-100" type="submit">Simpan</button>

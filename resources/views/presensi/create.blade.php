@@ -69,10 +69,13 @@
     </div>
     <div class="row">
         <div class="col">
-            @if ($cek > 0)
+            @php
+                // dd($cek," -------------- ", $cekJamOut);
+            @endphp
+            @if ($cek > 0 && $cekJamOut == false)
                 <button id="takeabsen" class="btn btn-danger btn-block">
                     <ion-icon name="camera-outline"></ion-icon>
-                    Absen Pulang
+                     Absen Pulang
                 </button>
             @else
                 <button id="takeabsen" class="btn btn-primary btn-block">

@@ -90,22 +90,23 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($setjamkerja as $s)
+                                                {{-- @foreach ($setjamkerja as $s) --}}
+                                                @foreach ($days as $day)
                                                     <tr>
                                                         <td>
-                                                            {{ $s->hari }}
+                                                            {{ $day }}
                                                             <input type="hidden" name="hari[]"
-                                                                value="{{ $s->hari }}">
+                                                                value="{{ $day }}">
                                                         </td>
                                                         <td>
-                                                            <select name="kode_jam_kerja[]" id="kode_jam_kerja"
-                                                                class="form-select">
+                                                            <select name="kode_jam_kerja[]" class="form-select">
                                                                 <option value="">Pilih Jam Kerja</option>
                                                                 @foreach ($jamkerja as $d)
-                                                                    <option
-                                                                        {{ $d->kode_jam_kerja == $s->kode_jam_kerja ? 'selected' : '' }}
-                                                                        value="{{ $d->kode_jam_kerja }}">
-                                                                        {{ $d->nama_jam_kerja }}</option>
+                                                                    <option 
+                                                                        value="{{ $d->kode_jam_kerja }}"
+                                                                        {{ isset($setjamkerjaMap[$day]) && $setjamkerjaMap[$day]->kode_jam_kerja == $d->kode_jam_kerja ? 'selected' : '' }}>
+                                                                        {{ $d->nama_jam_kerja }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
                                                         </td>
