@@ -290,23 +290,23 @@ class PresensiController extends Controller
                         echo "success|Terimkasih, Hati Hati Di Jalan|out";
                         Storage::put($file, $image_base64);
 
-                        if ($jamkerja->lintashari == 1 && $jamkerja->total_jam == 24) {
-                            $cek_hari_ini = DB::table('presensi')->where('tgl_presensi', $hariini)->where('nik', $nik)->count();
-                            if ($cek_hari_ini == 0) {
-                                DB::table('presensi')->insert([
-                                    'nik' => $nik,
-                                    'tgl_presensi' => $hariini,
-                                    'jam_in' => $jamkerja->jam_masuk,
-                                    'kode_jam_kerja' => $jamkerja->kode_jam_kerja,
-                                    'foto_in' => null,
-                                    'lokasi_in' => null,
-                                    'status' => 'h',
-                                    'jam_out' => $jamkerja->jam_pulang,
-                                    'foto_out' => null,
-                                    'lokasi_out' => null
-                                ]);
-                            }
-                        }
+                        // if ($jamkerja->lintashari == 1 && $jamkerja->total_jam == 24) {
+                        //     $cek_hari_ini = DB::table('presensi')->where('tgl_presensi', $hariini)->where('nik', $nik)->count();
+                        //     if ($cek_hari_ini == 0) {
+                        //         DB::table('presensi')->insert([
+                        //             'nik' => $nik,
+                        //             'tgl_presensi' => $hariini,
+                        //             'jam_in' => $jamkerja->jam_masuk,
+                        //             'kode_jam_kerja' => $jamkerja->kode_jam_kerja,
+                        //             'foto_in' => null,
+                        //             'lokasi_in' => null,
+                        //             'status' => 'h',
+                        //             'jam_out' => $jamkerja->jam_pulang,
+                        //             'foto_out' => null,
+                        //             'lokasi_out' => null
+                        //         ]);
+                        //     }
+                        // }
 
                         $curl = curl_init();
 
