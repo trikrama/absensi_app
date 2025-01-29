@@ -1607,13 +1607,31 @@ class PresensiController extends Controller
             return Redirect::back()->with(['warning' => 'Data Gagal Disimpan']);
         }
     }
-
+    
     public function pilihjamkerja()
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
+
         $hariini = date('Y-m-d');
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $tgl_sebelumnya = Carbon::parse($hariini)->subDay()->toDateString();
+        $cekpresensi_sebelumnya = DB::table('presensi')
+            ->join('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->where('tgl_presensi', $tgl_sebelumnya)
+            ->where('nik', $nik)
+            ->first();
+
+
+        $ceklintashari_presensi = $cekpresensi_sebelumnya != null  ? $cekpresensi_sebelumnya->lintashari : 0;
+
+        if ($ceklintashari_presensi == 1 && empty($cekpresensi_sebelumnya->jam_out)) {
+            // if ($jamsekarangFormatted < "08:00") {
+                $hariini = $tgl_sebelumnya;
+            // }
+        }
+
+        
         $cekpresensi = DB::table('presensi')->where('nik', $nik)->where('tgl_presensi', $hariini)->first();
-        if (!empty($cekpresensi)) {
+        if (!empty($cekpresensi) && $cekpresensi->jam_out == null) {
             $kode_jam_kerja = Crypt::encrypt($cekpresensi->kode_jam_kerja);
             return redirect('/presensi/' . $kode_jam_kerja . '/create');
         }

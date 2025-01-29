@@ -12,7 +12,7 @@
             </ion-icon>
             <strong>Histori</strong>
         </div>
-    </a>
+    </a>  
 
     @if (Auth::guard('karyawan')->user()->status_jam_kerja == 1)
         <a href="/presensi/null/create" class="item ">

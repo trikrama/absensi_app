@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,22 @@ class DashboardController extends Controller
         $tahunini = date("Y"); // 2023
         $nik = Auth::guard('karyawan')->user()->nik;
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+
+        $tgl_sebelumnya = Carbon::parse($hariini)->subDay()->toDateString();
+        $cekpresensi_sebelumnya = DB::table('presensi')
+            ->join('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+            ->where('tgl_presensi', $tgl_sebelumnya)
+            ->where('nik', $nik)
+            ->first();
+
+
+        $ceklintashari_presensi = $cekpresensi_sebelumnya != null  ? $cekpresensi_sebelumnya->lintashari : 0;
+
+        if ($ceklintashari_presensi == 1 && empty($cekpresensi_sebelumnya->jam_out)) {
+            // if ($jamsekarangFormatted < "08:00") {
+                $hariini = $tgl_sebelumnya;
+            // }
+        }
 
         $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
         $presensihariini = DB::table('presensi')->where('nik', $nik)->where('tgl_presensi', $hariini)->first();
