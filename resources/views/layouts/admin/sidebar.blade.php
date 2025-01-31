@@ -204,7 +204,7 @@
         </div>
         <div class="collapse navbar-collapse" id="sidebar-menu">
             <ul class="navbar-nav pt-lg-3">
-            @role('administrator|admin departemen|koordinator', 'user')
+            @role('administrator|admin departemen|koordinator|pimpinan', 'user')
                 <li class="nav-item"> 
                     <a class="nav-link" href="/panel/dashboardadmin">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -306,6 +306,8 @@
                         </span>
                     </a>
                 </li>
+                @endrole
+                @role('administrator|admin departemen|pimpinan', 'user')
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('presensi/izinsakit') ? 'active' : '' }}"
                         href="/presensi/izinsakit">
@@ -330,6 +332,8 @@
                         </span>
                     </a>
                 </li>
+                @endrole
+                @role('administrator|admin departemen', 'user')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ request()->is(['presensi/laporan', 'presensi/rekap']) ? 'show' : '' }}"
                         href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
