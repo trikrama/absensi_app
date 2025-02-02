@@ -30,7 +30,7 @@
 @section('content')
 <div class="row" style="margin-top:70px">
     <div class="col">
-        <form method="POST" action="/izinabsen/store" id="frmIzin">
+        <form method="POST" action="/izinabsen/store" id="frmIzin" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <input type="text" id="tgl_izin_dari" autocomplete="off" name="tgl_izin_dari" class="form-control datepicker" placeholder="Dari">
@@ -63,6 +63,19 @@
                 <textarea id="keterangan" name="keterangan" class="form-control" autocomplete="off"
                     placeholder="Keterangan" rows="4" style="resize: none;"></textarea>
             </div>
+
+            <div class="custom-file-upload" id="fileUpload1" style="height: 100px !important">
+                <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg">
+                <label for="fileuploadInput">
+                    <span>
+                        <strong>
+                            <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
+                            <i>Tap to Upload SID</i>
+                        </strong>
+                    </span>
+                </label>
+            </div>
+
             <div class="form-group">
                 <button class="btn btn-primary w-100">Kirim</button>
             </div>

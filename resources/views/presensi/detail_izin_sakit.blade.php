@@ -23,9 +23,9 @@
 <div class="row mb-3">
     <div class="col-4 text-end fw-bold">Lampiran</div>
     <div class="col-8 text-start">: 
-        @if (!empty($d->doc_sid))
+        @if (!empty($dataizin->doc_sid))
             @php
-                $path = Storage::url('uploads/sid/' . $d->doc_sid);
+                $path = Storage::url('uploads/sid/' . $dataizin->doc_sid);
             @endphp
             <a href="{{ url($path) }}" class="text-decoration-underline text-primary" target="_blank">Lihat Lampiran</a>
         @else

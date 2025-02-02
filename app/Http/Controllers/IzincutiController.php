@@ -61,6 +61,13 @@ class IzincutiController extends Controller
 
 
         //dd($kode_izin);
+
+        if ($request->hasFile('sid')) {
+            $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
+        } else {
+            $sid = null;
+        }
+        
         $data = [
             'kode_izin' => $kode_izin,
             'nik' => $nik,
@@ -68,7 +75,8 @@ class IzincutiController extends Controller
             'tgl_izin_sampai' => $tgl_izin_sampai,
             'kode_cuti' => $kode_cuti,
             'status' => $status,
-            'keterangan' => $keterangan
+            'keterangan' => $keterangan,
+            'doc_sid' => $sid
         ];
 
         //Cek Sudah Absen / Belum
@@ -97,8 +105,12 @@ class IzincutiController extends Controller
             return redirect('/presensi/izin')->with(['error' => 'Tidak Bisa Melakukan Pengajuan Pada Tanggal Tersebut Karena Ada tanggal yang sudah digunakan Sebelumnya !']);
         } else {
             $simpan = DB::table('pengajuan_izin')->insert($data);
-
             if ($simpan) {
+                if ($request->hasFile('sid')) {
+                    $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
+                    $folderPath = "public/uploads/sid/";
+                    $request->file('sid')->storeAs($folderPath, $sid);
+                }
                 return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Disimpan']);
             } else {
                 return redirect('/presensi/izin')->with(['error' => 'Data Gagal Disimpan']);
@@ -120,16 +132,31 @@ class IzincutiController extends Controller
         $tgl_izin_sampai = $request->tgl_izin_sampai;
         $keterangan = $request->keterangan;
         $kode_cuti = $request->kode_cuti;
+
+        if ($request->hasFile('sid')) {
+            $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
+        } else {
+            $sid = null;
+        }
+
         try {
             //code...
             $data = [
                 'tgl_izin_dari' => $tgl_izin_dari,
                 'tgl_izin_sampai' => $tgl_izin_sampai,
                 'kode_cuti' => $kode_cuti,
-                'keterangan' => $keterangan
+                'keterangan' => $keterangan,
+                'doc_sid' => $sid
             ];
 
+            
             DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->update($data);
+            
+            if ($request->hasFile('sid')) {
+                $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
+                $folderPath = "public/uploads/sid/";
+                $request->file('sid')->storeAs($folderPath, $sid);
+            }
             return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Diupdate']);
         } catch (\Exception $e) {
             return redirect('/presensi/izin')->with(['error' => 'Data Gagal Diupdate']);

@@ -14,9 +14,9 @@
     <!-- Set page size here: A5, A4 or A3 -->
     <!-- Set also "landscape" if you need -->
     <style>
-        @page {
+        /* @page {
             size: A4
-        }
+        } */
 
         #title {
             font-family: Arial, Helvetica, sans-serif;
@@ -64,7 +64,8 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 
-<body class="A4">
+{{-- <body> --}}
+<body class="">
     <!-- Each sheet element should have the class "sheet" -->
     <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
     <section class="sheet padding-10mm">

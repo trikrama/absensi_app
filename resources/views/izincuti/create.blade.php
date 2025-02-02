@@ -41,7 +41,7 @@
 @section('content')
     <div class="row" style="margin-top:70px">
         <div class="col">
-            <form method="POST" action="/izincuti/store" id="frmIzin">
+            <form method="POST" action="/izincuti/store" id="frmIzin" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <input type="text" id="tgl_izin_dari" autocomplete="off" name="tgl_izin_dari"
@@ -68,6 +68,17 @@
                     <input type="hidden" id="max_cuti" name="max_cuti" class="form-control" autocomplete="off"
                         placeholder="Maksimal Cuti" readonly>
                     <p id="info_max_cuti"></p>
+                </div>
+                <div class="custom-file-upload" id="fileUpload1" style="height: 100px !important">
+                    <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg">
+                    <label for="fileuploadInput">
+                        <span>
+                            <strong>
+                                <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" aria-label="cloud upload outline"></ion-icon>
+                                <i>Tap to Upload SID</i>
+                            </strong>
+                        </span>
+                    </label>
                 </div>
                 <!-- Mengubah keterangan menjadi textarea dengan warna background yang sama -->
                 <div class="form-group">

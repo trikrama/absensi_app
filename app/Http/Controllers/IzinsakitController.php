@@ -77,7 +77,7 @@ class IzinsakitController extends Controller
             return redirect('/presensi/izin')->with(['error' => 'Tidak Bisa Melakukan Pengajuan Pada Tanggal Tersebut Karena Ada tanggal yang sudah digunakan Sebelumnya !']);
         } else {
             $simpan = DB::table('pengajuan_izin')->insert($data);
-
+            
             if ($simpan) {
                 if ($request->hasFile('sid')) {
                     $sid = $kode_izin . "." . $request->file('sid')->getClientOriginalExtension();
