@@ -39,7 +39,7 @@ class AktivitasController extends Controller
                 'tanggal_aktivitas' => 'required|date',
                 'waktu_aktivitas' => 'required',
                 'deskripsi' => 'required|string|max:255',
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
             ]);
 
              // Mengonversi waktu ke format 24 jam
@@ -88,7 +88,7 @@ class AktivitasController extends Controller
                 'tanggal_aktivitas' => 'required|date',
                 'waktu_aktivitas' => 'required|string',
                 'deskripsi' => 'required|string|max:255',
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
             ]);
 
             $aktivitas = Aktivitas::findOrFail($id);

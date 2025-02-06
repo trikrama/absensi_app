@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         $hariini = date("Y-m-d");
-        $bulanini = date("m") * 1 ; //1 atau Januari
+        $bulanini = date("m") * 1; //1 atau Januari
         $tahunini = date("Y"); // 2023
         $nik = Auth::guard('karyawan')->user()->nik;
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
@@ -29,7 +30,7 @@ class DashboardController extends Controller
 
         if ($ceklintashari_presensi == 1 && empty($cekpresensi_sebelumnya->jam_out)) {
             // if ($jamsekarangFormatted < "08:00") {
-                $hariini = $tgl_sebelumnya;
+            $hariini = $tgl_sebelumnya;
             // }
         }
 
@@ -46,7 +47,7 @@ class DashboardController extends Controller
             ->orderBy('tgl_presensi', 'desc')
             ->get();
 
-        
+
         // Hitung jumlah hari dalam bulan yang berjalan
         $jumlahHariBulanIni = cal_days_in_month(CAL_GREGORIAN, $bulanini, $tahunini);
         $hariBerjalan = date('d'); // Hari ke berapa dalam bulan ini
@@ -107,8 +108,12 @@ class DashboardController extends Controller
             ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('tgl_presensi', $hariini)
             ->first();
+    
+        $pegawaiPerMitra = Karyawan::join('cabang', 'karyawan.kode_cabang', '=', 'cabang.kode_cabang')
+            ->select('cabang.kode_cabang', 'cabang.nama_cabang', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('cabang.kode_cabang', 'cabang.nama_cabang')
+            ->get();
 
-
-        return view('dashboard.dashboardadmin', compact('rekappresensi'));
+        return view('dashboard.dashboardadmin', compact('rekappresensi', 'pegawaiPerMitra'));
     }
 }

@@ -30,7 +30,7 @@ class TugasController extends Controller
         $deadlineSplit = explode(' ', $deadlineReq);
         try {
             $request->validate([
-                'lampiran' => 'file|mimes:jpg,jpeg,png,pdf|max:2048', // Maks 2 MB
+                'lampiran' => 'file|mimes:jpg,jpeg,png,pdf|max:10240', // Maks 2 MB
             ]);
 
             // Menggunakan Eloquent untuk insert data

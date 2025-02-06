@@ -155,8 +155,66 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Chart Pegawai per Mitra -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Jumlah Pegawai Per Mitra</div>
+                        <div class="card-body">
+                            <canvas id="chartMitra"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Pegawai per Unit -->
+                {{-- <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Jumlah Pegawai Per Unit</div>
+                        <div class="card-body">
+                            <canvas id="chartUnit"></canvas>
+                        </div>
+                    </div>
+                </div> --}}
             </div>
         </div>
-
     </div>
+
+    <input type="hidden" id="mitra" value="{{ $pegawaiPerMitra }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctxMitra = document.getElementById('chartMitra').getContext('2d');
+            var pegawaiPerMitra1 = JSON.parse(document.getElementById('mitra').value);
+    
+            // Prepare labels and data for the chart
+            var mitraLabels = pegawaiPerMitra1.map(function(item) {
+                return item.kode_cabang; // or item.kode_cabang if you want the code
+            });
+    
+            var mitraData = pegawaiPerMitra1.map(function(item) {
+                return item.jumlah;
+            });
+    
+            new Chart(ctxMitra, {
+                type: 'line',
+                data: {
+                    labels: mitraLabels,
+                    datasets: [{
+                        label: 'Jumlah Pegawai',
+                        data: mitraData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }],
+                    options: {
+                        scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                        }
+                    },
+                }
+            });
+        });
+    </script>
 @endsection

@@ -409,7 +409,7 @@ class PresensiController extends Controller
 
         // Validasi input
         $request->validate([
-            'foto' => 'image|mimes:png,jpg,jpeg|max:1024',
+            'foto' => 'image|mimes:png,jpg,jpeg|max:10240',
         ]);
 
         DB::beginTransaction();
@@ -791,20 +791,19 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
             ->orderBy('tgl_presensi')
             ->get();
-
+            
+        $aktivitas = Aktivitas::query()->where('nik', $nik)->get();
+        $ttd1 = Signature::where('type', 'TTD1')->first();
+        $ttd2 = Signature::where('type', 'TTD2')->first();
+        
         if (isset($_POST['exportexcel'])) {
             $time = date("d-M-Y H:i:s");
             // Fungsi header dengan mengirimkan raw data excel
             header("Content-type: application/vnd-ms-excel");
             // Mendefinisikan nama file ekspor "hasil-export.xls"
             header("Content-Disposition: attachment; filename=Laporan Presensi Karyawan $time.xls");
-            return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi'));
+            return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi', 'ttd1', 'ttd2'));
         }
-
-        $aktivitas = Aktivitas::query()->where('nik', $nik)->get();
-        $ttd1 = Signature::where('type', 'TTD1')->first();
-        $ttd2 = Signature::where('type', 'TTD2')->first();
-
         return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'karyawan', 'presensi', 'aktivitas', 'ttd1', 'ttd2'));
     }
 

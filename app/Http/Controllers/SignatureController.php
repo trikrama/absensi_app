@@ -106,10 +106,10 @@ class SignatureController extends Controller
         $request->validate([
             'name_1' => 'nullable', // Tidak wajib
             'position_1' => 'nullable',
-            'image_1' => 'nullable|image|max:2048',
+            'image_1' => 'nullable|image|max:10240',
             'name_2' => 'nullable', // Tidak wajib
             'position_2' => 'nullable',
-            'image_2' => 'nullable|image|max:2048',
+            'image_2' => 'nullable|image|max:10240',
         ]);
 
         // Handle TTD 1
@@ -171,7 +171,7 @@ class SignatureController extends Controller
             $request->validate([
                 'name' => 'required',
                 'position' => 'nullable',
-                'image' => 'nullable|image|max:2048', // Maksimal 2MB
+                'image' => 'nullable|image|max:10240', // Maksimal 2MB
             ]);
 
             $ttd = $signature->image; // Default adalah file lama jika tidak ada file baru

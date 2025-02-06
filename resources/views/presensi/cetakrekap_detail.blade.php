@@ -243,19 +243,35 @@
                 <li>{{ date('d-m-Y', strtotime($d->tanggal_libur)) }} - {{ $d->keterangan }}</li>
             @endforeach
         </ol>
+
         <table width="100%" style="margin-top:100px">
             <tr>
-                <td></td>
-                <td style="text-align: center">Tasikmalaya, {{ date('d-m-Y') }}</td>
+                <td colspan="2" style="text-align: center">Palu, {{ date('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td style="text-align: center; vertical-align:bottom" height="100px">
-                    <u>Qiana Aqila</u><br>
-                    <i><b>HRD Manager</b></i>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd1)
+                        @if ($ttd1->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd1->image) }}" alt="TTD 1" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd1->name }}</u><br>
+                        <i><b>{{ $ttd1->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
                 </td>
-                <td style="text-align: center; vertical-align:bottom">
-                    <u>Daffa</u><br>
-                    <i><b>Direktur</b></i>
+                <td style="text-align: center; vertical-align:bottom" height="150px">
+                    @if ($ttd2)
+                        @if ($ttd2->image)
+                            <img src="{{ asset('storage/uploads/ttd/' . $ttd2->image) }}" alt="TTD 2" style="max-height: 100px;">
+                        @endif
+                        <br>
+                        <u>{{ $ttd2->name }}</u><br>
+                        <i><b>{{ $ttd2->position }}</b></i>
+                    @else
+                        <span class="text-muted">Tidak ada TTD</span>
+                    @endif
                 </td>
             </tr>
         </table>
