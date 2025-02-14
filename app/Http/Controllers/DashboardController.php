@@ -93,8 +93,24 @@ class DashboardController extends Controller
     public function dashboardadmin()
     {
 
+        // Ambil total karyawan
+        $totalKaryawan = DB::table('karyawan')->count();
 
+        
+        
         $hariini = date("Y-m-d");
+        
+        //total Turlap
+        $totalturlap = DB::table('pengajuan_izin')
+            ->where('tl', 'Ya')
+            ->where(function($query) use ($hariini) {
+                $query->where('tgl_izin_dari', $hariini)
+                    ->orWhere(function($query) use ($hariini) {
+                        $query->where('tgl_izin_sampai', $hariini)
+                                ->where('tgl_izin_dari', '<=', $hariini);
+                    });
+            })
+            ->count();
 
         $rekappresensi = DB::table('presensi')
             ->selectRaw('
@@ -103,17 +119,23 @@ class DashboardController extends Controller
             SUM(IF(status="s",1,0)) as jmlsakit,
             SUM(IF(status="c",1,0)) as jmlcuti,
             SUM(IF(jam_in > jam_masuk ,1,0)) as jmlterlambat
-
             ')
             ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->where('tgl_presensi', $hariini)
             ->first();
-    
+
+        $jmlTidakHadir = $totalKaryawan - ($rekappresensi->jmlhadir + $rekappresensi->jmlizin + $rekappresensi->jmlsakit + $rekappresensi->jmlcuti);
+
+        $totalJabatan = DB::table('jabatan')->count();
+        $totalCabang = DB::table('cabang')->count();
+
+        $totalKaryawanPerJabatan = Karyawan::select('jabatan', DB::raw('COUNT(*) as total'))->groupBy('jabatan')->get();
+
         $pegawaiPerMitra = Karyawan::join('cabang', 'karyawan.kode_cabang', '=', 'cabang.kode_cabang')
             ->select('cabang.kode_cabang', 'cabang.nama_cabang', DB::raw('COUNT(*) as jumlah'))
             ->groupBy('cabang.kode_cabang', 'cabang.nama_cabang')
             ->get();
 
-        return view('dashboard.dashboardadmin', compact('rekappresensi', 'pegawaiPerMitra'));
+        return view('dashboard.dashboardadmin', compact('rekappresensi', 'pegawaiPerMitra', 'jmlTidakHadir', 'totalKaryawan', 'totalJabatan', 'totalCabang', 'totalKaryawanPerJabatan', 'totalturlap'));
     }
 }
