@@ -134,7 +134,7 @@ class KonfigurasiController extends Controller
         $jamkerja = DB::table('jam_kerja')->orderBy('nama_jam_kerja')->get();
         $cekjamkerja = DB::table('konfigurasi_jamkerja')->where('nik', $nik)->count();
         $bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        $days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        $days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
         if ($cekjamkerja > 0) {
             $setjamkerja = DB::table('konfigurasi_jamkerja')->where('nik', $nik)->get();
             $setjamkerjaMap = [];

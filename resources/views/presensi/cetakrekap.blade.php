@@ -180,14 +180,14 @@
                         $color = "white";
 
                         // Tanggal lebih besar dari hari ini
-                        if ($cekhari == "Minggu") {
-                            $jml_libut += 1;
-                            $color = "orange"; // Oranye untuk Minggu
-                        }elseif (strtotime($tgl_presensi) > strtotime($current_date)) {
-                            $color = "white"; // Tanggal di masa depan (belum tercatat)
-                        } elseif ($status == "h") {
+                        if ($status == "h") {
                             $jml_hadir += 1;
                             $color = "#00ff4c"; // Hijau untuk hadir
+                        }elseif (strtotime($tgl_presensi) > strtotime($current_date)) {
+                            $color = "white"; // Tanggal di masa depan (belum tercatat)
+                        } elseif ($cekhari == "Minggu") {
+                            $jml_libut += 1;
+                            $color = "orange"; // Oranye untuk Minggu
                         } elseif ($status == "i" && $tl == "Tidak") {
                             $jml_izin += 1;
                             $color = "#ffe600"; // Kuning untuk izin
